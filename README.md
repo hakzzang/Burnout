@@ -22,4 +22,10 @@
 
 ### 3. 일정
 
-![date](https://user-images.githubusercontent.com/22374750/89760710-e1fec880-db27-11ea-8678-5a9836bc23dd.png)
+![date](https://user-images.githubusercontent.com/22374750/89760983-694c3c00-db28-11ea-98d1-9ec6bd0ace47.png)
+
+### 4. 관심 분야에 따른 개발 영역
+
+- 홍주님 : Storage -> SNS에 사진 공유
+- 희영님 : ml kit -> 카메라 인식
+- 병학님 : AAC, Jetpack, Coroutine -> 채팅
