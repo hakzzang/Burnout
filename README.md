@@ -20,3 +20,6 @@
 
 ![image](https://user-images.githubusercontent.com/22374750/89758212-3acb6280-db22-11ea-8e5d-e8a979664eec.png)
 
+### 3. 일정
+
+![date](https://user-images.githubusercontent.com/22374750/89760710-e1fec880-db27-11ea-8678-5a9836bc23dd.png)
