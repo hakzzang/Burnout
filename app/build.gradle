@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+apply from: '../dependencies.gradle'
 
 android {
     compileSdkVersion 30
@@ -22,16 +25,57 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-}
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures{
+        dataBinding = true
+        viewBinding = true
+    }
+    hilt {
+        enableTransformForLocalTests = true
+    }
+}
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation libs.kotlin_stdlib
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.constraintlayout
+
+    implementation libs.core_ktx
+    implementation libs.lifecycle_livedata_ktx
+    implementation libs.lifecycle_viewmodel_ktx
+    implementation libs.lifecycle_runtime_ktx
+    implementation libs.activity_ktx
+    implementation libs.fragment_ktx
+
+    implementation libs.hilt_android
+    implementation libs.hilt_lifecycle_viewmodel
+
+    kapt libs.hilt_android_compiler
+    kapt libs.hilt_compiler
+    kaptTest libs.hilt_android_compiler
+    kaptAndroidTest libs.hilt_android_compiler
+    testImplementation libs.hilt_android_testing
+    androidTestImplementation libs.hilt_android_testing
+
+
+    implementation libs.retrofit
+    implementation libs.retrofit_converter_gson
+    implementation libs.okhttp3_logging_interceptor
+
+    testImplementation libs.junit
+    androidTestImplementation libs.ext_junit
+    androidTestImplementation libs.espresso_core
+    androidTestImplementation libs.test_runner
+    androidTestImplementation libs.test_rule
+    androidTestImplementation libs.test_core
 }
