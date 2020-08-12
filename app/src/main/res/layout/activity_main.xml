@@ -10,6 +10,7 @@
         android:fitsSystemWindows="true">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_mission"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="true"
@@ -36,7 +37,7 @@
             app:navigationIcon="@drawable/ic_drawer_menu_24px" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/fab_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/colorAccent"
