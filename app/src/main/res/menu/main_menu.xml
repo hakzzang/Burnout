@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="message"
+        android:icon="@drawable/ic_baseline_message_24"
+        app:showAsAction="ifRoom"/>
+
+</menu>
