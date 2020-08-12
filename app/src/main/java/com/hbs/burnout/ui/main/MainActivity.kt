@@ -1,14 +1,18 @@
 package com.hbs.burnout.ui.main
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityMainBinding
+import com.hbs.burnout.ui.mission.MissionActivity
+import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.TransitionNavigation
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -18,7 +22,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun isUseTransition(): Boolean = true
 
-    override fun transitionLogic() {
+    override fun preTransitionLogic() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
             window.sharedElementsUseOverlay = false
@@ -26,13 +30,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
+    override fun transitionLogic() {
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observeMainViewModel(binding, mainViewModel)
+        initView(binding)
     }
 
-    private fun observeMainViewModel(binding: ActivityMainBinding, mainViewModel: MainViewModel){
+    private fun observeMainViewModel(binding: ActivityMainBinding, mainViewModel: MainViewModel) {
 
     }
 
+    private fun initView(binding: ActivityMainBinding) {
+        val missionAdapter = MissionAdapter { itemView ->
+            val intent = Intent(itemView.context, MissionActivity::class.java)
+            startActivityResultWithTransition(
+                itemView,
+                intent,
+                ActivityNavigation.MISSION,
+                TransitionNavigation.MISSION
+            )
+        }
+        binding.rvMission.adapter = missionAdapter
+        binding.rvMission.layoutManager = GridLayoutManager(binding.root.context, 2)
+        missionAdapter.submitList(mutableListOf("a", "b", "c", "d", "e", "f", "g", "h"))
+    }
 }
