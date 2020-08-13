@@ -3,5 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#2A2E43</color>
     <color name="colorAccent">#FFB902</color>
+    
+    <color name="color_your_chatting">#5773FF</color>
 
 </resources>
