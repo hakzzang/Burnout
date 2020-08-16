@@ -7,7 +7,8 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mission"
@@ -28,6 +29,7 @@
             android:layout_gravity="bottom"
             android:fitsSystemWindows="true"
             app:backgroundTint="@color/colorPrimaryDark"
+            app:elevation="16dp"
             app:fabAlignmentMode="end"
             app:fabAnimationMode="slide"
             app:fabCradleMargin="8dp"

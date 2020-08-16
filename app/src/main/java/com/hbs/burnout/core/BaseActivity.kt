@@ -35,8 +35,8 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
             transitionLogic()
         }
 
-        rotationDevice(checkHorizontal())
-        toggleDarkTheme(checkDarkTheme())
+//        rotationDevice(checkHorizontal())
+//        toggleDarkTheme(checkDarkTheme())
         setContentView(binding.root)
         setLifeCycleOwner(binding, this)
     }

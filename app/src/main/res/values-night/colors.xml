@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#CE97FD</color>
+    <color name="colorPrimaryDark">#272727</color>
+    <color name="colorAccent">#ffce4f</color>
+
+    <color name="color_your_chatting">#899dff</color>
+
+</resources>
