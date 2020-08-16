@@ -7,8 +7,7 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        >
+        android:fitsSystemWindows="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mission"
@@ -17,7 +16,6 @@
             android:nestedScrollingEnabled="true"
             android:orientation="vertical"
             app:spanCount="2"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="10"
             tools:listitem="@layout/sample_item_grid_card" />
