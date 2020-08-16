@@ -5,7 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityMainBinding
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             )
         }
         binding.rvMission.adapter = missionAdapter
-        binding.rvMission.layoutManager = GridLayoutManager(binding.root.context, 2)
+        binding.rvMission.layoutManager = LinearLayoutManager(binding.root.context)
         missionAdapter.submitList(mutableListOf("a", "b", "c", "d", "e", "f", "g", "h"))
     }
 }
