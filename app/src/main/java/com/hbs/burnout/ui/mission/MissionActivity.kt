@@ -28,7 +28,7 @@ class MissionActivity : BaseActivity<ActivityMissionBinding>() {
     }
 
     override fun transitionLogic() {
-        setArcTransition(binding.root, TransitionNavigation.MISSION)
+        setHoldContainerTransition(binding.root, TransitionNavigation.MISSION)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
