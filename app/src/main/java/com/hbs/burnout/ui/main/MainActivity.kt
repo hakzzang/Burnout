@@ -3,23 +3,30 @@ package com.hbs.burnout.ui.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
+import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.ActivityMainBinding
 import com.hbs.burnout.ui.mission.MissionActivity
 import com.hbs.burnout.ui.share.ShareActivity
 import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-    val mainViewModel by viewModels<MainViewModel>()
+    private val mainViewModel by viewModels<MainViewModel>()
 
-    override fun bindBinding() = ActivityMainBinding.inflate(layoutInflater)
+    override fun bindBinding() :  ActivityMainBinding {
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.viewModel = mainViewModel
+        return binding
+    }
 
     override fun isUseTransition(): Boolean = true
 
@@ -42,7 +49,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun observeMainViewModel(binding: ActivityMainBinding, mainViewModel: MainViewModel) {
-
+        mainViewModel.startMission.observe(this, EventObserver {
+            startMissionActivity (it)
+        })
     }
 
     private fun initView(binding: ActivityMainBinding) {
