@@ -1,6 +1,6 @@
 package com.hbs.burnout.model
 
-data class Chatting(val user:Int, val message:String, val event:Int){
+data class Chatting(var user:Int, var message:String, var event:Int, var id:Int){
     var userType : UserType = UserType.YOU
     var eventType : EventType = EventType.CHATTING
     fun parse(){

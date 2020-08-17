@@ -37,28 +37,5 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/ChattingTextInputLabel"
-            android:id="@+id/input_layout_subject"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="16dp"
-            android:hint="Hello">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/getSubjectET"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autofillHints="timetable_subject"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:imeOptions="actionNext"
-                android:drawableEnd="@drawable/ic_baseline_add_24"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
