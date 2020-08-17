@@ -9,9 +9,6 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 object TransitionConfigure {
     const val START_DURATION = 350L
     const val END_DURATION = 350L
-    const val ARC_TYPE = "ARC_TYPE"
-    const val LINEAR_TYPE = "LINEAR_TYPE"
-    const val TRANSITION_TYPE = "TRANSITION_TYPE"
 }
 
 object TransitionNavigation{
