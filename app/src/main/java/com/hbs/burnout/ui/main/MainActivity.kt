@@ -58,6 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val missionAdapter = MissionAdapter { itemView ->
 //            val intent = Intent(itemView.context, MissionActivity::class.java)
             val intent = Intent(itemView.context, ShareActivity::class.java)
+            intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
             startActivityResultWithTransition(
                 itemView,
                 intent,
@@ -68,5 +69,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.rvMission.adapter = missionAdapter
         binding.rvMission.layoutManager = LinearLayoutManager(binding.root.context)
         missionAdapter.submitList(mutableListOf("a", "b", "c", "d", "e", "f", "g", "h"))
+    }
+
+    private fun startMissionActivity(view: View) {
+        val intent = Intent(view.context, MissionActivity::class.java)
+        intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
+        startActivityResultWithTransition(
+            view,
+            intent,
+            ActivityNavigation.MISSION,
+            TransitionNavigation.MISSION
+        )
     }
 }
