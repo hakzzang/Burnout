@@ -2,6 +2,26 @@
 ## Android 11 끝장개발대회 🔋
 주제는 번아웃을 재미있게 해결해보고자, 멘탈을 건강하게 하는 Health를 주제로 프로젝트를 진행합니다.
 
+![Android11](https://img.shields.io/badge/Android11-📱-green.svg)
+[![Wiki](https://img.shields.io/badge/Wiki-📚-pink.svg)](https://github.com/hakzzang/Burnout/wiki)
+
+## About
+
+### 프로젝트
+
+- 프로젝트는 다크테마와 가로모드를 고려했습니다 🌗
+- 프로젝트는 머터리얼 트랜지션을 고려했고, 머터리얼 디자인 뷰를 사용했습니다 ✏️
+- 프로젝트는 Dagger2-Hilt를 사용했습니다 🗡️
+
+### Android 11
+- 안드로이드 Bubble을 통한 채팅 시스템을 고려하고 있습니다 🧼
+- 안드로이드의 최신 Activity-ktx, Fragment-ktx을 사용해보고 있습니다 🚄
+
+### 특징
+- 인공지능을 통한 새판별기를 구현하려고 합니다 🐤
+- 채팅 UI 기반의 게임을 구현하려고 합니다 💬
+- SNS 챌린지를 만드는 앱을 구현하려고 합니다 💪
+
 ## Week 1
 ### 0. 프로젝트 개요
 
@@ -34,3 +54,5 @@
 - 병학님 : AAC, Jetpack, Coroutine -> 채팅
 
 ## Week 2
+### Hilt 사용기
+### 채팅 프로젝트 만들기
