@@ -10,6 +10,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityMainBinding
 import com.hbs.burnout.ui.mission.MissionActivity
+import com.hbs.burnout.ui.share.ShareActivity
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.TransitionNavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun initView(binding: ActivityMainBinding) {
         val missionAdapter = MissionAdapter { itemView ->
-            val intent = Intent(itemView.context, MissionActivity::class.java)
+//            val intent = Intent(itemView.context, MissionActivity::class.java)
+            val intent = Intent(itemView.context, ShareActivity::class.java)
             startActivityResultWithTransition(
                 itemView,
                 intent,
