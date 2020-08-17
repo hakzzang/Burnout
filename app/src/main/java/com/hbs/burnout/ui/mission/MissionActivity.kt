@@ -4,16 +4,21 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityMissionBinding
-import com.hbs.burnout.model.Chatting
+import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
 
 class MissionActivity : BaseActivity<ActivityMissionBinding>() {
+    private val missionNumber = 0
     private val viewModel by viewModels<MissionViewModel>()
-    private val chattingAdapter = ChattingAdapter()
+    private val chattingAdapter by lazy{
+        ChattingAdapter()
+    }
+
     override fun bindBinding() = ActivityMissionBinding.inflate(layoutInflater)
 
     override fun isUseTransition(): Boolean = true
@@ -28,23 +33,33 @@ class MissionActivity : BaseActivity<ActivityMissionBinding>() {
     }
 
     override fun transitionLogic() {
-        setHoldContainerTransition(binding.root, TransitionNavigation.MISSION)
+        val transitionType = intent.getStringExtra(TransitionConfigure.TRANSITION_TYPE)
+        if(transitionType==TransitionConfigure.ARC_TYPE){
+            setArcTransition(binding.root, TransitionNavigation.MISSION)
+        }else{
+            setHoldContainerTransition(binding.root, TransitionNavigation.MISSION)
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView(binding)
+        observeViewModel()
     }
 
     private fun initView(binding:ActivityMissionBinding){
-        binding.rvChatting.adapter = chattingAdapter
-        binding.rvChatting.layoutManager = LinearLayoutManager(this)
-        chattingAdapter.submitList(listOf(
-            Chatting(0, "안녕하세요", 0),
-            Chatting(1, "네~ 안녕하세요?", 0),
-            Chatting(0, "식사는 했어요", 0),
-            Chatting(0, "^ㅠ^ 난 밥먹었지롱", 0),
-            Chatting(1, "ㅡㅡ나갑니다", 0)
-        ))
+        binding.rvChatting.apply {
+            itemAnimator = null // remove update animation
+            adapter = chattingAdapter
+            layoutManager = LinearLayoutManager(this@MissionActivity)
+        }
+
+    }
+
+    private fun observeViewModel(){
+        viewModel.makeScriptLiveData(missionNumber).observe(this, Observer{
+            chattingAdapter.submitList(it.toList())
+        })
     }
 }
