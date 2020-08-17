@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="data"
+            type="com.hbs.burnout.model.ShareResult.Result" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:progress="@{data.progress}"
+            android:progressDrawable="@drawable/bg_progress_share"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="50"/>
+
+        <View
+            android:id="@+id/point_color"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/bg_circle"
+            app:layout_constraintLeft_toLeftOf="@id/progressBar"
+            app:layout_constraintTop_toTopOf="@id/progress_text"
+            app:layout_constraintBottom_toBottomOf="@id/progress_text"/>
+
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.title}"
+            android:textSize="12dp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toRightOf="@id/point_color"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            tools:text="포챠펭"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
