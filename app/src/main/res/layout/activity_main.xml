@@ -2,7 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.hbs.burnout.ui.main.MainViewModel"/>
 
+        <import type="android.view.View" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
@@ -40,6 +46,8 @@
             android:id="@+id/fab_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:transitionName="mission"
+            android:onClick="@{(view)-> viewModel.passMissionActivity(view)}"
             app:backgroundTint="@color/colorAccent"
             app:layout_anchor="@id/bar"
             app:srcCompat="@drawable/ic_baseline_message_24" />

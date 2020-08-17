@@ -11,7 +11,7 @@ import com.hbs.burnout.databinding.ItemYourChattingBinding
 import com.hbs.burnout.model.Chatting
 
 class ChattingAdapter : ListAdapter<Chatting, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Chatting>() {
-    override fun areItemsTheSame(oldItem: Chatting, newItem: Chatting): Boolean = oldItem == newItem
+    override fun areItemsTheSame(oldItem: Chatting, newItem: Chatting): Boolean = oldItem.message == newItem.message
     override fun areContentsTheSame(oldItem: Chatting, newItem: Chatting): Boolean = oldItem.user == newItem.user && oldItem.message == newItem.message
 }) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

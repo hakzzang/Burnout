@@ -110,6 +110,8 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
                     rootView, R.attr.colorSurface
                 ))
 
+            setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
             window.sharedElementsUseOverlay = false
             window.sharedElementEnterTransition = enterTransition
             window.sharedElementReturnTransition = returnTransition
