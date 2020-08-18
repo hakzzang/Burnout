@@ -14,6 +14,8 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.transition.Hold
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
 import com.hbs.burnout.utils.BurnoutTransitionManagerImpl
 
@@ -35,8 +37,8 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
             transitionLogic()
         }
 
-        rotationDevice(checkHorizontal())
-        toggleDarkTheme(checkDarkTheme())
+//        rotationDevice(checkHorizontal())
+//        toggleDarkTheme(checkDarkTheme())
         setContentView(binding.root)
         setLifeCycleOwner(binding, this)
     }
@@ -108,10 +110,36 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
                     rootView, R.attr.colorSurface
                 ))
 
+            setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
             window.sharedElementsUseOverlay = false
             window.sharedElementEnterTransition = enterTransition
             window.sharedElementReturnTransition = returnTransition
         }
+    }
+
+    fun setHoldContainerTransition(rootView: View, transitionName:String) : com.google.android.material.transition.platform.MaterialContainerTransform?{
+        val enterTransition = transitionManager.setLinearTransition(false)
+        val returnTransition = transitionManager.setLinearTransition(true)
+        val hold = Hold()
+        hold.addTarget(rootView)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            rootView.transitionName = transitionName
+            enterTransition?.addTarget(rootView)
+            enterTransition?.setAllContainerColors(
+                MaterialColors.getColor(
+                    rootView, R.attr.colorSurface
+                ))
+            returnTransition?.addTarget(rootView)
+
+            setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            window.sharedElementsUseOverlay = false
+            window.sharedElementEnterTransition = enterTransition
+            window.sharedElementReturnTransition = returnTransition
+        }
+
+        return enterTransition
     }
 
     private fun checkHorizontal() = false

@@ -6,10 +6,12 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.google.android.material.transition.platform.MaterialArcMotion
 import com.google.android.material.transition.platform.MaterialContainerTransform
 
-
 object TransitionConfigure {
-    const val START_DURATION = 500L
-    const val END_DURATION = 500L
+    const val START_DURATION = 350L
+    const val END_DURATION = 350L
+    const val ARC_TYPE = "ARC_TYPE"
+    const val LINEAR_TYPE = "LINEAR_TYPE"
+    const val TRANSITION_TYPE = "TRANSITION_TYPE"
 }
 
 object TransitionNavigation{
