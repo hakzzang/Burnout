@@ -16,7 +16,9 @@ ext{
             espresso_core : '3.2.0',
             retrofit : '2.9.0',
             okhttp3_logging_interceptor: '4.5.0',
-            androidx_test: '1.2.0'
+            androidx_test: '1.2.0',
+            camerax: '1.0.0-beta04',
+            navigation: '2.3.0'
     ]
     libs =  [
             //android-tools-gradle
@@ -47,6 +49,17 @@ ext{
             hilt_android_compiler : "com.google.dagger:hilt-android-compiler:${versions.dagger}",
             hilt_compiler : "androidx.hilt:hilt-compiler:${versions.hilt_compiler}",
             hilt_android_testing : "com.google.dagger:hilt-android-testing:${versions.dagger}",
+
+            // CameraX-libraries
+            camerax_core : "androidx.camera:camera-core:${versions.camerax}",
+            camerax_extentions : "androidx.camera:camera-camera2:${versions.camerax}",
+            camerax_lifecycle : "androidx.camera:camera-lifecycle:${versions.camerax}",
+            camerax_view : "androidx.camera:camera-view:1.0.0-alpha11",
+
+            //Navigation
+            navigation_gradle_plugin: "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.2",
+            navigation_ui_ktx : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
+            navigation_fragment_ktx : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
 
             //retrofit
             retrofit:  "com.squareup.retrofit2:retrofit:${versions.retrofit}",
