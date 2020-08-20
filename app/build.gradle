@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
+apply from: '../dependencies.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-apply from: '../dependencies.gradle'
+apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 30
@@ -59,6 +60,8 @@ dependencies {
 
     implementation libs.hilt_android
     implementation libs.hilt_lifecycle_viewmodel
+    implementation libs.navigation_fragment_ktx
+    implementation libs.navigation_ui_ktx
 
     kapt libs.hilt_android_compiler
     kapt libs.hilt_compiler
@@ -67,6 +70,13 @@ dependencies {
     testImplementation libs.hilt_android_testing
     androidTestImplementation libs.hilt_android_testing
 
+    implementation libs.camerax_core
+    implementation libs.camerax_extentions
+    implementation libs.camerax_lifecycle
+    implementation libs.camerax_view
+
+    implementation libs.navigation_ui_ktx
+    implementation libs.navigation_fragment_ktx
 
     implementation libs.retrofit
     implementation libs.retrofit_converter_gson

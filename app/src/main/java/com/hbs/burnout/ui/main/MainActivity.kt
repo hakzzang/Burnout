@@ -11,6 +11,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.ActivityMainBinding
+import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.ui.mission.MissionActivity
 import com.hbs.burnout.ui.share.ShareActivity
 import com.hbs.burnout.utils.ActivityNavigation
@@ -57,7 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun initView(binding: ActivityMainBinding) {
         val missionAdapter = MissionAdapter { itemView ->
 //            val intent = Intent(itemView.context, MissionActivity::class.java)
-            val intent = Intent(itemView.context, ShareActivity::class.java)
+            val intent = Intent(itemView.context, CameraMissionActivity::class.java)
             intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
             startActivityResultWithTransition(
                 itemView,
