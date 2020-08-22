@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModel
 import com.hbs.burnout.core.Event
 
 class MainViewModel @ViewModelInject constructor() : ViewModel() {
-    private val _startMission : MutableLiveData<Event<View>> = MutableLiveData()
-    val startMission : LiveData<Event<View>> = _startMission
+    private val _startChatting : MutableLiveData<Event<View>> = MutableLiveData()
+    val startChatting : LiveData<Event<View>> = _startChatting
 
-    fun passMissionActivity(view:View){
-        _startMission.value = Event(view)
+    fun passChattingActivity(view:View){
+        _startChatting.value = Event(view)
     }
 }

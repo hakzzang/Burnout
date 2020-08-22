@@ -37,4 +37,15 @@
     <dimen name="rect_button_width">80dp</dimen>
     <dimen name="rect_button_height">24dp</dimen>
     <dimen name="shutter_button_margin">80dp</dimen>
+
+
+    <!-- Chatting resource -->
+    <dimen name="chatting_item_container_margin">12dp</dimen>
+    <dimen name="chatting_profile_image_size">36dp</dimen>
+    <dimen name="chatting_profile_image_elevation">2dp</dimen>
+    <dimen name="chatting_profile_image_outline">2dp</dimen>
+    <dimen name="chatting_dialog_margin_to_profile">18dp</dimen>
+    <dimen name="chatting_dialog_margin_text">16dp</dimen>
+    <dimen name="chatting_wait_animation_width">96dp</dimen>
+    <dimen name="chatting_wait_animation_height">46dp</dimen>
 </resources>
