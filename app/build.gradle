@@ -16,7 +16,6 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -63,6 +62,10 @@ dependencies {
     implementation libs.navigation_fragment_ktx
     implementation libs.navigation_ui_ktx
 
+    implementation libs.room_runtime
+    implementation libs.room_ktx
+    kapt libs.room_compiler
+
     kapt libs.hilt_android_compiler
     kapt libs.hilt_compiler
     kaptTest libs.hilt_android_compiler
@@ -81,6 +84,8 @@ dependencies {
     implementation libs.retrofit
     implementation libs.retrofit_converter_gson
     implementation libs.okhttp3_logging_interceptor
+
+    implementation libs.lottie
 
     testImplementation libs.junit
     androidTestImplementation libs.ext_junit
