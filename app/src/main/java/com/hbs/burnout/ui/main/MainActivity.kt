@@ -12,8 +12,7 @@ import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.ActivityMainBinding
 import com.hbs.burnout.ui.mission.CameraMissionActivity
-import com.hbs.burnout.ui.mission.MissionActivity
-import com.hbs.burnout.ui.share.ShareActivity
+import com.hbs.burnout.ui.chat.ChattingActivity
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
@@ -45,13 +44,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observeMainViewModel(binding, mainViewModel)
+        observeMainViewModel(mainViewModel)
         initView(binding)
     }
 
-    private fun observeMainViewModel(binding: ActivityMainBinding, mainViewModel: MainViewModel) {
-        mainViewModel.startMission.observe(this, EventObserver {
-            startMissionActivity (it)
+    private fun observeMainViewModel(mainViewModel: MainViewModel) {
+        mainViewModel.startChatting.observe(this, EventObserver {
+            startChattingActivity (it)
         })
     }
 
@@ -72,8 +71,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         missionAdapter.submitList(mutableListOf("a", "b", "c", "d", "e", "f", "g", "h"))
     }
 
-    private fun startMissionActivity(view: View) {
-        val intent = Intent(view.context, MissionActivity::class.java)
+    private fun startChattingActivity(view: View) {
+        val intent = Intent(view.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
         startActivityResultWithTransition(
             view,
