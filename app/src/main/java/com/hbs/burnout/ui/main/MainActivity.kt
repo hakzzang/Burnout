@@ -62,8 +62,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             startActivityResultWithTransition(
                 itemView,
                 intent,
-                ActivityNavigation.MISSION,
-                TransitionNavigation.MISSION
+                ActivityNavigation.CHATTING,
+                TransitionNavigation.CHATTING
             )
         }
         binding.rvMission.adapter = missionAdapter
@@ -77,8 +77,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         startActivityResultWithTransition(
             view,
             intent,
-            ActivityNavigation.MISSION,
-            TransitionNavigation.MISSION
+            ActivityNavigation.CHATTING,
+            TransitionNavigation.CHATTING
         )
     }
 }

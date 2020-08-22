@@ -15,7 +15,7 @@ object TransitionConfigure {
 }
 
 object TransitionNavigation{
-    const val MISSION = "MISSION"
+    const val CHATTING = "CHATTING"
 }
 
 interface BurnoutTransitionManager {

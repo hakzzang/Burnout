@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.hbs.burnout.core.Event
 import com.hbs.burnout.domain.local.usecase.ChattingUseCase
 import com.hbs.burnout.model.Script
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,13 @@ class ChattingViewModel @ViewModelInject constructor(
     private val _completedReadingScript = MutableLiveData<Event<Script>>()
     val completedReadingScript : LiveData<Event<Script>> = _completedReadingScript
 
+    private val _completedStage = MutableLiveData<Event<Unit>>()
+    val completedStage : LiveData<Event<Unit>> =_completedStage
+
     fun readNextScriptLine(scriptNumber: Int) {
-        val script = chattingUseCase.readNextScriptLine(scriptNumber)
+        val script = chattingUseCase.readNextScriptLine(scriptNumber) {
+            _completedStage.value = Event(Unit)
+        }?:return
         _readingScript.value = Event(script)
     }
 

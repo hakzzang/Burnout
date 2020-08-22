@@ -15,6 +15,5 @@ object StorageModule {
     fun provideScriptStorage() : ScriptStorage = ScriptStorage()
 
     @Provides
-    fun provideScriptManager(scriptStorage: ScriptStorage) : ScriptManager =
-        ScriptManagerImpl(scriptStorage)
+    fun provideScriptManager(scriptStorage: ScriptStorage) : ScriptManager = ScriptManagerImpl(scriptStorage)
 }

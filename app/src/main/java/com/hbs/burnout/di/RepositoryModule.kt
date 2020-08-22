@@ -15,10 +15,8 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 object RepositoryModule{
     @Provides
-    @Singleton
     fun provideScriptRepository(dataBase: StageDataBase) : ScriptRepository = ScriptRepositoryImpl(dataBase)
 
     @Provides
-    @Singleton
     fun provideStageRepository(dataBase: StageDataBase) : StageRepository = StageRepositoryImpl(dataBase)
 }

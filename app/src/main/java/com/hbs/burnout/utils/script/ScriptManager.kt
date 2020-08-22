@@ -1,10 +1,9 @@
 package com.hbs.burnout.utils.script
 
-import android.util.Log
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.Script
 import com.hbs.burnout.model.ScriptBuilder
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -15,8 +14,9 @@ object ScriptConfiguration {
     const val READING_SPEED = 175L
 }
 
+@FragmentScoped
 interface ScriptManager {
-    fun readNextScriptLine(scriptPageNumber: Int): Script
+    fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script?
 
     //scriptCallback은 Chatting 클래스에서 대본의 정보를 모두 담고 있고,
     //String을 통해서 speed에 따른 말하는 내용이 담겨져 있습니다.
@@ -36,8 +36,7 @@ interface ScriptManager {
     ): MutableList<Script>
 }
 
-@ActivityRetainedScoped
-class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptStorage) :
+class ScriptManagerImpl @Inject constructor(val scriptStorage: ScriptStorage) :
     ScriptManager {
     private var pageNumber = 0
     private var isStopScript = true
@@ -115,8 +114,12 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
     }
 
 
-    override fun readNextScriptLine(scriptPageNumber: Int): Script {
+    override fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script? {
         val script = scriptStorage.search(scriptPageNumber)
+        if(script.size <= pageNumber){
+            completedStageCallback()
+            return null
+        }
         val scriptLine = script[pageNumber]
         pageNumber++
         return scriptLine

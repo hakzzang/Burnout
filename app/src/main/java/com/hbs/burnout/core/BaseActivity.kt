@@ -45,15 +45,6 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         setLifeCycleOwner(binding, this)
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-    }
-
     private fun setLifeCycleOwner(binding: B, lifecycleOwner: LifecycleOwner) {
         binding.lifecycleOwner = lifecycleOwner
     }

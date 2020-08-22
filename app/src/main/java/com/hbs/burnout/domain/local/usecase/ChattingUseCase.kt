@@ -25,7 +25,7 @@ interface ChattingUseCase {
 
     fun saveStage(stage: Stage): Long
     fun saveScript(script: Script): Long
-    fun readNextScriptLine(scriptPageNumber: Int): Script
+    fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script?
 
 }
 
@@ -42,8 +42,10 @@ class ChattingUseCaseImpl @Inject constructor(
     override suspend fun loadStage() = stageRepository.loadMission()
     override fun saveStage(stage: Stage) = stageRepository.insert(stage)
 
-    override fun readNextScriptLine(scriptPageNumber: Int) =
-        scriptManager.readNextScriptLine(scriptPageNumber)
+    override fun readNextScriptLine(
+        scriptPageNumber: Int,
+        completedStageCallback: () -> Unit
+    ):Script? = scriptManager.readNextScriptLine(scriptPageNumber, completedStageCallback)
 
     override suspend fun readScriptLine(
         newScript: Script,

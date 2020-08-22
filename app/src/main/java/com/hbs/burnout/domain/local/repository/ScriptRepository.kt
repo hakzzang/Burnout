@@ -2,6 +2,7 @@ package com.hbs.burnout.domain.local.repository
 
 import com.hbs.burnout.model.Script
 import com.hbs.burnout.model.dao.script.StageDataBase
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 interface ScriptRepository {
@@ -10,6 +11,7 @@ interface ScriptRepository {
     fun insert(script: Script) : Long
 }
 
+@FragmentScoped
 class ScriptRepositoryImpl @Inject constructor(private val dataBase: StageDataBase): ScriptRepository {
     override suspend fun loadScript() = dataBase.getScriptDao().getAll()
     override suspend fun loadScriptOf(scriptNumber:Int): List<Script> = dataBase.getScriptDao().getScriptOf(scriptNumber)

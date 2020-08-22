@@ -11,13 +11,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object UseCaseModule {
     @Provides
-    @Singleton
     fun provideChattingUseCase(
         scriptRepository: ScriptRepository,
         stageRepository: StageRepository,
@@ -25,7 +25,6 @@ object UseCaseModule {
     ): ChattingUseCase = ChattingUseCaseImpl(scriptRepository, stageRepository, scriptManager)
 
     @Provides
-    @Singleton
     fun provideMainUseCase(stageRepository: StageRepository): MainUseCase =
         MainUseCaseImpl(stageRepository)
 }

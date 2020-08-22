@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_chatting_graph"
+    app:startDestination="@id/chatting_fragment">
+
+    <fragment
+        android:id="@+id/chatting_fragment"
+        android:name="com.hbs.burnout.ui.chat.ChattingFragment"
+        tools:layout="@layout/fragment_chatting"
+        android:label="ChattingFragment" >
+
+        <action
+            android:id="@+id/action_chatting_to_completed_stage"
+            app:destination="@id/completed_stage_fragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/completed_stage_fragment"
+        tools:layout="@layout/fragment_completed_stage"
+        android:name="com.hbs.burnout.ui.chat.CompletedStageFragment"
+        android:label="CompletedStageFragment" >
+        <action
+            android:id="@+id/action_completed_stage_to_chatting"
+            app:destination="@id/chatting_fragment" />
+    </fragment>
+</navigation>
