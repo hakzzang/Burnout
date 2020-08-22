@@ -10,6 +10,7 @@ import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.FragmentChattingBinding
 import com.hbs.burnout.model.Script
+import com.hbs.burnout.ui.ext.dialog.AnswerDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,12 +41,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
     private fun initView(binding: FragmentChattingBinding) {
         initChattingList(binding.rvChatting)
-        binding.tvPositive.setOnClickListener {
-            viewModel.selectAnswer(0)
-        }
-        binding.tvNegative.setOnClickListener {
-            viewModel.selectAnswer(1)
-        }
     }
 
     private fun observeViewModel(viewModel: ChattingViewModel){
@@ -58,8 +53,13 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         })
 
         viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript->
-            if(lastScript.event == 0){
+            if (lastScript.event == 0) {
                 viewModel.readNextScriptLine(missionNumber)
+            } else {
+                binding.root.post {
+                    showAnswerDialog(viewModel, lastScript)
+                }
+
             }
         })
 
@@ -76,9 +76,15 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         }
     }
 
-    private fun updateRecyclerView(scriptCache: List<Script>){
+    private fun updateRecyclerView(scriptCache: List<Script>) {
         chattingAdapter.submitList(scriptCache.toList())
     }
 
-
+    private fun showAnswerDialog(viewModel: ChattingViewModel, lastScript: Script) {
+        val dialog = AnswerDialog(lastScript.answer) { dialog,answerNumber ->
+            dialog.dismiss()
+            viewModel.selectAnswer(answerNumber)
+        }
+        dialog.showNow(parentFragmentManager, "asdf")
+    }
 }

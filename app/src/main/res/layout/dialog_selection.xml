@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/selection_dialog_height"
+        app:shapeAppearance="@style/SelectContainerStyle"
+        app:cardBackgroundColor="#ffffff">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_dialog_selection_title"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:text="@string/title_answer"
+                android:textSize="@dimen/material_text_headline"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@android:color/primary_text_light"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <com.hbs.burnout.ui.ext.custom.SelectionView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/view_selection"
+                app:layout_constraintTop_toBottomOf="@id/tv_dialog_selection_title"
+                app:layout_constraintBottom_toBottomOf="parent">
+            </com.hbs.burnout.ui.ext.custom.SelectionView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</layout>
