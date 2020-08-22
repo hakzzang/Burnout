@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Burnout</string>
+    <!-- Chatting -->
+    <string name="title_chatting">Chatting</string>
 </resources>
