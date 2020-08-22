@@ -39,6 +39,16 @@
     <dimen name="shutter_button_margin">80dp</dimen>
 
 
+    <!-- Material text size resources-->
+    <dimen name="material_text_overline">10sp</dimen>
+    <dimen name="material_text_caption">12sp</dimen>
+    <dimen name="material_text_body1">14sp</dimen>
+    <dimen name="material_text_body2">13sp</dimen>
+    <dimen name="material_text_subhead">16sp</dimen>
+    <dimen name="material_text_headline2">20sp</dimen>
+    <dimen name="material_text_headline">24sp</dimen>
+    <dimen name="material_text_display1">34sp</dimen>
+
     <!-- Chatting resource -->
     <dimen name="chatting_item_container_margin">12dp</dimen>
     <dimen name="chatting_profile_image_size">36dp</dimen>
@@ -48,4 +58,7 @@
     <dimen name="chatting_dialog_margin_text">16dp</dimen>
     <dimen name="chatting_wait_animation_width">96dp</dimen>
     <dimen name="chatting_wait_animation_height">46dp</dimen>
+
+
+    <dimen name="selection_dialog_height">256dp</dimen>
 </resources>
