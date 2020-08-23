@@ -70,7 +70,6 @@ class CameraFragment : Fragment() {
 
     private lateinit var container: ConstraintLayout
     private lateinit var viewFinder: PreviewView
-    private lateinit var outputDirectory: File
     private lateinit var broadcastManager: LocalBroadcastManager
 
     private var displayId: Int = -1
@@ -146,7 +145,7 @@ class CameraFragment : Fragment() {
         displayManager.registerDisplayListener(displayListener, null)
 
         // Determine the output directory
-        outputDirectory = CameraMissionActivity.getOutputDirectory(requireContext())
+//        outputDirectory = CameraMissionActivity.getOutputDirectory(requireContext())
 
         // Wait for the views to be properly laid out
         viewFinder.post {
@@ -316,7 +315,6 @@ class CameraFragment : Fragment() {
 
                     override fun onError(exc: ImageCaptureException) {
                         Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
-                        val errorType = exc.getImageCaptureError()
                     }
 
                     override fun onCaptureSuccess(image: ImageProxy) {

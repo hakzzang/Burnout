@@ -37,6 +37,7 @@ android {
     buildFeatures{
         dataBinding = true
         viewBinding = true
+        mlModelBinding true
     }
     hilt {
         enableTransformForLocalTests = true
@@ -81,6 +82,10 @@ dependencies {
     implementation libs.retrofit
     implementation libs.retrofit_converter_gson
     implementation libs.okhttp3_logging_interceptor
+
+    implementation libs.tensorflow_support
+    implementation libs.tensorflow_metadata
+    implementation libs.tensorflow_gpu
 
     testImplementation libs.junit
     androidTestImplementation libs.ext_junit
