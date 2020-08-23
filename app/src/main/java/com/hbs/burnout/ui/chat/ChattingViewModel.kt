@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.hbs.burnout.core.Event
 import com.hbs.burnout.domain.local.usecase.ChattingUseCase
 import com.hbs.burnout.model.Script
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChattingViewModel @ViewModelInject constructor(
     private val chattingUseCase: ChattingUseCase
@@ -19,8 +19,8 @@ class ChattingViewModel @ViewModelInject constructor(
     private val _readingScript = MutableLiveData<Event<Script>>()
     val readingScript:LiveData<Event<Script>> = _readingScript
 
-    private val _parsedScript = MutableLiveData<List<Script>>(listOf())
-    val parsedScript : LiveData<List<Script>> = _parsedScript
+    private val _parsedScript = MutableLiveData<Event<List<Script>>>()
+    val parsedScript : LiveData<Event<List<Script>>> = _parsedScript
 
     private val _completedReadingScript = MutableLiveData<Event<Script>>()
     val completedReadingScript : LiveData<Event<Script>> = _completedReadingScript
@@ -38,9 +38,10 @@ class ChattingViewModel @ViewModelInject constructor(
     fun emitParsingScript(newScript: Script) {
         viewModelScope.launch(Dispatchers.IO) {
             chattingUseCase.readScriptLine(newScript, { scriptCache ->
-                _parsedScript.value = scriptCache
+                _parsedScript.value = Event(scriptCache)
             },{lastScript->
                 _completedReadingScript.postValue(Event(lastScript))
+                chattingUseCase.saveScript(lastScript)
             })
         }
     }
@@ -48,10 +49,25 @@ class ChattingViewModel @ViewModelInject constructor(
     fun selectAnswer(answerNumber: Int){
         viewModelScope.launch(Dispatchers.IO){
             chattingUseCase.answerScriptLine(answerNumber, { scriptCache ->
-                _parsedScript.value = scriptCache
+                _parsedScript.value = Event(scriptCache)
             },{lastScript->
                 _completedReadingScript.postValue(Event(lastScript))
+                chattingUseCase.saveScript(lastScript)
             })
+        }
+    }
+
+    fun loadStage(scriptNumber: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val script = chattingUseCase.loadScriptOf(scriptNumber)
+            withContext(Dispatchers.Main){
+                _parsedScript.value = Event(script)
+                if(script.isNotEmpty()){
+                    _completedReadingScript.postValue(Event(script.last()))
+                }else{
+                    readNextScriptLine(scriptNumber)
+                }
+            }
         }
     }
 }
