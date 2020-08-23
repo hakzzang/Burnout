@@ -20,6 +20,8 @@ ext{
             camerax: '1.0.0-beta04',
             navigation: '2.3.0',
             tensorflow:'0.1.0-rc1'
+            lottie : '3.4.1',
+            room : '2.2.5'
     ]
     libs =  [
             //android-tools-gradle
@@ -75,6 +77,12 @@ ext{
             //test-libraries
             junit : "junit:junit:${versions.junit}",
             ext_junit : "androidx.test.ext:junit:${versions.ext_junit}",
-            espresso_core : "androidx.test.espresso:espresso-core:${versions.espresso_core}"
+            espresso_core : "androidx.test.espresso:espresso-core:${versions.espresso_core}",
+            lottie: "com.airbnb.android:lottie:${versions.lottie}",
+
+            //room
+            room_runtime : "androidx.room:room-runtime:${versions.room}",
+            room_ktx : "androidx.room:room-ktx:${versions.room}",
+            room_compiler : "androidx.room:room-compiler:${versions.room}"
     ]
 }
