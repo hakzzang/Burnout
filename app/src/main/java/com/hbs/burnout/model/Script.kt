@@ -6,20 +6,21 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
-data class Script(@ColumnInfo var user:Int, @ColumnInfo var message:String,
-    @ColumnInfo var event:Int, @ColumnInfo var stage:Int){
+data class Script(
+    @ColumnInfo var user: Int, @ColumnInfo var message: String,
+    @ColumnInfo var event: Int, @ColumnInfo var stage: Int, @PrimaryKey var id: Int
+) {
+    @Ignore
+    val answer = hashMapOf<Int, String>()
 
-    @PrimaryKey(autoGenerate = true)
-    var id : Int = 0
     @Ignore
-    val answer = hashMapOf<Int,String>()
+    var userType: UserType = UserType.YOU
+
     @Ignore
-    var userType : UserType = UserType.YOU
-    @Ignore
-    var eventType : EventType = EventType.CHATTING
+    var eventType: EventType = EventType.CHATTING
 
     fun parse(): Script {
-        userType = if(user == 0){
+        userType = if (user == 0) {
             UserType.YOU
         }else{
             UserType.ME
@@ -40,8 +41,8 @@ data class Script(@ColumnInfo var user:Int, @ColumnInfo var message:String,
     }
 }
 
-class ScriptBuilder(user:Int, message:String, event:Int, stage:Int){
-    private val script = Script(user, message, event, stage)
+class ScriptBuilder(user:Int, message:String, event:Int, stage:Int, id: Int){
+    private val script = Script(user, message, event, stage, id)
 
     fun addAnswer(answer:Map<Int,String>): ScriptBuilder {
         script.answer.putAll(answer)
