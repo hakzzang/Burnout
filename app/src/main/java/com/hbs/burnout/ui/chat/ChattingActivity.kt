@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.Window
-import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -59,7 +58,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun bindNavigationGraph(@NavigationRes graphId:Int){
+    private fun bindNavigationGraph(@NavigationRes graphId:Int){
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
         val navController = navHostFragment.navController
         navController.setGraph(graphId)

@@ -22,6 +22,7 @@ interface ScriptManager {
     //String을 통해서 speed에 따른 말하는 내용이 담겨져 있습니다.
     fun resetScript()
     fun pauseScript()
+    fun loadScript(scriptNumber: Int, loadedScripts: List<Script>): List<Script>
     fun getCache(): MutableList<Script>
     suspend fun readScriptLine(
         newScript: Script,
@@ -36,7 +37,7 @@ interface ScriptManager {
     ): MutableList<Script>
 }
 
-class ScriptManagerImpl @Inject constructor(val scriptStorage: ScriptStorage) :
+class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptStorage) :
     ScriptManager {
     private var pageNumber = 0
     private var isStopScript = true
@@ -52,13 +53,14 @@ class ScriptManagerImpl @Inject constructor(val scriptStorage: ScriptStorage) :
     ): List<Script> {
         var newWord = ""
         val newScript = newScript.parse()
-        val (user, message, event, stage) = newScript
+        val (user, message, event, stage, id) = newScript
         if (newScript.eventType == EventType.CHATTING) {
             message.toCharArray().forEachIndexed { index, word ->
                 delay(ScriptConfiguration.READING_SPEED)
                 newWord += word.toString()
                 val newScriptLine =
-                    ScriptBuilder(user, newWord, event, stage).addAnswer(newScript.answer).create()
+                    ScriptBuilder(user, newWord, event, stage, id).addAnswer(newScript.answer)
+                        .create()
                 if (index == 0) {
                     scriptCache.add(newScriptLine)
                 } else {
@@ -77,6 +79,7 @@ class ScriptManagerImpl @Inject constructor(val scriptStorage: ScriptStorage) :
         delay(ScriptConfiguration.LINE_ENTER_SPEED)
         val lastScript = scriptCache.last().parse()
         completeReadingCallback(lastScript)
+
         return scriptCache
     }
 
@@ -87,13 +90,13 @@ class ScriptManagerImpl @Inject constructor(val scriptStorage: ScriptStorage) :
     ): MutableList<Script> {
         var newWord = ""
         val lastScript = scriptCache.last().parse()
-        val (user, message, event, stage) = lastScript
+        val (user, _, _, stage, id) = lastScript
         val answerScriptMessage = lastScript.answer[answerNumber] ?: ""
         answerScriptMessage.toCharArray().forEach { word ->
             delay(ScriptConfiguration.READING_SPEED)
             newWord += word.toString()
             val newScriptLine =
-                ScriptBuilder(user, newWord, 0, stage).addAnswer(lastScript.answer).create()
+                ScriptBuilder(user, newWord, 0, stage, id).addAnswer(lastScript.answer).create()
 
             scriptCache.set(scriptCache.lastIndex, newScriptLine)
             withContext(Dispatchers.Main) {
@@ -127,5 +130,26 @@ class ScriptManagerImpl @Inject constructor(val scriptStorage: ScriptStorage) :
 
     override fun pauseScript() {
         this.isStopScript = false
+    }
+
+    override fun loadScript(scriptNumber: Int, loadedScripts: List<Script>): List<Script> {
+        this.pageNumber = loadedScripts.size
+        val allScripts = scriptStorage.search(scriptNumber)
+        val mutableLoadedScripts = loadedScripts.toMutableList()
+        mutableLoadedScripts.forEachIndexed { index, script ->
+            if (script.event == 0) {
+                scriptCache.add(script)
+            } else if (script.event == 1) {
+                val script = ScriptBuilder(
+                    script.user,
+                    script.message,
+                    script.event,
+                    script.stage,
+                    script.id
+                ).addAnswer(allScripts[index].answer).create()
+                scriptCache.add(script)
+            }
+        }
+        return scriptCache.toList()
     }
 }

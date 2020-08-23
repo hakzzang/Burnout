@@ -10,13 +10,11 @@ import javax.inject.Inject
 interface ChattingUseCase {
     suspend fun loadStage(): List<Stage>
     suspend fun loadScriptOf(scriptNumber: Int): List<Script>
-
     suspend fun readScriptLine(
         newScript: Script,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
-
     suspend fun answerScriptLine(
         answerNumber: Int,
         readingLineCallback: (List<Script>) -> Unit,
@@ -34,12 +32,15 @@ class ChattingUseCaseImpl @Inject constructor(
     private val stageRepository: StageRepository,
     private val scriptManager: ScriptManager
 ) : ChattingUseCase {
-    override suspend fun loadScriptOf(scriptNumber: Int) =
-        scriptRepository.loadScriptOf(scriptNumber)
+    override suspend fun loadScriptOf(scriptNumber: Int): List<Script> {
+        val lastScripts = scriptRepository.loadScriptOf(scriptNumber)
+        return scriptManager.loadScript(scriptNumber, lastScripts)
+    }
 
-    override fun saveScript(script: Script): Long = scriptRepository.insert(script)
 
     override suspend fun loadStage() = stageRepository.loadMission()
+
+    override fun saveScript(script: Script): Long = scriptRepository.insert(script)
     override fun saveStage(stage: Stage) = stageRepository.insert(stage)
 
     override fun readNextScriptLine(
