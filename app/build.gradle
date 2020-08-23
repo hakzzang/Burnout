@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
+apply from: '../dependencies.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-apply from: '../dependencies.gradle'
+apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 30
@@ -15,14 +16,24 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.hbs.burnout.CustomTestRunner"
     }
 
     buildTypes {
         release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            splits.abi.enable = true
+            aaptOptions.cruncherEnabled = true
+            ext.alwaysUpdateBuildId = true
+        }
+        debug{
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            shrinkResources false
+            splits.abi.enable = false
+            aaptOptions.cruncherEnabled = false
+            ext.alwaysUpdateBuildId = false
         }
     }
 
@@ -36,6 +47,7 @@ android {
     buildFeatures{
         dataBinding = true
         viewBinding = true
+        mlModelBinding = true
     }
     hilt {
         enableTransformForLocalTests = true
@@ -59,18 +71,37 @@ dependencies {
 
     implementation libs.hilt_android
     implementation libs.hilt_lifecycle_viewmodel
+    implementation libs.navigation_fragment_ktx
+    implementation libs.navigation_ui_ktx
+
+    implementation libs.room_runtime
+    implementation libs.room_ktx
+    kapt libs.room_compiler
 
     kapt libs.hilt_android_compiler
     kapt libs.hilt_compiler
     kaptTest libs.hilt_android_compiler
     kaptAndroidTest libs.hilt_android_compiler
     testImplementation libs.hilt_android_testing
+
     androidTestImplementation libs.hilt_android_testing
 
+    implementation libs.camerax_core
+    implementation libs.camerax_extentions
+    implementation libs.camerax_lifecycle
+    implementation libs.camerax_view
+
+    implementation libs.navigation_ui_ktx
+    implementation libs.navigation_fragment_ktx
 
     implementation libs.retrofit
     implementation libs.retrofit_converter_gson
     implementation libs.okhttp3_logging_interceptor
+
+    implementation libs.tensorflow_support
+    implementation libs.tensorflow_metadata
+    implementation libs.tensorflow_gpu
+    implementation libs.lottie
 
     testImplementation libs.junit
     androidTestImplementation libs.ext_junit

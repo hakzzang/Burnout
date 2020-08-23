@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hbs.burnout">
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".BaseApplication"
@@ -28,7 +32,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.mission.MissionActivity">
+        <activity android:name=".ui.chat.ChattingActivity"
+            android:documentLaunchMode="always"
+            android:resizeableActivity="true"
+            tools:targetApi="n">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,5 +43,6 @@
         </activity>
 
         <activity android:name=".ui.share.ShareActivity" />
+        <activity android:name=".ui.mission.CameraMissionActivity"/>
     </application>
 </manifest>

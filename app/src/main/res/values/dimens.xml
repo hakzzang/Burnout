@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <dimen name="margin_xsmall">16dp</dimen>
+    <dimen name="margin_small">32dp</dimen>
+    <dimen name="margin_medium">48dp</dimen>
+    <dimen name="margin_large">64dp</dimen>
+    <dimen name="margin_xlarge">92dp</dimen>
+
+    <dimen name="spacing_small">4dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+
+    <dimen name="stroke_small">4dp</dimen>
+    <dimen name="stroke_medium">8dp</dimen>
+    <dimen name="stroke_large">12dp</dimen>
+
+    <dimen name="round_button_small">32dp</dimen>
+    <dimen name="round_button_medium">64dp</dimen>
+    <dimen name="round_button_large">92dp</dimen>
+
+    <dimen name="rect_button_margin">12dp</dimen>
+    <dimen name="rect_button_width">80dp</dimen>
+    <dimen name="rect_button_height">24dp</dimen>
+    <dimen name="shutter_button_margin">80dp</dimen>
+
+
+    <!-- Material text size resources-->
+    <dimen name="material_text_overline">10sp</dimen>
+    <dimen name="material_text_caption">12sp</dimen>
+    <dimen name="material_text_body1">14sp</dimen>
+    <dimen name="material_text_body2">13sp</dimen>
+    <dimen name="material_text_subhead">16sp</dimen>
+    <dimen name="material_text_headline2">20sp</dimen>
+    <dimen name="material_text_headline">24sp</dimen>
+    <dimen name="material_text_display1">34sp</dimen>
+
+    <!-- Chatting resource -->
+    <dimen name="chatting_item_container_margin">12dp</dimen>
+    <dimen name="chatting_profile_image_size">36dp</dimen>
+    <dimen name="chatting_profile_image_elevation">2dp</dimen>
+    <dimen name="chatting_profile_image_outline">2dp</dimen>
+    <dimen name="chatting_dialog_margin_to_profile">18dp</dimen>
+    <dimen name="chatting_dialog_margin_text">16dp</dimen>
+    <dimen name="chatting_wait_animation_width">96dp</dimen>
+    <dimen name="chatting_wait_animation_height">46dp</dimen>
+
+
+    <dimen name="selection_dialog_height">256dp</dimen>
+</resources>

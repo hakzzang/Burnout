@@ -1,6 +1,6 @@
 ext{
     versions =  [
-            gradle : '4.0.1',
+            gradle : '4.2.0-alpha02',
             kotlin: '1.3.72',
             ktx: '1.3.1',
             activityktx : '1.2.0-alpha07',
@@ -16,7 +16,12 @@ ext{
             espresso_core : '3.2.0',
             retrofit : '2.9.0',
             okhttp3_logging_interceptor: '4.5.0',
-            androidx_test: '1.2.0'
+            androidx_test: '1.2.0',
+            camerax: '1.0.0-beta04',
+            navigation: '2.3.0',
+            lottie : '3.4.1',
+            room : '2.2.5',
+            tensorflow:'0.1.0-rc1'
     ]
     libs =  [
             //android-tools-gradle
@@ -48,6 +53,22 @@ ext{
             hilt_compiler : "androidx.hilt:hilt-compiler:${versions.hilt_compiler}",
             hilt_android_testing : "com.google.dagger:hilt-android-testing:${versions.dagger}",
 
+            // CameraX-libraries
+            camerax_core : "androidx.camera:camera-core:${versions.camerax}",
+            camerax_extentions : "androidx.camera:camera-camera2:${versions.camerax}",
+            camerax_lifecycle : "androidx.camera:camera-lifecycle:${versions.camerax}",
+            camerax_view : "androidx.camera:camera-view:1.0.0-alpha11",
+
+            //Navigation
+            navigation_gradle_plugin: "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.2",
+            navigation_ui_ktx : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
+            navigation_fragment_ktx : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+
+            //tf
+            tensorflow_support : "org.tensorflow:tensorflow-lite-support:${versions.tensorflow}",
+            tensorflow_metadata : "org.tensorflow:tensorflow-lite-metadata:${versions.tensorflow}",
+            tensorflow_gpu : "org.tensorflow:tensorflow-lite-gpu:2.2.0",
+
             //retrofit
             retrofit:  "com.squareup.retrofit2:retrofit:${versions.retrofit}",
             retrofit_converter_gson : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
@@ -56,6 +77,12 @@ ext{
             //test-libraries
             junit : "junit:junit:${versions.junit}",
             ext_junit : "androidx.test.ext:junit:${versions.ext_junit}",
-            espresso_core : "androidx.test.espresso:espresso-core:${versions.espresso_core}"
+            espresso_core : "androidx.test.espresso:espresso-core:${versions.espresso_core}",
+            lottie: "com.airbnb.android:lottie:${versions.lottie}",
+
+            //room
+            room_runtime : "androidx.room:room-runtime:${versions.room}",
+            room_ktx : "androidx.room:room-ktx:${versions.room}",
+            room_compiler : "androidx.room:room-compiler:${versions.room}"
     ]
 }

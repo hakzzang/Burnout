@@ -6,16 +6,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp">
+        android:layout_margin="@dimen/chatting_item_container_margin">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_profile"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="#000000"
-            android:elevation="2dp"
-            app:strokeWidth="2dp"
-            app:strokeColor="#ffffff"
+            android:layout_width="@dimen/chatting_profile_image_size"
+            android:layout_height="@dimen/chatting_profile_image_size"
+            android:background="@android:color/black"
+            android:elevation="@dimen/chatting_profile_image_elevation"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="@dimen/chatting_profile_image_outline"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircleImageView" />
@@ -23,8 +23,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginLeft="@dimen/chatting_dialog_margin_to_profile"
+            android:layout_marginTop="@dimen/chatting_dialog_margin_to_profile"
             app:cardBackgroundColor="@color/color_your_chatting"
             app:layout_constraintLeft_toLeftOf="@id/iv_profile"
             app:layout_constraintTop_toTopOf="@id/iv_profile">
@@ -32,12 +32,13 @@
             <com.google.android.material.textview.MaterialTextView
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:id="@+id/tv_chatting"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/chatting_dialog_margin_text"
                 android:textColor="@android:color/white"
                 tools:text="안녕~~~~"
                 />
+
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
