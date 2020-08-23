@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Burnout</string>
+
+    <string name="text_download">다운로드</string>
+    <string name="text_cancel">취소</string>
+    <string name="text_save">저장</string>
+    <string name="text_share">공유하기</string>
+
+    <string name="share_kakaotalk">카카오톡</string>
+    <string name="share_facebook">페이스북</string>
+    <string name="share_instagram">인스타그램</string>
+
+    <string name="tag_title">#번아웃_챌린지 #%s</string>
+    <string name="select_tag">&lt;b&gt;#번아웃_챌린지&lt;/b&gt; 태그 포함하기</string>
 </resources>
