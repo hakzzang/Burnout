@@ -5,4 +5,5 @@
 
     <!-- Answer-->
     <string name="title_answer">Answer</string>
+    <string name="text_new_message_mission">새로운 번아웃 미션 알림</string>
 </resources>

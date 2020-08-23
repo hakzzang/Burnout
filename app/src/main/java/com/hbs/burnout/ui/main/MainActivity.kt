@@ -14,12 +14,16 @@ import com.hbs.burnout.databinding.ActivityMainBinding
 import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.ui.chat.ChattingActivity
 import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.NotificationHelper
 import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
+    @Inject
+    lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
 
     override fun bindBinding() :  ActivityMainBinding {
@@ -46,6 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         observeMainViewModel(mainViewModel)
         initView(binding)
+
     }
 
     private fun observeMainViewModel(mainViewModel: MainViewModel) {

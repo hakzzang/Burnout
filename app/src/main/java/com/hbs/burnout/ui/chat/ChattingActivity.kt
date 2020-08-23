@@ -10,13 +10,18 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityChattingBinding
+import com.hbs.burnout.utils.NotificationHelper
 import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
+    @Inject
+    lateinit var notificationHelper: NotificationHelper
+
     override fun bindBinding() = ActivityChattingBinding.inflate(layoutInflater)
 
     override fun isUseTransition(): Boolean = true
@@ -42,6 +47,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         super.onCreate(savedInstanceState)
         initView(binding)
         bindNavigationGraph(R.navigation.nav_chatting_graph)
+        showBubble()
     }
 
     private fun initView(binding:ActivityChattingBinding){
@@ -62,5 +68,11 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
         val navController = navHostFragment.navController
         navController.setGraph(graphId)
+    }
+
+    private fun showBubble(){
+        notificationHelper.makeNotificationChannel(this)
+
+        notificationHelper.showBubble(this)
     }
 }
