@@ -1,14 +1,11 @@
 package com.hbs.burnout.ui.share
 
-import android.R
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.Window
-import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -19,7 +16,6 @@ import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.model.Model
-import java.io.File
 
 
 private const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
@@ -75,10 +71,10 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private fun alnalyzer (imageBitmap: Bitmap) {
 
         val options = Model.Options.Builder().setDevice(Model.Device.GPU).build()
-        val flowerModel = BirdModel.newInstance(baseContext, options)
+        val birdModel = BirdModel.newInstance(baseContext, options)
         val items = mutableListOf<ShareResult.Result>()
         val tfImage = TensorImage.fromBitmap(imageBitmap)
-        val outputs = flowerModel.process(tfImage)
+        val outputs = birdModel.process(tfImage)
             .probabilityAsCategoryList.apply {
                 sortByDescending { it.score } // Sort with highest confidence first
             }.take(MAX_RESULT_DISPLAY) // take the top results

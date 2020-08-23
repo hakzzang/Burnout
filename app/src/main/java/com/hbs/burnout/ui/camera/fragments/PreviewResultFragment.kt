@@ -49,9 +49,9 @@ class PreviewResultFragment : Fragment() {
             val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
             val out = FileOutputStream(photoFile.canonicalFile)
 
-            bitmapImage?.rotate(rotationf)?.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitmapImage?.rotate(rotationf)?.compress(Bitmap.CompressFormat.JPEG, 100, out)
 	    	
-            out.close();
+            out.close()
 
             val intent = Intent(this.context, ShareActivity::class.java)
 

@@ -19,9 +19,9 @@ ext{
             androidx_test: '1.2.0',
             camerax: '1.0.0-beta04',
             navigation: '2.3.0',
-            tensorflow:'0.1.0-rc1'
             lottie : '3.4.1',
-            room : '2.2.5'
+            room : '2.2.5',
+            tensorflow:'0.1.0-rc1'
     ]
     libs =  [
             //android-tools-gradle
