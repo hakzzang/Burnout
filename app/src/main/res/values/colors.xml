@@ -10,4 +10,7 @@
     <color name="color_progress_0">#ff7473</color>
     <color name="color_progress_1">#ffc952</color>
     <color name="color_progress_2">#47b8e0</color>
+
+    <color name="color_dialog_bg">#ffffff</color>
+    <color name="color_dialog_text">#000000</color>
 </resources>

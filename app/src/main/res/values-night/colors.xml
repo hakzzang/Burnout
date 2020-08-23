@@ -6,4 +6,6 @@
 
     <color name="color_your_chatting">#899dff</color>
 
+    <color name="color_dialog_bg">#272727</color>
+    <color name="color_dialog_text">#ffffff</color>
 </resources>

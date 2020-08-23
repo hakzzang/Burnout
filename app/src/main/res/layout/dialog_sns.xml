@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.hbs.burnout.ui.share.SnsType"/>
+        <variable
+            name="handler"
+            type="com.hbs.burnout.ui.share.SnsDialog" />
+
+        <variable
+            name="viewModel"
+            type="com.hbs.burnout.ui.share.ShareViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@drawable/bg_container_dialog"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:text="@string/text_share"
+                android:textColor="@color/color_dialog_text"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/close_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="8dp"
+                android:backgroundTint="@color/color_dialog_text"
+                android:padding="16dp"
+                android:src="@drawable/ic_btn_close"
+                android:tint="@color/color_dialog_text"
+                android:onClick="@{()->handler.dismiss()}"
+                app:layout_constraintBottom_toBottomOf="@id/dialog_title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dialog_title" />
+
+            <!-- 카카오톡 공유하기 -->
+            <ImageView
+                android:id="@+id/kakao_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_btn_share_kakao"
+                android:onClick="@{()->viewModel.shareToSns(SnsType.KAKAOTALK)}"
+                app:layout_constraintBottom_toTopOf="@id/kakao_title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/facebook_btn"
+                app:layout_constraintTop_toBottomOf="@id/dialog_title"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/kakao_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Text.Dialog.Sns"
+                android:layout_marginTop="7dp"
+                android:text="@string/share_kakaotalk"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/kakao_btn"
+                app:layout_constraintRight_toRightOf="@id/kakao_btn"
+                app:layout_constraintTop_toBottomOf="@id/kakao_btn"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <!-- 페이스북 공유하기 -->
+            <ImageView
+                android:id="@+id/facebook_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_btn_share_facebook"
+                android:onClick="@{()->viewModel.shareToSns(SnsType.FACEBOOK)}"
+                app:layout_constraintBottom_toBottomOf="@id/kakao_btn"
+                app:layout_constraintLeft_toRightOf="@id/kakao_btn"
+                app:layout_constraintRight_toLeftOf="@id/instagram_btn"
+                app:layout_constraintTop_toTopOf="@id/kakao_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Text.Dialog.Sns"
+                android:layout_marginTop="7dp"
+                android:text="@string/share_facebook"
+                app:layout_constraintLeft_toLeftOf="@id/facebook_btn"
+                app:layout_constraintRight_toRightOf="@id/facebook_btn"
+                app:layout_constraintTop_toBottomOf="@id/facebook_btn" />
+
+            <!-- 인스타그램 공유하기 -->
+            <ImageView
+                android:id="@+id/instagram_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_btn_share_instagram"
+                android:onClick="@{()->viewModel.shareToSns(SnsType.INSTAGRAM)}"
+                app:layout_constraintBottom_toBottomOf="@id/facebook_btn"
+                app:layout_constraintLeft_toRightOf="@id/facebook_btn"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/facebook_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Text.Dialog.Sns"
+                android:layout_marginTop="7dp"
+                android:text="@string/share_instagram"
+                app:layout_constraintLeft_toLeftOf="@id/instagram_btn"
+                app:layout_constraintRight_toRightOf="@id/instagram_btn"
+                app:layout_constraintTop_toBottomOf="@id/instagram_btn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
