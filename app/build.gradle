@@ -16,7 +16,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.hbs.burnout.CustomTestRunner"
     }
 
     buildTypes {
@@ -71,6 +71,7 @@ dependencies {
     kaptTest libs.hilt_android_compiler
     kaptAndroidTest libs.hilt_android_compiler
     testImplementation libs.hilt_android_testing
+
     androidTestImplementation libs.hilt_android_testing
 
     implementation libs.camerax_core
