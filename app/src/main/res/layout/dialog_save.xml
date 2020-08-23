@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.text.Html"/>
+        <import type="android.view.View"/>
+
+        <variable
+            name="handler"
+            type="com.hbs.burnout.ui.save.SaveDialog" />
+
+        <variable
+            name="viewModel"
+            type="com.hbs.burnout.ui.share.ShareViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="#DD000000">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/text_download"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/save_img"
+            app:layout_constraintLeft_toLeftOf="@id/save_img"
+            app:layout_constraintRight_toRightOf="@id/save_img"/>
+
+        <ImageView
+            android:id="@+id/save_img"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="24dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/gamjatwigim"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H, 1:0.8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tag_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#33000000"
+            android:visibility="@{viewModel.tagSelected?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@id/save_img"
+            app:layout_constraintLeft_toLeftOf="@id/save_img"
+            app:layout_constraintRight_toRightOf="@id/save_img"
+            app:layout_constraintTop_toTopOf="@id/save_img"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/tag_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintBottom_toBottomOf="@id/tag_title"
+                app:layout_constraintRight_toLeftOf="@id/tag_title"
+                app:layout_constraintTop_toTopOf="@id/tag_title" />
+
+            <TextView
+                android:id="@+id/tag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:shadowRadius="5.0"
+                android:shadowDx="5.0"
+                android:shadowDy="5.0"
+                android:shadowColor="#DD000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="#번아웃_챌린지 #새우버거 밥주기" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/tag_checkbox"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/selector_checkbox"
+            android:layout_marginTop="16dp"
+            app:setSelected="@{viewModel.tagSelected}"
+            android:onClick="@{(v)->viewModel.updateTagSelected(!viewModel.tagSelected)}"
+            app:layout_constraintLeft_toLeftOf="@id/save_img"
+            app:layout_constraintTop_toBottomOf="@id/save_img" />
+
+        <TextView
+            android:id="@+id/tag_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{Html.fromHtml(@string/select_tag)}"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="8dp"
+            android:onClick="@{(v)->viewModel.updateTagSelected(!viewModel.tagSelected)}"
+            app:layout_constraintBottom_toBottomOf="@id/tag_checkbox"
+            app:layout_constraintLeft_toRightOf="@id/tag_checkbox"
+            app:layout_constraintTop_toTopOf="@id/tag_checkbox"
+            tools:text="#번아웃_챌린지 태그 포함하기"/>
+
+        <TextView
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/text_cancel"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_dialog_cancel"
+            android:onClick="@{()->handler.dismiss()}"
+            app:layout_constraintVertical_bias="0.4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tag_checkbox"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="@id/save_img"
+            app:layout_constraintRight_toLeftOf="@id/save_btn" />
+
+        <TextView
+            android:id="@+id/save_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/text_save"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/bg_btn_dialog_ok"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:onClick="@{()->handler.dismiss()}"
+            app:layout_constraintTop_toTopOf="@id/cancel_btn"
+            app:layout_constraintBottom_toBottomOf="@id/cancel_btn"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintRight_toRightOf="@id/save_img"
+            app:layout_constraintLeft_toRightOf="@id/cancel_btn"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
