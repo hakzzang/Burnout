@@ -15,8 +15,7 @@ class MainViewModel @ViewModelInject constructor(val mainUseCase: MainUseCase) :
     val startChatting : LiveData<Event<View>> = _startChatting
 
     val stages = liveData {
-        val completedStages = mainUseCase.loadMission()
-        val stages = MissionHelper.clearStageList(completedStages)
+        val stages = mainUseCase.loadMission()
         emit(Event(stages.toList()))
     }
 
