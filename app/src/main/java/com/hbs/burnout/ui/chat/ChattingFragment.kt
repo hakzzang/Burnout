@@ -1,5 +1,6 @@
 package com.hbs.burnout.ui.chat
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels

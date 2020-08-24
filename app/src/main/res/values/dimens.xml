@@ -59,7 +59,10 @@
     <dimen name="chatting_wait_animation_height">46dp</dimen>
 
 
+    <!-- Selection Resources-->
+    <dimen name="view_selection_height">216dp</dimen>
     <dimen name="selection_dialog_height">256dp</dimen>
+
     <!-- ItemMission resources-->
     <dimen name="item_mission_container_height">128dp</dimen>
     <dimen name="item_mission_space">16dp</dimen>
