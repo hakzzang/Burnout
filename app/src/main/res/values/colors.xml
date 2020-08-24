@@ -13,4 +13,6 @@
 
     <color name="color_dialog_bg">#ffffff</color>
     <color name="color_dialog_text">#000000</color>
+
+    <color name="color_black_alpha_60">#A0000000</color>
 </resources>
