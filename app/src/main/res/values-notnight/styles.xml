@@ -40,12 +40,6 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="SelectContainerStyle" parent="ShapeAppearance.Shrine.LargeComponent">
-        <item name="cornerSizeTopLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-    </style>
-
     <style name="BaseBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:windowIsTranslucent">true</item>
@@ -60,5 +54,11 @@
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="SelectContainerStyle" parent="ShapeAppearance.Shrine.LargeComponent">
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 </resources>
