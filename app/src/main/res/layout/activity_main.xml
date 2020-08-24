@@ -2,13 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
-            type="com.hbs.burnout.ui.main.MainViewModel"/>
+            type="com.hbs.burnout.ui.main.MainViewModel" />
 
         <import type="android.view.View" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
@@ -21,8 +24,8 @@
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="true"
             android:orientation="vertical"
-            app:spanCount="2"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:spanCount="2"
             tools:itemCount="10"
             tools:listitem="@layout/sample_item_grid_card" />
 
@@ -46,11 +49,80 @@
             android:id="@+id/fab_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:transitionName="mission"
+            android:contentDescription="@string/main_fab_chatting_description"
             android:onClick="@{(view)-> viewModel.passChattingActivity(view)}"
+            android:transitionName="mission"
             app:backgroundTint="@color/colorAccent"
             app:layout_anchor="@id/bar"
             app:srcCompat="@drawable/ic_baseline_message_24" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bottom_drawer"
+            style="@style/BaseBottomSheetDialog"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_badge_drawer_height"
+            app:behavior_hideable="true"
+            app:cardBackgroundColor="@color/color_badge_view_color"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:shapeAppearanceOverlay="@style/SelectContainerStyle">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_badge_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/title_badge"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/material_text_headline2"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_badge_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_badge_content_top_margin"
+                    android:fontFamily="sans-serif"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="@dimen/material_text_headline"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_badge_title"
+                    tools:text="당신은 1번째 미션으로\n아래의 뱃지를 획득했습니다" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_badge"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/item_badge_list_top_bottom_margin"
+                    android:layout_marginBottom="@dimen/item_badge_list_top_bottom_margin"
+                    android:nestedScrollingEnabled="true"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
+                    app:layout_constraintRight_toRightOf="@id/guideline_badge_view_end"
+                    app:layout_constraintTop_toBottomOf="@id/tv_badge_content"
+                    app:spanCount="3"
+                    tools:itemCount="10"
+                    tools:listitem="@layout/item_badge" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_badge_view_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.9" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
