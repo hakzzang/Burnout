@@ -13,3 +13,12 @@ data class Stage(
     @ColumnInfo val thumbnail:String = "",
     @ColumnInfo var progress:Int
 )
+
+class StageProgress{
+    companion object{
+        const val NOT_COMPLETED = 0
+        const val PLAYING = 1
+        const val COMPLETED = 2
+    }
+}
+
