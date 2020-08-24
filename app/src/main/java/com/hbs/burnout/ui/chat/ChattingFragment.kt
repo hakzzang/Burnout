@@ -3,7 +3,6 @@ package com.hbs.burnout.ui.chat
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hbs.burnout.core.BaseFragment
@@ -15,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
-    private val missionNumber = 0
+    private val stageNumber = 1
     private val viewModel by viewModels<ChattingViewModel>()
     private val chattingAdapter by lazy{
         ChattingAdapter()
@@ -36,7 +35,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
         initView(binding)
         observeViewModel(viewModel)
-        viewModel.readNextScriptLine(missionNumber)
+        viewModel.loadStage(stageNumber)
     }
 
     private fun initView(binding: FragmentChattingBinding) {
@@ -44,22 +43,19 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     }
 
     private fun observeViewModel(viewModel: ChattingViewModel){
-        viewModel.readingScript.observe(viewLifecycleOwner, EventObserver{ script->
-            viewModel.emitParsingScript(script)
+        viewModel.readingScript.observe(viewLifecycleOwner, EventObserver{ scripts->
+            viewModel.emitParsingScript(scripts)
         })
 
-        viewModel.parsedScript.observe(viewLifecycleOwner, Observer { scriptCache->
+        viewModel.parsedScript.observe(viewLifecycleOwner, EventObserver { scriptCache->
             updateRecyclerView(scriptCache)
         })
 
         viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript->
             if (lastScript.event == 0) {
-                viewModel.readNextScriptLine(missionNumber)
-            } else {
-                binding.root.post {
-                    showAnswerDialog(viewModel, lastScript)
-                }
-
+                viewModel.readNextScriptLine(stageNumber)
+            }else if(lastScript.event == 1){
+                binding.root.post { showAnswerDialog(viewModel, lastScript) }
             }
         })
 

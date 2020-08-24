@@ -15,4 +15,7 @@ interface ScriptDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(script: Script): Long
+
+    @Query("DELETE FROM Script")
+    fun dropTable()
 }

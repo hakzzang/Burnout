@@ -20,6 +20,11 @@
         <item name="boxStrokeColor">@android:color/transparent</item>
     </style>
 
+    <style name="Text.Dialog.Sns" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/color_dialog_text</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
     <style name="ShapeAppearance.Shrine.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">cut</item>
         <item name="cornerSize">4dp</item>
