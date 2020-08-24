@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.hbs.burnout.core.Event
 import com.hbs.burnout.domain.local.usecase.MainUseCase
-import com.hbs.burnout.ui.main.adapter.MissionHelper
 
 class MainViewModel @ViewModelInject constructor(val mainUseCase: MainUseCase) : ViewModel() {
     private val _startChatting : MutableLiveData<Event<View>> = MutableLiveData()

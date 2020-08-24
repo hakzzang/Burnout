@@ -2,7 +2,7 @@ package com.hbs.burnout.domain.local.usecase
 
 import com.hbs.burnout.domain.local.repository.StageRepository
 import com.hbs.burnout.model.Stage
-import com.hbs.burnout.ui.main.adapter.MissionHelper
+import com.hbs.burnout.utils.script.MissionHelper
 import javax.inject.Inject
 
 interface MainUseCase {
