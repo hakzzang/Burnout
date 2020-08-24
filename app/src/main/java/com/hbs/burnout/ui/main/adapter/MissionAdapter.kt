@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hbs.burnout.databinding.ItemMissionBinding
 import com.hbs.burnout.model.Stage
 import com.hbs.burnout.model.StageProgress
+import com.hbs.burnout.utils.script.MissionHelper
 
 class MissionAdapter(private val successCallback: (View) -> (Unit)) :
     ListAdapter<Stage, MissionAdapter.ViewHolder>(object : DiffUtil.ItemCallback<Stage>() {

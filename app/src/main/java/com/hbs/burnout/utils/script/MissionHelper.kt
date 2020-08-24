@@ -1,4 +1,4 @@
-package com.hbs.burnout.ui.main.adapter
+package com.hbs.burnout.utils.script
 
 import com.hbs.burnout.R
 import com.hbs.burnout.model.Stage
@@ -11,6 +11,13 @@ object MissionHelper {
         R.drawable.broccoli, R.drawable.apple, R.drawable.strawberry,
         R.drawable.tangerine, R.drawable.paprika, R.drawable.orange,
         R.drawable.tomato
+    )
+
+    private val badgeDark = arrayListOf(
+        R.drawable.watermelon_dark, R.drawable.banana_dark, R.drawable.mango_dark,
+        R.drawable.broccoli_dark, R.drawable.apple_dark, R.drawable.strawberry_dark,
+        R.drawable.tangerine_dark, R.drawable.paprika_dark, R.drawable.orange_dark,
+        R.drawable.tomato_dark
     )
 
     private val stages = listOf(
@@ -30,14 +37,20 @@ object MissionHelper {
         return badge[stageRound - 1]
     }
 
+    fun getMyBadge(index: Int, stage: Stage): Int =
+        if (stage.isCompleted()) {
+            badge[index]
+        } else {
+            badgeDark[index]
+        }
+
     fun clearStageList(completedStages: List<Stage>): MutableList<Stage> {
         val editableCompletedStages = completedStages.toMutableList()
-        if(editableCompletedStages.isEmpty()){
+        if (editableCompletedStages.isEmpty()) {
             val mission = stages[0]
             mission.progress = StageProgress.PLAYING
             editableCompletedStages.add(mission)
-        }
-        else if (editableCompletedStages.isNotEmpty() && editableCompletedStages.last().progress == StageProgress.COMPLETED) {
+        } else if (editableCompletedStages.isNotEmpty() && editableCompletedStages.last().progress == StageProgress.COMPLETED) {
             if (editableCompletedStages.size < MISSION_SIZE) {
                 val mission = stages[editableCompletedStages.size]
                 mission.progress = StageProgress.PLAYING

@@ -15,11 +15,17 @@
     <string name="tag_title">#번아웃_챌린지 #%s</string>
     <string name="select_tag">&lt;b&gt;#번아웃_챌린지&lt;/b&gt; 태그 포함하기</string>
 
+    <!-- Mission -->
+    <string name="main_fab_chatting_description">START CHATTING</string>
+
     <!-- Chatting -->
     <string name="title_chatting">Chatting</string>
 
     <!-- Answer-->
     <string name="title_answer">Answer</string>
     <string name="text_new_message_mission">새로운 번아웃 미션 알림</string>
+
+    <!-- Badge -->
+    <string name="title_badge">BADGE</string>
 
 </resources>
