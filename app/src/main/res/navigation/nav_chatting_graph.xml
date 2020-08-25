@@ -8,22 +8,35 @@
     <fragment
         android:id="@+id/chatting_fragment"
         android:name="com.hbs.burnout.ui.chat.ChattingFragment"
-        tools:layout="@layout/fragment_chatting"
-        android:label="ChattingFragment" >
+        android:label="ChattingFragment"
+        tools:layout="@layout/fragment_chatting">
 
         <action
             android:id="@+id/action_chatting_to_completed_stage"
-            app:destination="@id/completed_stage_fragment" />
+            app:destination="@id/completed_stage_fragment"
+            app:popUpTo="@id/completed_stage_fragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"/>
 
+        <argument
+            android:name="stageNumber"
+            app:argType="integer"
+            app:nullable="false" />
     </fragment>
 
     <fragment
         android:id="@+id/completed_stage_fragment"
-        tools:layout="@layout/fragment_completed_stage"
         android:name="com.hbs.burnout.ui.chat.CompletedStageFragment"
-        android:label="CompletedStageFragment" >
+        android:label="CompletedStageFragment"
+        tools:layout="@layout/fragment_completed_stage">
+
         <action
             android:id="@+id/action_completed_stage_to_chatting"
             app:destination="@id/chatting_fragment" />
+
+        <argument
+            android:name="stageNumber"
+            app:argType="integer"
+            app:nullable="false" />
     </fragment>
 </navigation>

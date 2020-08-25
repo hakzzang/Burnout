@@ -44,6 +44,10 @@ object MissionHelper {
             badgeDark[index]
         }
 
+    fun getStage(stageRound: Int): Stage {
+        return stages[stageRound-1]
+    }
+
     fun clearStageList(completedStages: List<Stage>): MutableList<Stage> {
         val editableCompletedStages = completedStages.toMutableList()
         if (editableCompletedStages.isEmpty()) {

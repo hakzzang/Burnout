@@ -65,7 +65,7 @@ class NotificationHelper {
             val notification = Notification.Builder(context, NotificationConfiguration.CHANNEL_ID)
                 .setContentIntent(bubbleIntent)
                 .setContentTitle("미션")
-                .setContentText("미션을 확인해보세요")
+                .setContentText("버블 알림을 통해서 미션을 확인해보세요")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setBubbleMetadata(bubbleData)
                 .addPerson(person)
