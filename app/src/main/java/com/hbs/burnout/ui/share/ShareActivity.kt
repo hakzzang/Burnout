@@ -124,7 +124,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             else -> "이것을 찍은게 맞나요?"
         }
 
-        var sample = ShareResult( title, bitmapImagePath, completeMsg)
+        var sample = ShareResult( title, imageBitmap, completeMsg)
         sample.eventType = EventType.CAMERA
 
         for (output in outputs) {
