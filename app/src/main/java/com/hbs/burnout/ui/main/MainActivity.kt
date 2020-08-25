@@ -10,8 +10,6 @@ import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -39,7 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
     private val missionAdapter = MissionAdapter { itemView -> clickMissionList(itemView) }
-    private val badgeAdapter = BadgeAdapter{}
+    private val badgeAdapter = BadgeAdapter {}
 
     override fun bindBinding(): ActivityMainBinding {
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -120,8 +118,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun initBottomDrawer(stageList: List<Stage>) {
         var completedStage = 0
-        for(stage in stageList){
-            if(stage.isCompleted()){
+        for (stage in stageList) {
+            if (stage.isCompleted()) {
                 completedStage++
             }
         }
@@ -145,5 +143,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.rvBadge.adapter = badgeAdapter
     }
 
+    override fun onBackPressed() {
+        val bottomDrawerBehavior = BottomSheetBehavior.from(binding.bottomDrawer)
+        if (bottomDrawerBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+            bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        } else {
+            super.onBackPressed()
+        }
 
+    }
 }
