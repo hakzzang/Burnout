@@ -10,10 +10,9 @@ import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
@@ -24,7 +23,6 @@ import com.hbs.burnout.ui.chat.ChattingActivity
 import com.hbs.burnout.ui.ext.view.hideBottomDrawer
 import com.hbs.burnout.ui.main.adapter.BadgeAdapter
 import com.hbs.burnout.ui.main.adapter.MissionAdapter
-import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.NotificationHelper
 import com.hbs.burnout.utils.TransitionConfigure
@@ -38,8 +36,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @Inject
     lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
-    private val missionAdapter = MissionAdapter { itemView -> clickMissionList(itemView) }
-    private val badgeAdapter = BadgeAdapter{}
+    private val missionAdapter = MissionAdapter(
+        { itemView, position -> startActivityWithLinearTransition(itemView, position) },
+        { isCompleted -> showMissionHintDialog(isCompleted) }
+    )
+    private val badgeAdapter = BadgeAdapter { isCompleted -> showMissionHintDialog(isCompleted) }
 
     override fun bindBinding(): ActivityMainBinding {
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -62,21 +63,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-         setTheme(R.style.AppTheme)
+        postponeEnterTransition()
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+
+        startPostponedEnterTransition()
         observeMainViewModel(mainViewModel)
         initView(binding)
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.selectStages()
+
+    }
+
     private fun observeMainViewModel(mainViewModel: MainViewModel) {
         mainViewModel.startChatting.observe(this, EventObserver {
-            startChattingActivity(it)
+            startChattingActivityWithArcTransition(it)
         })
 
-        mainViewModel.stages.observe(this, Observer { stages ->
+        mainViewModel.stages.observe(this@MainActivity, Observer { stages ->
             initBottomDrawer(stages)
-            missionAdapter.submitList(stages)
-            badgeAdapter.submitList(stages)
+            missionAdapter.submitList(stages.toList())
+            badgeAdapter.submitList(stages.toList())
+            missionAdapter.notifyDataSetChanged()
         })
     }
 
@@ -87,7 +102,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.bottomDrawer.hideBottomDrawer()
     }
 
-    private fun startChattingActivity(view: View) {
+    private fun startChattingActivityWithArcTransition(view: View) {
         val intent = Intent(view.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
         startActivityResultWithTransition(
@@ -98,16 +113,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         )
     }
 
-    private fun clickMissionList(itemView: View) {
-        //            val intent = Intent(itemView.context, MissionActivity::class.java)
-        val intent = Intent(itemView.context, CameraMissionActivity::class.java)
+    private fun startActivityWithLinearTransition(itemView: View, position: Int) {
+        val intent = Intent(itemView.context, ChattingActivity::class.java)
+//        val intent = Intent(itemView.context, CameraMissionActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
+        intent.putExtra(ActivityNavigation.STAGE_ROUND, position + 1)
         startActivityResultWithTransition(
             itemView,
             intent,
             ActivityNavigation.CHATTING,
             TransitionNavigation.CHATTING
         )
+    }
+
+    private fun showMissionHintDialog(isCompleted: Boolean) {
+        if (!isCompleted) {
+            MaterialAlertDialogBuilder(this, R.style.OutlinedCutDialog)
+                .setTitle("미션진행 불가")
+                .setMessage("아직 수행하지 않은 미션이 있습니다.\n해당 미션을 진행하고 다시 시도해주세요.")
+                .setIcon(R.mipmap.ic_launcher_round)
+                .setPositiveButton("확인") { dialog, _ ->
+                    dialog.dismiss()
+                }.show()
+        }
     }
 
     private fun toggleBottomDrawer() {
@@ -121,8 +149,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun initBottomDrawer(stageList: List<Stage>) {
         var completedStage = 0
-        for(stage in stageList){
-            if(stage.isCompleted()){
+        for (stage in stageList) {
+            if (stage.isCompleted()) {
                 completedStage++
             }
         }
@@ -146,5 +174,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.rvBadge.adapter = badgeAdapter
     }
 
-
+    override fun onBackPressed() {
+        val bottomDrawerBehavior = BottomSheetBehavior.from(binding.bottomDrawer)
+        if (bottomDrawerBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+            bottomDrawerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        } else {
+            super.onBackPressed()
+        }
+    }
 }

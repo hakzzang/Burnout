@@ -45,6 +45,15 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
+    <style name="ThemeOverlay.Catalog.MaterialAlertDialog.Outline.Cut" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="OutlinedCutDialog" parent="">
+        <item name="shapeAppearanceOverlay">@style/ThemeOverlay.Catalog.MaterialAlertDialog.Outline.Cut</item>
+    </style>
+
     <style name="BaseBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:windowIsTranslucent">true</item>
@@ -65,5 +74,10 @@
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="TakePictureContainerStyle" parent="ShapeAppearance.Shrine.LargeComponent">
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
     </style>
 </resources>

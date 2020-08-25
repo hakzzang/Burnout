@@ -48,13 +48,23 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
         fun bind(position: Int){
             val chatting = getItem(position).parse()
             binding.ivProfile.setImageResource(R.drawable.gamjatwigim)
-            if(chatting.eventType == EventType.QUESTION){
-                binding.tvChatting.text = ""
-                binding.lottieViewWait.visibility = View.VISIBLE
-            }
-            else if(chatting.eventType == EventType.CHATTING){
-                binding.lottieViewWait.visibility = View.GONE
-                binding.tvChatting.text = getItem(position).message
+            when (chatting.eventType) {
+                EventType.QUESTION -> {
+                    binding.tvChatting.text = ""
+                    binding.lottieViewWait.visibility = View.VISIBLE
+                }
+                EventType.CHATTING -> {
+                    binding.lottieViewWait.visibility = View.GONE
+                    binding.tvChatting.text = getItem(position).message
+                }
+                EventType.CAMERA -> {
+                    binding.tvChatting.text = ""
+                    binding.lottieViewWait.visibility = View.VISIBLE
+                }
+                EventType.CAMERA_RESULT -> {
+                    binding.tvChatting.text = getItem(position).message
+                    binding.lottieViewWait.visibility = View.GONE
+                }
             }
         }
     }

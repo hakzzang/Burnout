@@ -14,17 +14,18 @@
             android:layout_height="@dimen/chatting_profile_image_size"
             android:background="@android:color/black"
             android:elevation="@dimen/chatting_profile_image_elevation"
-            app:strokeWidth="@dimen/chatting_profile_image_outline"
-            app:strokeColor="@android:color/white"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/CircleImageView" />
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="@dimen/chatting_profile_image_outline" />
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/chatting_dialog_margin_to_profile"
             android:layout_marginTop="@dimen/chatting_dialog_margin_to_profile"
+            android:layout_marginRight="@dimen/chatting_dialog_margin_to_profile"
             app:cardBackgroundColor="@color/colorAccent"
             app:layout_constraintRight_toRightOf="@id/iv_profile"
             app:layout_constraintTop_toTopOf="@id/iv_profile">
@@ -53,6 +54,7 @@
                 app:lottie_autoPlay="true"
                 app:lottie_fileName="wait.json"
                 app:lottie_loop="true" />
+
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

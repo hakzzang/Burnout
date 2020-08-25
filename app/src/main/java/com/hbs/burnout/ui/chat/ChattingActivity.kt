@@ -10,6 +10,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityChattingBinding
+import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.NotificationHelper
 import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
@@ -36,9 +37,9 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
 
     override fun transitionLogic() {
         val transitionType = intent.getStringExtra(TransitionConfigure.TRANSITION_TYPE)
-        if(transitionType==TransitionConfigure.ARC_TYPE){
+        if (transitionType == TransitionConfigure.ARC_TYPE) {
             setArcTransition(binding.root, TransitionNavigation.CHATTING)
-        }else{
+        } else {
             setHoldContainerTransition(binding.root, TransitionNavigation.CHATTING)
         }
     }
@@ -50,8 +51,8 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         showBubble()
     }
 
-    private fun initView(binding:ActivityChattingBinding){
-        initToolbar(binding.toolbar, getString(R.string.title_chatting) , true)
+    private fun initView(binding: ActivityChattingBinding) {
+        initToolbar(binding.toolbar, getString(R.string.title_chatting), true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,15 +65,31 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun bindNavigationGraph(@NavigationRes graphId:Int){
-        val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
+    private fun bindNavigationGraph(@NavigationRes graphId: Int) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
         val navController = navHostFragment.navController
-        navController.setGraph(graphId)
+        val stageNumber = intent.getIntExtra(ActivityNavigation.STAGE_ROUND, 0)
+        navController.setGraph(graphId, Bundle().apply {
+            putInt(ActivityNavigation.STAGE_ROUND, stageNumber)
+        })
+
     }
 
-    private fun showBubble(){
-        notificationHelper.makeNotificationChannel(this)
+    fun changeNavigationGraph(stageNumber: Int) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
+        val navController = navHostFragment.navController
 
+        navController.popBackStack(R.id.chatting_fragment, true);
+        navController.navigate(R.id.completed_stage_fragment,
+            Bundle().apply {
+                putInt("stageNumber", stageNumber)
+            })
+    }
+
+    private fun showBubble() {
+        notificationHelper.makeNotificationChannel(this)
         notificationHelper.showBubble(this)
     }
 }

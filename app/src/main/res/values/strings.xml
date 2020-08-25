@@ -20,6 +20,7 @@
 
     <!-- Chatting -->
     <string name="title_chatting">Chatting</string>
+    <string name="item_chatting_take_picture">사진 찍기</string>
 
     <!-- Answer-->
     <string name="title_answer">Answer</string>

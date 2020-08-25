@@ -32,7 +32,15 @@ data class Script(
             1 -> {
                 EventType.QUESTION
             }
-
+            2 -> {
+                EventType.ANSWER
+            }
+            3 -> {
+                EventType.CAMERA
+            }
+            4 -> {
+                EventType.CAMERA_RESULT
+            }
             else -> {
                 EventType.FREE
             }
@@ -59,5 +67,5 @@ enum class UserType{
 }
 
 enum class EventType{
-    CHATTING, QUESTION, ANSWER, CAMERA, FREE,
+    CHATTING, QUESTION, ANSWER, CAMERA, CAMERA_RESULT, FREE,
 }

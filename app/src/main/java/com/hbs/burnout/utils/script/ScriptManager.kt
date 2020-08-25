@@ -1,5 +1,6 @@
 package com.hbs.burnout.utils.script
 
+import android.util.Log
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.Script
 import com.hbs.burnout.model.ScriptBuilder
@@ -11,12 +12,12 @@ import javax.inject.Inject
 
 object ScriptConfiguration {
     const val LINE_ENTER_SPEED = 100L
-    const val READING_SPEED = 175L
+    const val READING_SPEED = 120L
 }
 
 @FragmentScoped
 interface ScriptManager {
-    fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script?
+    fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback: () -> Unit): Script?
 
     //scriptCallback은 Chatting 클래스에서 대본의 정보를 모두 담고 있고,
     //String을 통해서 speed에 따른 말하는 내용이 담겨져 있습니다.
@@ -25,6 +26,8 @@ interface ScriptManager {
     fun pauseScript()
     fun loadScript(scriptNumber: Int, loadedScripts: List<Script>): List<Script>
     fun getCache(): MutableList<Script>
+    fun setSelectedAnswer(answerNumber: Int)
+
     suspend fun readScriptLine(
         newScript: Script,
         readingLineCallback: (List<Script>) -> Unit,
@@ -36,6 +39,11 @@ interface ScriptManager {
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): MutableList<Script>
+
+    suspend fun takePictureScriptLine(
+        readingLineCallback: (List<Script>) -> Unit,
+        completeReadingCallback: (Script) -> Unit
+    ): List<Script>
 }
 
 class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptStorage) :
@@ -43,9 +51,14 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
     private var pageNumber = 0
     private var isStopScript = true
     private var selectedScriptNumber = -1
+    private var selectedAnswerNumber = 0
     private val scriptCache = mutableListOf<Script>()
 
     override fun getCache(): MutableList<Script> = scriptCache
+
+    override fun setSelectedAnswer(answerNumber: Int) {
+        this.selectedAnswerNumber = answerNumber
+    }
 
     override fun clearCache() {
         scriptCache.clear()
@@ -75,7 +88,44 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
                     readingLineCallback(scriptCache)
                 }
             }
-        } else {
+        } else if(newScript.eventType == EventType.ANSWER){
+            val answerScriptMessage = newScript.answer[selectedAnswerNumber] ?: ""
+            answerScriptMessage.toCharArray().forEachIndexed { index, word ->
+                delay(ScriptConfiguration.READING_SPEED)
+                newWord += word.toString()
+                val newScriptLine =
+                    ScriptBuilder(user, newWord, 0, stage, id).addAnswer(newScript.answer).create()
+
+                if(index == 0){
+                    scriptCache.add(newScriptLine)
+                }else{
+                    scriptCache.set(scriptCache.lastIndex, newScriptLine)
+                }
+
+                withContext(Dispatchers.Main) {
+                    readingLineCallback(scriptCache)
+                }
+            }
+        }
+        else if(newScript.eventType == EventType.CAMERA_RESULT){
+            message.toCharArray().forEachIndexed { index, word ->
+                delay(ScriptConfiguration.READING_SPEED)
+                newWord += word.toString()
+                val newScriptLine =
+                    ScriptBuilder(user, newWord, event, stage, id).addAnswer(newScript.answer)
+                        .create()
+                if (index == 0) {
+                    scriptCache.add(newScriptLine)
+                } else {
+                    scriptCache.set(scriptCache.lastIndex, newScriptLine)
+                }
+                withContext(Dispatchers.Main) {
+                    readingLineCallback(scriptCache)
+                }
+            }
+            //TODO : 사진을 보여주는 로직 추가하기
+        }
+        else {
             scriptCache.add(newScript)
             withContext(Dispatchers.Main) {
                 readingLineCallback(scriptCache)
@@ -102,7 +152,6 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
             newWord += word.toString()
             val newScriptLine =
                 ScriptBuilder(user, newWord, 0, stage, id).addAnswer(lastScript.answer).create()
-
             scriptCache.set(scriptCache.lastIndex, newScriptLine)
             withContext(Dispatchers.Main) {
                 readingLineCallback(scriptCache)
@@ -114,6 +163,30 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         return scriptCache
     }
 
+    override suspend fun takePictureScriptLine(
+        readingLineCallback: (List<Script>) -> Unit,
+        completeReadingCallback: (Script) -> Unit
+    ): List<Script> {
+        var newWord = ""
+        val lastScript = scriptCache.last().parse()
+        val (user, message, _, stage, id) = lastScript
+        //TODO : 사진 찍었을 때, 로직은 여기에서 처리
+
+        message.toCharArray().forEachIndexed { index, word ->
+            delay(ScriptConfiguration.READING_SPEED)
+            newWord += word.toString()
+            val newScriptLine =
+                ScriptBuilder(user, newWord, 4, stage, id).addAnswer(lastScript.answer).create()
+            scriptCache.set(scriptCache.lastIndex, newScriptLine)
+            withContext(Dispatchers.Main) {
+                readingLineCallback(scriptCache)
+            }
+        }
+        delay(ScriptConfiguration.LINE_ENTER_SPEED)
+        val answerScript = scriptCache.last().parse()
+        completeReadingCallback(answerScript)
+        return scriptCache
+    }
 
     override fun resetScript() {
         isStopScript = true
@@ -122,9 +195,12 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
     }
 
 
-    override fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script? {
+    override fun readNextScriptLine(
+        scriptPageNumber: Int,
+        completedStageCallback: () -> Unit
+    ): Script? {
         val script = scriptStorage.search(scriptPageNumber)
-        if(script.size <= pageNumber){
+        if (script.size <= pageNumber) {
             completedStageCallback()
             return null
         }
@@ -144,7 +220,7 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         mutableLoadedScripts.forEachIndexed { index, script ->
             if (script.event == 0) {
                 scriptCache.add(script)
-            } else if (script.event == 1) {
+            } else {
                 val script = ScriptBuilder(
                     script.user,
                     script.message,
