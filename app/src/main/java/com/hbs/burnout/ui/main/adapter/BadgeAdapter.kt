@@ -22,6 +22,13 @@ class BadgeAdapter(private val clickCallBack: (Boolean) -> (Unit)) :
             oldItem == newItem
     }) {
 
+    init {
+        setHasStableIds(true)
+    }
+    override fun getItemId(position: Int): Long {
+        return getItem(position).round.toLong()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(ItemBadgeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 

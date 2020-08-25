@@ -37,7 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
     private val missionAdapter = MissionAdapter(
-        { itemView -> startActivityWithLinearTranstion(itemView) },
+        { itemView, position -> startActivityWithLinearTransition(itemView, position) },
         { isCompleted -> showMissionHintDialog(isCompleted) }
     )
     private val badgeAdapter = BadgeAdapter { isCompleted -> showMissionHintDialog(isCompleted) }
@@ -63,10 +63,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        postponeEnterTransition()
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+
+        startPostponedEnterTransition()
         observeMainViewModel(mainViewModel)
         initView(binding)
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.selectStages()
+
     }
 
     private fun observeMainViewModel(mainViewModel: MainViewModel) {
@@ -74,10 +87,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             startChattingActivityWithArcTransition(it)
         })
 
-        mainViewModel.stages.observe(this, Observer { stages ->
+        mainViewModel.stages.observe(this@MainActivity, Observer { stages ->
             initBottomDrawer(stages)
-            missionAdapter.submitList(stages)
-            badgeAdapter.submitList(stages)
+            missionAdapter.submitList(stages.toList())
+            badgeAdapter.submitList(stages.toList())
+            missionAdapter.notifyDataSetChanged()
         })
     }
 
@@ -99,10 +113,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         )
     }
 
-    private fun startActivityWithLinearTranstion(itemView: View) {
+    private fun startActivityWithLinearTransition(itemView: View, position: Int) {
         val intent = Intent(itemView.context, ChattingActivity::class.java)
 //        val intent = Intent(itemView.context, CameraMissionActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
+        intent.putExtra(ActivityNavigation.STAGE_ROUND, position + 1)
         startActivityResultWithTransition(
             itemView,
             intent,
