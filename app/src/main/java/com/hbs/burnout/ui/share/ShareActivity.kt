@@ -66,10 +66,14 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
     lateinit var bitmapImagePath: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.lifecycleOwner = this
+
+        binding.apply {
+            lifecycleOwner = this@ShareActivity
+            viewModel = this@ShareActivity.viewModel
+            handler = this@ShareActivity
+        }
 
         this.bitmapImagePath = intent.getStringExtra("resultImagePath").toString()
 
@@ -79,8 +83,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         binding.shareImage.setImageBitmap(bitmapImage)
-        binding.viewModel = viewModel
-        binding.handler = this
 
         initView(binding)
 
@@ -95,7 +97,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun alnalyzer (imageBitmap: Bitmap) {
-
         val options = Model.Options.Builder().setDevice(Model.Device.GPU).build()
         val birdModel = BirdModel.newInstance(baseContext, options)
         val items = mutableListOf<ShareResult.Result>()
@@ -129,15 +130,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         binding.shareImage.clipToOutline = true
         binding.progressList.adapter = progressAdapter
 
-        val sample: ShareResult = ShareResult("새우버거 발닦기", "", "새우버거 발닦기 성공~\n더 친해지면 양치도 도전해보아요~~!")
-        sample.resultList = mutableListOf(
-            ShareResult.Result("포챠펭", 85),
-            ShareResult.Result("비둘기", 12),
-            ShareResult.Result("돼지", 3)
-        )
-
-        viewModel.updateShareData(sample)
-
         binding.fabShare.setOnClickListener {
             val data = viewModel.shareData.value
 
@@ -146,9 +138,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         binding.fabSave.setOnClickListener {
-            val data = viewModel.shareData.value
-
-            val dialog = SaveDialog.newInstance(data!!.title)
+            val dialog = SaveDialog()
             dialog.show(supportFragmentManager, "SAVE_DIALOG")
         }
     }
