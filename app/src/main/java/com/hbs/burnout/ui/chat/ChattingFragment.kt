@@ -1,6 +1,5 @@
 package com.hbs.burnout.ui.chat
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -10,16 +9,17 @@ import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.FragmentChattingBinding
 import com.hbs.burnout.model.Script
-import com.hbs.burnout.model.Stage
 import com.hbs.burnout.ui.ext.dialog.AnswerDialog
+import com.hbs.burnout.ui.ext.dialog.TakePictureDialog
+import com.hbs.burnout.utils.ActivityNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
-    //선택되어진 답변에 따라 이어지는 스토리
-    private var selectedAnswer = 0
     //진행하는 스테이지 인덱스 : 1부터 시작
-    private val stageNumber = 1
+    private val stageNumber by lazy {
+        arguments?.getInt(ActivityNavigation.STAGE_ROUND, 0) ?: 0
+    }
 
     private val viewModel by viewModels<ChattingViewModel>()
     private val chattingAdapter by lazy {
@@ -39,10 +39,11 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initView(binding)
-        observeViewModel(viewModel)
-        loadChattingMessages()
+        viewModel.startStage(stageNumber) {
+            initView(binding)
+            observeViewModel(viewModel)
+            loadChattingMessages()
+        }
     }
 
     private fun initView(binding: FragmentChattingBinding) {
@@ -67,13 +68,25 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                     binding.root.post { showAnswerDialog(viewModel, lastScript) }
                 }
                 2 -> {
-                    viewModel.selectAnswer(selectedAnswer)
+                    viewModel.readNextScriptLine(stageNumber)
+                }
+                3 -> {
+                    binding.root.post {
+                        showTakePictureDialog()
+                    }
+                }
+                4 -> {
+                    viewModel.readNextScriptLine(stageNumber)
                 }
             }
         })
 
         viewModel.completedStage.observe(viewLifecycleOwner, EventObserver {
-
+            viewModel.completeStage(stageNumber) {
+                binding.root.postDelayed({
+                    (activity as? ChattingActivity)?.changeNavigationGraph(stageNumber)
+                }, 3000L)
+            }
         })
     }
 
@@ -85,7 +98,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         }
     }
 
-    private fun loadChattingMessages(){
+    private fun loadChattingMessages() {
         viewModel.clearScriptCache()
         viewModel.loadStage(stageNumber)
     }
@@ -96,10 +109,17 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
     private fun showAnswerDialog(viewModel: ChattingViewModel, lastScript: Script) {
         val dialog = AnswerDialog(lastScript.answer) { dialog, answerNumber ->
-            selectedAnswer = answerNumber
             dialog.dismiss()
             viewModel.selectAnswer(answerNumber)
         }
-        dialog.showNow(parentFragmentManager, "asdf")
+        dialog.showNow(parentFragmentManager, "AnswerDialog")
+    }
+
+    private fun showTakePictureDialog() {
+        val dialog = TakePictureDialog { dialog ->
+            dialog.dismiss()
+            viewModel.takePicture()
+        }
+        dialog.showNow(parentFragmentManager, "TakePictureDialog")
     }
 }
