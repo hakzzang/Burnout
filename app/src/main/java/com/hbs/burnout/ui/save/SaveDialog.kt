@@ -5,41 +5,28 @@ import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.hbs.burnout.R
 import com.hbs.burnout.databinding.DialogSaveBinding
 import com.hbs.burnout.ui.share.ShareViewModel
+import com.hbs.burnout.utils.FileUtils
 import java.util.*
 
+const val TAG = "SaveDialog"
 
 class SaveDialog() : DialogFragment() {
 
-    var title: String? = ""
-
-    companion object {
-        private val EXTRA_TITLE = "EXTRA_TITLE"
-
-        fun newInstance(title: String): SaveDialog {
-            val args = Bundle()
-            args.putString(EXTRA_TITLE, title)
-
-            val fragment = SaveDialog()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     private lateinit var binding: DialogSaveBinding
-    private val shareViewModel by viewModels<ShareViewModel>()
+    private val shareViewModel by activityViewModels<ShareViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title = arguments?.getString(EXTRA_TITLE, "")?.replace(" ", "_")
     }
 
     override fun onResume() {
@@ -77,33 +64,20 @@ class SaveDialog() : DialogFragment() {
             handler = this@SaveDialog
         }
 
-        binding.tagTitle.text = resources.getString(R.string.tag_title, title)
+        shareViewModel.shareData.value?.let {
+            binding.tagTitle.text = resources.getString(R.string.tag_title, it.title)
+            binding.saveImg.setImageBitmap(it.image)
+        }
+
+        binding.saveBtn.setOnClickListener{
+            val bitmap = binding.saveImg.getDrawable().toBitmap()
+            context?.let { it -> FileUtils.saveImageToMediaStore(it, bitmap, "BurnOut_test.jpeg") }
+        }
 
         return binding.root
     }
 
     private fun takeScreenshot() {
         val date = Date()
-    }
-
-    private fun saveImage() {
-        val bitmap = binding.saveImg.getDrawable().toBitmap()
-        val values = ContentValues()
-        with(values) {
-            put(MediaStore.Images.Media.TITLE, title)
-            put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-            put(MediaStore.Images.Media.RELATIVE_PATH, "DCIM/my_folder")
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        }
-
-        val uri = context?.getContentResolver()
-            ?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        val fos = context?.contentResolver?.openOutputStream(uri!!)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        fos?.run {
-            flush()
-            close()
-        }
-
     }
 }

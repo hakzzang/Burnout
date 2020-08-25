@@ -39,7 +39,6 @@
             android:layout_height="0dp"
             android:layout_margin="24dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/gamjatwigim"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="H, 1:0.8"
             app:layout_constraintLeft_toLeftOf="parent"
