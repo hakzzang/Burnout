@@ -62,6 +62,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         observeMainViewModel(mainViewModel)
         initView(binding)
