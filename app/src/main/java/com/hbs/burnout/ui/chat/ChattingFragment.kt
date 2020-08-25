@@ -16,7 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
+    //선택되어진 답변에 따라 이어지는 스토리
+    private var selectedAnswer = 0
+    //진행하는 스테이지 인덱스 : 1부터 시작
     private val stageNumber = 1
+
     private val viewModel by viewModels<ChattingViewModel>()
     private val chattingAdapter by lazy {
         ChattingAdapter()
@@ -55,10 +59,16 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         })
 
         viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript ->
-            if (lastScript.event == 0) {
-                viewModel.readNextScriptLine(stageNumber)
-            } else if (lastScript.event == 1) {
-                binding.root.post { showAnswerDialog(viewModel, lastScript) }
+            when (lastScript.event) {
+                0 -> {
+                    viewModel.readNextScriptLine(stageNumber)
+                }
+                1 -> {
+                    binding.root.post { showAnswerDialog(viewModel, lastScript) }
+                }
+                2 -> {
+                    viewModel.selectAnswer(selectedAnswer)
+                }
             }
         })
 
@@ -86,6 +96,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
     private fun showAnswerDialog(viewModel: ChattingViewModel, lastScript: Script) {
         val dialog = AnswerDialog(lastScript.answer) { dialog, answerNumber ->
+            selectedAnswer = answerNumber
             dialog.dismiss()
             viewModel.selectAnswer(answerNumber)
         }

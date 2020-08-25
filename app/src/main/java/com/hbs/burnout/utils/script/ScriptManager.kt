@@ -114,7 +114,6 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         return scriptCache
     }
 
-
     override fun resetScript() {
         isStopScript = true
         selectedScriptNumber = -1
@@ -144,7 +143,7 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         mutableLoadedScripts.forEachIndexed { index, script ->
             if (script.event == 0) {
                 scriptCache.add(script)
-            } else if (script.event == 1) {
+            } else if (script.event == 1 && script.event == 2) {
                 val script = ScriptBuilder(
                     script.user,
                     script.message,

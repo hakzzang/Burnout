@@ -13,7 +13,7 @@ class ScriptStorage @Inject constructor(){
                 1 to "뭔데 나한테 인시해!?"
             )
         ).create(),
-        ScriptBuilder(0, "저는 새우버거입니다.", 0, 1, 2).addAnswer(
+        ScriptBuilder(0, "저는 새우버거입니다.", 2, 1, 2).addAnswer(
             mapOf(
                 0 to "하하^-^ 저는 새우버거라고 합니다.",
                 1 to "ㅡㅡ 아주 무례하군요?"

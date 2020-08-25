@@ -15,6 +15,7 @@ interface ChattingUseCase {
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
+
     suspend fun answerScriptLine(
         answerNumber: Int,
         readingLineCallback: (List<Script>) -> Unit,

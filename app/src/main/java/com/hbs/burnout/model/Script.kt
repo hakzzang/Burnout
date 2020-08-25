@@ -32,7 +32,9 @@ data class Script(
             1 -> {
                 EventType.QUESTION
             }
-
+            2 -> {
+                EventType.ANSWER
+            }
             else -> {
                 EventType.FREE
             }
