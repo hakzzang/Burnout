@@ -9,6 +9,9 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -62,7 +65,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         observeMainViewModel(mainViewModel)
         initView(binding)
-
     }
 
     private fun observeMainViewModel(mainViewModel: MainViewModel) {
@@ -70,7 +72,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             startChattingActivity(it)
         })
 
-        mainViewModel.stages.observe(this, EventObserver { stages ->
+        mainViewModel.stages.observe(this, Observer { stages ->
             initBottomDrawer(stages)
             missionAdapter.submitList(stages)
             badgeAdapter.submitList(stages)
