@@ -15,7 +15,7 @@ class MainViewModel @ViewModelInject constructor(val mainUseCase: MainUseCase) :
 
     val stages = liveData {
         val stages = mainUseCase.loadMission()
-        emit(Event(stages.toList()))
+        emit(stages.toList())
     }
 
     fun passChattingActivity(view:View){
