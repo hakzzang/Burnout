@@ -11,7 +11,7 @@ import com.hbs.burnout.model.Stage
 import com.hbs.burnout.model.StageProgress
 import com.hbs.burnout.utils.script.MissionHelper
 
-class MissionAdapter(private val successCallback: (View) -> (Unit)) :
+class MissionAdapter(private val successCallback: (View) -> (Unit), private val failCallback:(Boolean)->Unit) :
     ListAdapter<Stage, MissionAdapter.ViewHolder>(object : DiffUtil.ItemCallback<Stage>() {
         override fun areItemsTheSame(oldItem: Stage, newItem: Stage): Boolean =
             oldItem.round == newItem.round
@@ -36,23 +36,25 @@ class MissionAdapter(private val successCallback: (View) -> (Unit)) :
             when (stage.progress) {
                 StageProgress.PLAYING -> {
                     binding.ivNotCompletedImage.visibility = View.GONE
-                    binding.root.setOnClickListener(makeRootClickListener())
+                    binding.root.setOnClickListener(makeSuccessClickListener())
                 }
                 StageProgress.COMPLETED -> {
                     binding.ivNotCompletedImage.visibility = View.GONE
-                    binding.root.setOnClickListener(makeRootClickListener())
+                    binding.root.setOnClickListener(makeSuccessClickListener())
                 }
                 StageProgress.NOT_COMPLETED -> {
                     binding.ivNotCompletedImage.visibility = View.VISIBLE
-                    binding.root.setOnClickListener(null)
+                    binding.root.setOnClickListener(makeFailClickListener(stage.progress))
                 }
                 else -> {
                     binding.ivNotCompletedImage.visibility = View.VISIBLE
-                    binding.root.setOnClickListener(null)
+                    binding.root.setOnClickListener(makeFailClickListener(stage.progress))
                 }
             }
         }
 
-        private fun makeRootClickListener() = View.OnClickListener { successCallback(it) }
+        private fun makeSuccessClickListener() = View.OnClickListener { successCallback(it) }
+        private fun makeFailClickListener(progress:Int) = View.OnClickListener { failCallback(progress != StageProgress.NOT_COMPLETED) }
+
     }
 }

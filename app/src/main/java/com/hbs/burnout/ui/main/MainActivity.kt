@@ -12,6 +12,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
@@ -36,8 +38,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @Inject
     lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
-    private val missionAdapter = MissionAdapter { itemView -> clickMissionList(itemView) }
-    private val badgeAdapter = BadgeAdapter {}
+    private val missionAdapter = MissionAdapter(
+        { itemView -> clickMissionList(itemView) },
+        { isCompleted -> showMissionHintDialog(isCompleted) }
+    )
+    private val badgeAdapter = BadgeAdapter { isCompleted -> showMissionHintDialog(isCompleted) }
 
     override fun bindBinding(): ActivityMainBinding {
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -60,7 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-         setTheme(R.style.AppTheme)
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         observeMainViewModel(mainViewModel)
         initView(binding)
@@ -108,6 +113,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         )
     }
 
+    private fun showMissionHintDialog(isCompleted: Boolean) {
+        if (!isCompleted) {
+            MaterialAlertDialogBuilder(this, R.style.OutlinedCutDialog)
+                .setTitle("미션진행 불가")
+                .setMessage("아직 수행하지 않은 미션이 있습니다.\n해당 미션을 진행하고 다시 시도해주세요.")
+                .setIcon(R.mipmap.ic_launcher_round)
+                .setPositiveButton("확인") { dialog, _ ->
+                    dialog.dismiss()
+                }.show()
+        }
+    }
+
     private fun toggleBottomDrawer() {
         val bottomDrawerBehavior = BottomSheetBehavior.from(binding.bottomDrawer)
         if (bottomDrawerBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
@@ -151,6 +168,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         } else {
             super.onBackPressed()
         }
-
     }
 }
