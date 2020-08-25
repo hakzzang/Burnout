@@ -112,7 +112,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             "성공!\n 다음 미션에 도전해 보아요!"
         }
 
-        var sample = ShareResult("이것은 새인가?", bitmapImagePath, completeMsg)
+        var sample = ShareResult("이것은 새인가?", bitmapImage, completeMsg)
         sample.eventType = EventType.CAMERA
 
         for (output in outputs) {
