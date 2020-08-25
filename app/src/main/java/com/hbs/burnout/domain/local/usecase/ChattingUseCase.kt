@@ -21,6 +21,7 @@ interface ChattingUseCase {
         completeReadingCallback: (Script) -> Unit
     ): MutableList<Script>
 
+    fun clearScriptCache()
     fun saveStage(stage: Stage): Long
     fun saveScript(script: Script): Long
     fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script?
@@ -37,6 +38,9 @@ class ChattingUseCaseImpl @Inject constructor(
         return scriptManager.loadScript(scriptNumber, lastScripts)
     }
 
+    override fun clearScriptCache() {
+        scriptManager.clearCache()
+    }
 
     override suspend fun loadStage() = stageRepository.loadMission()
 

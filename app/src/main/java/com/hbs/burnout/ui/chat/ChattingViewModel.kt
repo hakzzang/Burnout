@@ -28,6 +28,10 @@ class ChattingViewModel @ViewModelInject constructor(
     private val _completedStage = MutableLiveData<Event<Unit>>()
     val completedStage : LiveData<Event<Unit>> =_completedStage
 
+    fun clearScriptCache() {
+        chattingUseCase.clearScriptCache()
+    }
+
     fun readNextScriptLine(scriptNumber: Int) {
         val script = chattingUseCase.readNextScriptLine(scriptNumber) {
             _completedStage.value = Event(Unit)
