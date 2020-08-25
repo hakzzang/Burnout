@@ -60,3 +60,8 @@
 ### 채팅 프로젝트 만들기
 
 ![image](https://user-images.githubusercontent.com/22374750/90979282-0b3f4000-e58f-11ea-91f3-57298ba9601f.png)
+
+## Week 3
+### 스테이지 & 뱃지함 리스트 추가
+
+![image](https://user-images.githubusercontent.com/22374750/91059945-4f9d0f80-e665-11ea-902f-347f73792a88.png)
