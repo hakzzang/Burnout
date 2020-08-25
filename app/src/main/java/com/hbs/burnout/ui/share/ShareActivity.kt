@@ -14,19 +14,20 @@ import androidx.lifecycle.Observer
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityShareBinding
-import com.hbs.burnout.ml.BirdModel
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
+import com.hbs.burnout.tfml.TFModelType
+import com.hbs.burnout.tfml.TFModelWorker
 
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.FileUtils
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.model.Model
+import java.io.File
 
 
-private const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
+internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
+    private var resultType: Int = 0
     private lateinit var uri: Uri
     
    private var bitmapImage: Bitmap? = null
@@ -72,11 +73,14 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         binding.lifecycleOwner = this
 
         this.bitmapImagePath = intent.getStringExtra("resultImagePath").toString()
+        this.resultType = intent.getIntExtra("resultImage",1)
 
         bitmapImagePath.let {
             Log.d(TAG, "image path:" + bitmapImagePath)
             this.bitmapImage = BitmapFactory.decodeFile(it)
         }
+
+        uri = Uri.fromFile(File(bitmapImagePath))
 
         binding.shareImage.setImageBitmap(bitmapImage)
         binding.viewModel = viewModel
@@ -90,20 +94,21 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     override fun onStart() {
         super.onStart()
         if (bitmapImage != null) {
-            alnalyzer(bitmapImage!!)
+            runTFImageParser(bitmapImage!!)
         }
     }
 
-    private fun alnalyzer (imageBitmap: Bitmap) {
+    private fun runTFImageParser (imageBitmap: Bitmap) {
+        val tfWork = TFModelWorker()
 
-        val options = Model.Options.Builder().setDevice(Model.Device.GPU).build()
-        val birdModel = BirdModel.newInstance(baseContext, options)
+        when (resultType) {
+            TFModelType.BIRD.ordinal -> tfWork.initModel(baseContext, TFModelType.BIRD)
+            else -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
+        }
+
+        val outputs = tfWork.alnalyze(imageBitmap)
+
         val items = mutableListOf<ShareResult.Result>()
-        val tfImage = TensorImage.fromBitmap(imageBitmap)
-        val outputs = birdModel.process(tfImage)
-            .probabilityAsCategoryList.apply {
-                sortByDescending { it.score } // Sort with highest confidence first
-            }.take(MAX_RESULT_DISPLAY) // take the top results
 
         val completeMsg = if (outputs[0].label.equals("None") || (outputs[0].score*100) < 30) {
             "실패~\n" +
@@ -112,7 +117,12 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             "성공!\n 다음 미션에 도전해 보아요!"
         }
 
-        var sample = ShareResult("이것은 새인가?", bitmapImagePath, completeMsg)
+        val title = when (resultType) {
+            TFModelType.BIRD.ordinal -> "이것은 새인가!"
+            else -> "이것을 찍은게 맞나요?"
+        }
+
+        var sample = ShareResult( title, bitmapImagePath, completeMsg)
         sample.eventType = EventType.CAMERA
 
         for (output in outputs) {
@@ -129,14 +139,14 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         binding.shareImage.clipToOutline = true
         binding.progressList.adapter = progressAdapter
 
-        val sample: ShareResult = ShareResult("새우버거 발닦기", "", "새우버거 발닦기 성공~\n더 친해지면 양치도 도전해보아요~~!")
-        sample.resultList = mutableListOf(
-            ShareResult.Result("포챠펭", 85),
-            ShareResult.Result("비둘기", 12),
-            ShareResult.Result("돼지", 3)
-        )
-
-        viewModel.updateShareData(sample)
+//        val sample: ShareResult = ShareResult("새우버거 발닦기", "", "새우버거 발닦기 성공~\n더 친해지면 양치도 도전해보아요~~!")
+//        sample.resultList = mutableListOf(
+//            ShareResult.Result("포챠펭", 85),
+//            ShareResult.Result("비둘기", 12),
+//            ShareResult.Result("돼지", 3)
+//        )
+//
+//        viewModel.updateShareData(sample)
 
         binding.fabShare.setOnClickListener {
             val data = viewModel.shareData.value

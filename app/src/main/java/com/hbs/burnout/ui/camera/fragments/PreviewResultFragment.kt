@@ -3,14 +3,18 @@ package com.hbs.burnout.ui.mission.fragments
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
+import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.databinding.FragmentPreviewBinding
 import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.ui.share.ShareActivity
@@ -20,15 +24,12 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PreviewResultFragment : Fragment() {
-    private  lateinit var binding: FragmentPreviewBinding
+class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
     private lateinit var outputDirectory: File
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_preview, container, false)
+    override fun bindBinding(): FragmentPreviewBinding = FragmentPreviewBinding.inflate(layoutInflater)
+
+    override fun isUseTransition(): Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val bitmapImage = arguments?.getParcelable<Bitmap>("resultImage")
@@ -36,7 +37,6 @@ class PreviewResultFragment : Fragment() {
 
         Log.i("PreviewResultFragment", "rotation value:$rotationf")
 
-        binding = FragmentPreviewBinding.bind(view)
         binding.cancelButton.setOnClickListener {
             Log.i("PREVIEW", "취소취소!! 카메라로 돌아가자!!")
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
@@ -50,7 +50,7 @@ class PreviewResultFragment : Fragment() {
             val out = FileOutputStream(photoFile.canonicalFile)
 
             bitmapImage?.rotate(rotationf)?.compress(Bitmap.CompressFormat.JPEG, 100, out)
-	    	
+
             out.close()
 
             val intent = Intent(this.context, ShareActivity::class.java)
