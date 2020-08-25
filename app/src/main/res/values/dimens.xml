@@ -59,11 +59,21 @@
     <dimen name="chatting_wait_animation_height">46dp</dimen>
 
 
+    <!-- Selection Resources-->
+    <dimen name="view_selection_height">216dp</dimen>
     <dimen name="selection_dialog_height">256dp</dimen>
+
     <!-- ItemMission resources-->
     <dimen name="item_mission_container_height">128dp</dimen>
     <dimen name="item_mission_space">16dp</dimen>
     <dimen name="item_mission_container_radius">16dp</dimen>
     <dimen name="item_mission_not_completed_view_elevation">2dp</dimen>
     <dimen name="item_mission_not_completed_view_padding">32dp</dimen>
+
+    <!-- Badge resources-->
+    <dimen name="item_badge_size">96dp</dimen>
+    <dimen name="item_badge_content_top_margin">24dp</dimen>
+    <dimen name="item_badge_drawer_height">600dp</dimen>
+    <dimen name="item_badge_list_top_bottom_margin">16dp</dimen>
+
 </resources>

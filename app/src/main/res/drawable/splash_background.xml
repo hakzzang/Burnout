@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/splash_background_color"
+        android:gravity="center"/>
+
+    <item
+        android:width="72dp"
+        android:height="72dp"
+        android:gravity="center"
+        android:drawable="@drawable/splash_burnout_icon" />
+</layer-list>

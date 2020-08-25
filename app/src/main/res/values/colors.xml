@@ -15,4 +15,7 @@
     <color name="color_dialog_text">#000000</color>
 
     <color name="color_black_alpha_60">#A0000000</color>
+    <color name="color_badge_view_color">#F5F6FA</color>
+
+    <color name="splash_background_color">#3F3F3F</color>
 </resources>

@@ -20,6 +20,7 @@ interface ScriptManager {
 
     //scriptCallback은 Chatting 클래스에서 대본의 정보를 모두 담고 있고,
     //String을 통해서 speed에 따른 말하는 내용이 담겨져 있습니다.
+    fun clearCache()
     fun resetScript()
     fun pauseScript()
     fun loadScript(scriptNumber: Int, loadedScripts: List<Script>): List<Script>
@@ -45,6 +46,10 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
     private val scriptCache = mutableListOf<Script>()
 
     override fun getCache(): MutableList<Script> = scriptCache
+
+    override fun clearCache() {
+        scriptCache.clear()
+    }
 
     override suspend fun readScriptLine(
         newScript: Script,

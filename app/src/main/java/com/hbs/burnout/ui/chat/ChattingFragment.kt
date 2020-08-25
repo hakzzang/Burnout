@@ -1,5 +1,6 @@
 package com.hbs.burnout.ui.chat
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -9,6 +10,7 @@ import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.FragmentChattingBinding
 import com.hbs.burnout.model.Script
+import com.hbs.burnout.model.Stage
 import com.hbs.burnout.ui.ext.dialog.AnswerDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,13 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     private val stageNumber = 1
     private val viewModel by viewModels<ChattingViewModel>()
-    private val chattingAdapter by lazy{
+    private val chattingAdapter by lazy {
         ChattingAdapter()
     }
 
     override fun isUseTransition(): Boolean = true
 
-    override fun bindBinding(): FragmentChattingBinding = FragmentChattingBinding.inflate(layoutInflater)
+    override fun bindBinding(): FragmentChattingBinding =
+        FragmentChattingBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,36 +38,36 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
         initView(binding)
         observeViewModel(viewModel)
-        viewModel.loadStage(stageNumber)
+        loadChattingMessages()
     }
 
     private fun initView(binding: FragmentChattingBinding) {
         initChattingList(binding.rvChatting)
     }
 
-    private fun observeViewModel(viewModel: ChattingViewModel){
-        viewModel.readingScript.observe(viewLifecycleOwner, EventObserver{ scripts->
+    private fun observeViewModel(viewModel: ChattingViewModel) {
+        viewModel.readingScript.observe(viewLifecycleOwner, EventObserver { scripts ->
             viewModel.emitParsingScript(scripts)
         })
 
-        viewModel.parsedScript.observe(viewLifecycleOwner, EventObserver { scriptCache->
+        viewModel.parsedScript.observe(viewLifecycleOwner, EventObserver { scriptCache ->
             updateRecyclerView(scriptCache)
         })
 
-        viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript->
+        viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript ->
             if (lastScript.event == 0) {
                 viewModel.readNextScriptLine(stageNumber)
-            }else if(lastScript.event == 1){
+            } else if (lastScript.event == 1) {
                 binding.root.post { showAnswerDialog(viewModel, lastScript) }
             }
         })
 
-        viewModel.completedStage.observe(viewLifecycleOwner, EventObserver{
+        viewModel.completedStage.observe(viewLifecycleOwner, EventObserver {
 
         })
     }
 
-    private fun initChattingList(chattingRecyclerView: RecyclerView){
+    private fun initChattingList(chattingRecyclerView: RecyclerView) {
         chattingRecyclerView.apply {
             itemAnimator = null // remove update animation
             adapter = chattingAdapter
@@ -72,12 +75,17 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         }
     }
 
+    private fun loadChattingMessages(){
+        viewModel.clearScriptCache()
+        viewModel.loadStage(stageNumber)
+    }
+
     private fun updateRecyclerView(scriptCache: List<Script>) {
         chattingAdapter.submitList(scriptCache.toList())
     }
 
     private fun showAnswerDialog(viewModel: ChattingViewModel, lastScript: Script) {
-        val dialog = AnswerDialog(lastScript.answer) { dialog,answerNumber ->
+        val dialog = AnswerDialog(lastScript.answer) { dialog, answerNumber ->
             dialog.dismiss()
             viewModel.selectAnswer(answerNumber)
         }

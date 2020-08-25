@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/splash_background_color</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
     <style name="CircleImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">25%</item>
@@ -40,12 +45,6 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="SelectContainerStyle" parent="ShapeAppearance.Shrine.LargeComponent">
-        <item name="cornerSizeTopLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-    </style>
-
     <style name="BaseBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:windowIsTranslucent">true</item>
@@ -60,5 +59,11 @@
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="SelectContainerStyle" parent="ShapeAppearance.Shrine.LargeComponent">
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 </resources>

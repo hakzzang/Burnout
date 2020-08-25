@@ -7,12 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.hbs.burnout.R
 import com.hbs.burnout.databinding.DialogSelectionBinding
 
 class AnswerDialog(
     private val answer: HashMap<Int, String>,
     private val answerCallBack: (DialogFragment, Int) -> Unit
 ) : BottomSheetDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BaseBottomSheetDialog)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +40,4 @@ class AnswerDialog(
             bottomSheetDialog.behavior.isDraggable= false
         }
     }
-
-
 }
