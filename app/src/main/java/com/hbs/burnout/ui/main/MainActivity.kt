@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
@@ -24,7 +23,6 @@ import com.hbs.burnout.ui.chat.ChattingActivity
 import com.hbs.burnout.ui.ext.view.hideBottomDrawer
 import com.hbs.burnout.ui.main.adapter.BadgeAdapter
 import com.hbs.burnout.ui.main.adapter.MissionAdapter
-import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.NotificationHelper
 import com.hbs.burnout.utils.TransitionConfigure
@@ -39,7 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
     private val missionAdapter = MissionAdapter(
-        { itemView -> clickMissionList(itemView) },
+        { itemView -> startActivityWithLinearTranstion(itemView) },
         { isCompleted -> showMissionHintDialog(isCompleted) }
     )
     private val badgeAdapter = BadgeAdapter { isCompleted -> showMissionHintDialog(isCompleted) }
@@ -73,7 +71,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun observeMainViewModel(mainViewModel: MainViewModel) {
         mainViewModel.startChatting.observe(this, EventObserver {
-            startChattingActivity(it)
+            startChattingActivityWithArcTransition(it)
         })
 
         mainViewModel.stages.observe(this, Observer { stages ->
@@ -90,7 +88,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.bottomDrawer.hideBottomDrawer()
     }
 
-    private fun startChattingActivity(view: View) {
+    private fun startChattingActivityWithArcTransition(view: View) {
         val intent = Intent(view.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
         startActivityResultWithTransition(
@@ -101,9 +99,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         )
     }
 
-    private fun clickMissionList(itemView: View) {
-        //            val intent = Intent(itemView.context, MissionActivity::class.java)
-        val intent = Intent(itemView.context, CameraMissionActivity::class.java)
+    private fun startActivityWithLinearTranstion(itemView: View) {
+        val intent = Intent(itemView.context, ChattingActivity::class.java)
+//        val intent = Intent(itemView.context, CameraMissionActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
         startActivityResultWithTransition(
             itemView,
