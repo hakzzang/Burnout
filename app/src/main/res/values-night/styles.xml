@@ -64,7 +64,6 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-
     <style name="BaseBottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
         <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
         <item name="android:windowIsTranslucent">true</item>

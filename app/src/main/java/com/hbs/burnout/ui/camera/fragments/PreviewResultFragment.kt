@@ -4,15 +4,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
+import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.databinding.FragmentPreviewBinding
 import com.hbs.burnout.ui.ext.view.rotate
 import com.hbs.burnout.ui.mission.CameraMissionActivity
@@ -24,15 +28,12 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PreviewResultFragment : Fragment() {
-    private  lateinit var binding: FragmentPreviewBinding
+class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
     private lateinit var outputDirectory: File
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_preview, container, false)
+    override fun bindBinding(): FragmentPreviewBinding = FragmentPreviewBinding.inflate(layoutInflater)
+
+    override fun isUseTransition(): Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val bitmapFileUriPath = arguments?.getString("resultImage")?:return
@@ -41,7 +42,6 @@ class PreviewResultFragment : Fragment() {
         Log.d("SaveFile=2",bitmapFileUriPath)
         Log.i("PreviewResultFragment", "rotation value:$rotationf")
 
-        binding = FragmentPreviewBinding.bind(view)
         binding.cancelButton.setOnClickListener {
             Log.i("PREVIEW", "취소취소!! 카메라로 돌아가자!!")
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(

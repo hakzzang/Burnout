@@ -1,5 +1,6 @@
 package com.hbs.burnout.ui.chat
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -123,6 +124,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     private fun showTakePictureDialog() {
         val dialog = TakePictureDialog { dialog ->
             dialog.dismiss()
+            viewModel.takePicture()
             val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 when (result.resultCode) {
                     ActivityNavigation.SHARE_TO_CHATTING -> {

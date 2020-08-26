@@ -15,21 +15,23 @@ import androidx.lifecycle.Observer
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityShareBinding
-import com.hbs.burnout.ml.BirdModel
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
+import com.hbs.burnout.tfml.TFModelType
+import com.hbs.burnout.tfml.TFModelWorker
 
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
+import java.io.File
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
 import org.tensorflow.lite.support.model.Model
 
-
-private const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
+internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
+    private var resultType: Int = 0
     private lateinit var uri: Uri
 
     private var bitmapImage: Bitmap? = null
@@ -103,11 +105,14 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         this.bitmapImagePath = intent.getStringExtra("resultImagePath").toString()
+        this.resultType = intent.getIntExtra("resultImage",1)
 
         bitmapImagePath.let {
             Log.d(TAG, "image path:" + bitmapImagePath)
             this.bitmapImage = BitmapFactory.decodeFile(it)
         }
+
+        uri = Uri.fromFile(File(bitmapImagePath))
 
         binding.shareImage.setImageBitmap(bitmapImage)
 
@@ -119,19 +124,20 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     override fun onStart() {
         super.onStart()
         if (bitmapImage != null) {
-            alnalyzer(bitmapImage!!)
+            runTFImageParser(bitmapImage!!)
         }
     }
 
-    private fun alnalyzer(imageBitmap: Bitmap) {
-        val options = Model.Options.Builder().setDevice(Model.Device.GPU).build()
-        val birdModel = BirdModel.newInstance(baseContext, options)
+    private fun runTFImageParser (imageBitmap: Bitmap) {
+        val tfWork = TFModelWorker()
+
+        when (resultType) {
+            TFModelType.BIRD.ordinal -> tfWork.initModel(baseContext, TFModelType.BIRD)
+            else -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
+        }
+
+        val outputs = tfWork.alnalyze(imageBitmap)
         val items = mutableListOf<ShareResult.Result>()
-        val tfImage = TensorImage.fromBitmap(imageBitmap)
-        val outputs = birdModel.process(tfImage)
-            .probabilityAsCategoryList.apply {
-                sortByDescending { it.score } // Sort with highest confidence first
-            }.take(MAX_RESULT_DISPLAY) // take the top results
 
         val isCompleteAnalysis = isComplete(outputs)
         val completeMsg = if (isCompleteAnalysis) {
@@ -140,7 +146,12 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             "실패~\n다시 도전해보아요~~!"
         }
 
-        var sample = ShareResult("이것은 새인가?", bitmapImage, completeMsg)
+        val title = when (resultType) {
+            TFModelType.BIRD.ordinal -> "이것은 새인가!"
+            else -> "이것을 찍은게 맞나요?"
+        }
+
+        var sample = ShareResult( title, imageBitmap, completeMsg)
         sample.eventType = EventType.CAMERA
 
         for (output in outputs) {

@@ -19,6 +19,11 @@
             app:shapeAppearanceOverlay="@style/CircleImageView"
             app:strokeColor="@android:color/white"
             app:strokeWidth="@dimen/chatting_profile_image_outline" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="@dimen/chatting_profile_image_outline" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_chatting_recognize_image"
@@ -35,6 +40,7 @@
             android:id="@+id/card_view_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/chatting_dialog_margin_to_profile"
             android:layout_marginTop="4dp"
             android:layout_marginRight="@dimen/chatting_dialog_margin_to_profile"
             app:cardBackgroundColor="@color/colorAccent"
