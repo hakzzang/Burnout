@@ -9,6 +9,8 @@
     <color name="color_dialog_bg">#272727</color>
     <color name="color_dialog_text">#ffffff</color>
 
+    <color name="color_black_for_night">#FFFFFF</color>
+
     <color name="color_black_alpha_60">#A0000000</color>
     <color name="color_badge_view_color">#F7F8FB</color>
 

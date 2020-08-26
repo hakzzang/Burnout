@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/permissions_fragment"
-        android:name="com.hbs.burnout.ui.mission.fragments.PermissionsFragment"
+        android:name="com.hbs.burnout.ui.camera.fragments.PermissionsFragment"
         android:label="PermissionsFragment" >
 
         <action
@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/preview_fragment"
         tools:layout="@layout/fragment_preview"
-        android:name="com.hbs.burnout.ui.mission.fragments.PreviewResultFragment"
+        android:name="com.hbs.burnout.ui.camera.fragments.PreviewResultFragment"
         android:label="PreviewFragment" >
 
         <action
@@ -55,7 +55,7 @@
         <argument
             android:name="resultImage"
             app:nullable="true"
-            app:argType="android.graphics.Bitmap" />
+            app:argType="string" />
 
         <argument
             android:name="targetRotation"

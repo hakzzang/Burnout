@@ -20,15 +20,27 @@
             app:strokeColor="@android:color/white"
             app:strokeWidth="@dimen/chatting_profile_image_outline" />
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_chatting_recognize_image"
+            android:layout_width="@dimen/chatting_recognize_image_width"
+            android:layout_height="@dimen/chatting_recognize_image_height"
+            android:layout_margin="@dimen/chatting_dialog_margin_text"
+            tools:background="@mipmap/ic_launcher"
+            app:shapeAppearance="@style/ShapeAppearance.LargeComponent.Round"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"/>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/chatting_dialog_margin_to_profile"
+            android:layout_marginTop="4dp"
             android:layout_marginRight="@dimen/chatting_dialog_margin_to_profile"
             app:cardBackgroundColor="@color/colorAccent"
             app:layout_constraintRight_toRightOf="@id/iv_profile"
-            app:layout_constraintTop_toTopOf="@id/iv_profile">
+            app:layout_constraintTop_toBottomOf="@id/iv_chatting_recognize_image"
+            app:layout_goneMarginTop="18dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_chatting"
