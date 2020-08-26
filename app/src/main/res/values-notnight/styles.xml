@@ -40,6 +40,11 @@
         <item name="cornerSize">24dp</item>
     </style>
 
+    <style name="ShapeAppearance.LargeComponent.Round" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
     <style name="SelectButtonStyle" parent="ShapeAppearance.Shrine.MediumComponent">
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>

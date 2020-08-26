@@ -1,7 +1,8 @@
-package com.hbs.burnout.ui.mission.fragments
+package com.hbs.burnout.ui.camera.fragments
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Build
 import android.os.Bundle
@@ -10,14 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.databinding.FragmentPreviewBinding
+import com.hbs.burnout.ui.ext.view.rotate
 import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.ui.share.ShareActivity
+import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.TransitionConfigure
 import java.io.File
 import java.io.FileOutputStream
@@ -32,9 +36,10 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
     override fun isUseTransition(): Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val bitmapImage = arguments?.getParcelable<Bitmap>("resultImage")
+        val bitmapFileUriPath = arguments?.getString("resultImage")?:return
         val rotationf = arguments?.getInt("targetRotation")?.toFloat()!!
-
+        val bitmapImage = BitmapFactory.decodeFile(bitmapFileUriPath)
+        Log.d("SaveFile=2",bitmapFileUriPath)
         Log.i("PreviewResultFragment", "rotation value:$rotationf")
 
         binding.cancelButton.setOnClickListener {
@@ -46,8 +51,7 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
             Log.i("PREVIEW", "결과 화면으로 가자가자! ")
             outputDirectory = CameraMissionActivity.getOutputDirectory(requireContext())
 
-            val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
-            val out = FileOutputStream(photoFile.canonicalFile)
+            val out = FileOutputStream(bitmapFileUriPath)
 
             bitmapImage?.rotate(rotationf)?.compress(Bitmap.CompressFormat.JPEG, 100, out)
 
@@ -56,19 +60,27 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
             val intent = Intent(this.context, ShareActivity::class.java)
 
             intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
-            intent.putExtra("resultImagePath", photoFile.canonicalPath)
-            startActivity(intent)
-            requireActivity().finish()
+            intent.putExtra("resultImagePath", bitmapFileUriPath)
+            Log.d("result-dada","start")
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
+                Log.d("result-dada",result.toString())
+                when(result.resultCode){
+                    ActivityNavigation.SHARE_TO_CHATTING -> {
+                        requireActivity().setResult(result.resultCode, result.data)
+                        requireActivity().finish()
+
+                    }
+                    ActivityNavigation.CAMERA_TO_CHATTING-> {
+                        requireActivity().setResult(result.resultCode, result.data)
+                        requireActivity().finish()
+                    }
+                }
+            }.launch(intent)
         }
 
         binding.viewPreview.apply {
             setImageBitmap(bitmapImage?.rotate(rotationf))
         }
-    }
-
-    private fun Bitmap.rotate(degrees: Float): Bitmap {
-        val matrix = Matrix().apply { postRotate(degrees) }
-        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 
     companion object {

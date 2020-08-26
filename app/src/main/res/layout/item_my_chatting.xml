@@ -19,16 +19,34 @@
             app:shapeAppearanceOverlay="@style/CircleImageView"
             app:strokeColor="@android:color/white"
             app:strokeWidth="@dimen/chatting_profile_image_outline" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="@dimen/chatting_profile_image_outline" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_chatting_recognize_image"
+            android:layout_width="128dp"
+            android:layout_height="156dp"
+            android:layout_margin="16dp"
+            tools:background="@mipmap/ic_launcher"
+            app:shapeAppearance="@style/ShapeAppearance.LargeComponent.Round"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/chatting_dialog_margin_to_profile"
+            android:layout_marginTop="4dp"
             android:layout_marginRight="@dimen/chatting_dialog_margin_to_profile"
             app:cardBackgroundColor="@color/colorAccent"
             app:layout_constraintRight_toRightOf="@id/iv_profile"
-            app:layout_constraintTop_toTopOf="@id/iv_profile">
+            app:layout_constraintTop_toBottomOf="@id/iv_chatting_recognize_image"
+            app:layout_goneMarginTop="18dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_chatting"
