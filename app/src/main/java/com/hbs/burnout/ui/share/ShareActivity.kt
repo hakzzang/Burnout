@@ -1,6 +1,7 @@
 package com.hbs.burnout.ui.share
 
 
+import android.content.Intent
 import android.net.Uri
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,6 +20,7 @@ import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
 
 import com.hbs.burnout.ui.save.SaveDialog
+import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
@@ -69,13 +71,21 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                 binding.fabNext.apply {
                     setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
                     text = "미션 완료"
-                    setOnClickListener {  }
+                    setOnClickListener {
+                        val intent = makeSuccessResultIntent()
+                        setResult(ActivityNavigation.SHARE_TO_CHATTING, intent)
+                        finish()
+                    }
                 }
             } else {
                 binding.fabNext.apply {
                     setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
                     text = "미션 실패"
-                    setOnClickListener {  }
+                    setOnClickListener {
+                        val intent = makeFailResultIntent()
+                        setResult(ActivityNavigation.SHARE_TO_CHATTING, intent)
+                        finish()
+                    }
                 }
             }
         })
@@ -167,6 +177,23 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
     private fun isComplete(outputs: List<Category>): Boolean {
         return outputs[0].label != "None" && (outputs[0].score * 100) >= 30
+    }
+
+    private fun makeSuccessResultIntent(): Intent {
+        val intent = Intent()
+        val uri = FileUtils.saveImageToExternalFilesDir(
+            this,
+            binding.shareImage.drawable.toBitmap()
+        )
+        intent.putExtra(ActivityNavigation.ANALYZE_RESULT, uri.path)
+        intent.putExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, true)
+        return intent
+    }
+
+    private fun makeFailResultIntent(): Intent {
+        val intent = Intent()
+        intent.putExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, false)
+        return intent
     }
 
     companion object {

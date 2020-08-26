@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hbs.burnout.ui.mission.fragments
+package com.hbs.burnout.ui.camera.fragments
 
 import android.Manifest
 import android.content.Context
