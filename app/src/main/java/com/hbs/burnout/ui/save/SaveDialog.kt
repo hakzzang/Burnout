@@ -1,22 +1,19 @@
 package com.hbs.burnout.ui.save
 
 import android.app.Dialog
-import android.content.ContentValues
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.*
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.hbs.burnout.R
 import com.hbs.burnout.databinding.DialogSaveBinding
 import com.hbs.burnout.ui.share.ShareViewModel
 import com.hbs.burnout.utils.FileUtils
-import java.util.*
+
 
 const val TAG = "SaveDialog"
 
@@ -69,15 +66,21 @@ class SaveDialog() : DialogFragment() {
             binding.saveImg.setImageBitmap(it.image)
         }
 
-        binding.saveBtn.setOnClickListener{
-            val bitmap = binding.saveImg.getDrawable().toBitmap()
-            context?.let { it -> FileUtils.saveImageToMediaStore(it, bitmap, "BurnOut_test.jpeg") }
+        binding.saveBtn.setOnClickListener { v ->
+            val fileName = "BurnOut_${System.currentTimeMillis()}}"
+            getBitmapFromView(binding.tagContainer)?.let {
+                FileUtils.saveImageToMediaStore(v.context, it, fileName)
+            }
+            dismiss()
         }
 
         return binding.root
     }
 
-    private fun takeScreenshot() {
-        val date = Date()
+    private fun getBitmapFromView(view: View): Bitmap? {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
     }
 }
