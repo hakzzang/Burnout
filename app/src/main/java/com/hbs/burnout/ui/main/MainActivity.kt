@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
@@ -19,6 +20,7 @@ import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.ActivityMainBinding
 import com.hbs.burnout.model.Stage
+import com.hbs.burnout.model.StageProgress
 import com.hbs.burnout.ui.chat.ChattingActivity
 import com.hbs.burnout.ui.ext.view.hideBottomDrawer
 import com.hbs.burnout.ui.main.adapter.BadgeAdapter
@@ -105,6 +107,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun startChattingActivityWithArcTransition(view: View) {
         val intent = Intent(view.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
+        var stageRound = 0
+        val stages = mainViewModel.stages.value ?: return
+
+        for (stage in stages) {
+            if (stage.progress == StageProgress.PLAYING || stage.progress == StageProgress.NOT_COMPLETED) {
+                break
+            }
+            stageRound++
+        }
+        intent.putExtra(ActivityNavigation.STAGE_ROUND, stageRound + 1)
         startActivityResultWithTransition(
             view,
             intent,
@@ -115,7 +127,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun startActivityWithLinearTransition(itemView: View, position: Int) {
         val intent = Intent(itemView.context, ChattingActivity::class.java)
-//        val intent = Intent(itemView.context, CameraMissionActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
         intent.putExtra(ActivityNavigation.STAGE_ROUND, position + 1)
         startActivityResultWithTransition(
