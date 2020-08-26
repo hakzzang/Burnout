@@ -19,16 +19,19 @@ class ChattingViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     private val _readingScript = MutableLiveData<Event<Script>>()
-    val readingScript:LiveData<Event<Script>> = _readingScript
+    val readingScript: LiveData<Event<Script>> = _readingScript
 
     private val _parsedScript = MutableLiveData<Event<List<Script>>>()
-    val parsedScript : LiveData<Event<List<Script>>> = _parsedScript
+    val parsedScript: LiveData<Event<List<Script>>> = _parsedScript
 
     private val _completedReadingScript = MutableLiveData<Event<Script>>()
-    val completedReadingScript : LiveData<Event<Script>> = _completedReadingScript
+    val completedReadingScript: LiveData<Event<Script>> = _completedReadingScript
 
     private val _completedStage = MutableLiveData<Event<Unit>>()
-    val completedStage : LiveData<Event<Unit>> =_completedStage
+    val completedStage: LiveData<Event<Unit>> = _completedStage
+
+    private val _lastScript = MutableLiveData<Script>()
+    val lastScript: LiveData<Script> = _lastScript
 
     fun clearScriptCache() {
         chattingUseCase.clearScriptCache()
@@ -37,7 +40,7 @@ class ChattingViewModel @ViewModelInject constructor(
     fun readNextScriptLine(scriptNumber: Int) {
         val script = chattingUseCase.readNextScriptLine(scriptNumber) {
             _completedStage.value = Event(Unit)
-        }?:return
+        } ?: return
         _readingScript.value = Event(script)
     }
 
@@ -47,58 +50,61 @@ class ChattingViewModel @ViewModelInject constructor(
                 _parsedScript.value = Event(scriptCache)
             }, { lastScript ->
                 chattingUseCase.saveScript(lastScript)
-                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
+                    _lastScript.value = lastScript
                 }
             })
         }
     }
 
-    fun selectAnswer(answerNumber: Int){
+    fun selectAnswer(answerNumber: Int) {
         chattingUseCase.setSelectedAnswer(answerNumber)
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             chattingUseCase.answerScriptLine(answerNumber, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
-            },{lastScript->
+            }, { lastScript ->
                 chattingUseCase.saveScript(lastScript)
-                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
+                    _lastScript.value = lastScript
                 }
             })
         }
     }
 
-    fun takePicture(){
-        viewModelScope.launch(Dispatchers.IO){
-            chattingUseCase.takePictureScriptLine( { scriptCache ->
+    fun takePicture() {
+        viewModelScope.launch(Dispatchers.IO) {
+            chattingUseCase.takePictureScriptLine({ scriptCache ->
                 _parsedScript.value = Event(scriptCache)
-            },{lastScript->
+            }, { lastScript ->
                 chattingUseCase.saveScript(lastScript)
-                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
                 }
             })
         }
     }
 
-    fun loadStage(scriptNumber: Int){
+    fun loadStage(scriptNumber: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val script = chattingUseCase.loadScriptOf(scriptNumber)
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _parsedScript.value = Event(script)
-                if(script.isNotEmpty()){
-                    viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                if (script.isNotEmpty()) {
+                    viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                         _completedReadingScript.value = Event(script.last())
+                        _lastScript.value = script.last()
                     }
-                }else{
+                } else {
                     readNextScriptLine(scriptNumber)
                 }
             }
         }
     }
 
-    fun startStage(stageRound: Int,dbCallback:()->Unit){
-        viewModelScope.launch(Dispatchers.IO){
+    fun startStage(stageRound: Int, dbCallback: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
             val stage = MissionHelper.getStage(stageRound)
             stage.progress = StageProgress.PLAYING
             chattingUseCase.saveStage(stage)
@@ -106,8 +112,8 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun completeStage(stageRound:Int, dbCallback: () -> Unit){
-        viewModelScope.launch(Dispatchers.IO){
+    fun completeStage(stageRound: Int, dbCallback: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
             val stage = MissionHelper.getStage(stageRound)
             stage.progress = StageProgress.COMPLETED
             chattingUseCase.saveStage(stage)

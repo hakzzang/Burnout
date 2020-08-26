@@ -3,10 +3,10 @@ package com.hbs.burnout.ui.chat
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,9 +27,14 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         arguments?.getInt(ActivityNavigation.STAGE_ROUND, 0) ?: 0
     }
 
-    private val viewModel by viewModels<ChattingViewModel>()
+    val viewModel by viewModels<ChattingViewModel>()
     private val chattingAdapter by lazy {
         ChattingAdapter()
+    }
+
+    val answerCallback: (DialogFragment, Int) -> Unit = { dialog, answerNumber ->
+        dialog.dismiss()
+        viewModel.selectAnswer(answerNumber)
     }
 
     override fun isUseTransition(): Boolean = true
@@ -71,7 +76,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                     viewModel.readNextScriptLine(stageNumber)
                 }
                 1 -> {
-                    binding.root.post { showAnswerDialog(viewModel, lastScript) }
+                    binding.root.post { showAnswerDialog() }
                 }
                 2 -> {
                     viewModel.readNextScriptLine(stageNumber)
@@ -114,41 +119,52 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         chattingAdapter.submitList(scriptCache.toList())
     }
 
-    private fun showAnswerDialog(viewModel: ChattingViewModel, lastScript: Script) {
-        val dialog = AnswerDialog(lastScript.answer) { dialog, answerNumber ->
-            dialog.dismiss()
-            viewModel.selectAnswer(answerNumber)
+    private fun showAnswerDialog() {
+        if(childFragmentManager.findFragmentByTag("AnswerDialog") != null){
+            val fragment = childFragmentManager.findFragmentByTag("AnswerDialog")
+            (fragment as AnswerDialog).dismiss()
         }
-        dialog.showNow(parentFragmentManager, "AnswerDialog")
+        AnswerDialog().showNow(childFragmentManager, "AnswerDialog")
     }
 
     private fun showTakePictureDialog() {
         val dialog = TakePictureDialog { dialog ->
             dialog.dismiss()
             viewModel.takePicture()
-            val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                when (result.resultCode) {
-                    ActivityNavigation.SHARE_TO_CHATTING -> {
-                        val receiveIntent = result.data?: return@registerForActivityResult
-                        val isComplete = receiveIntent.getBooleanExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, false)
-                        if(isComplete){
-                            viewModel.takePicture()
-                        }else{
-                            showTakePictureDialog()
+            val cameraActivityResult =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                    when (result.resultCode) {
+                        ActivityNavigation.SHARE_TO_CHATTING -> {
+                            val receiveIntent = result.data ?: return@registerForActivityResult
+                            val isComplete = receiveIntent.getBooleanExtra(
+                                ActivityNavigation.ANALYZE_IS_COMPLETE,
+                                false
+                            )
+                            if (isComplete) {
+                                viewModel.takePicture()
+                            } else {
+                                showTakePictureDialog()
+                            }
                         }
-                    }
-                    ActivityNavigation.CAMERA_TO_CHATTING-> showTakePictureDialog()
+                        ActivityNavigation.CAMERA_TO_CHATTING -> showTakePictureDialog()
 
+                    }
                 }
-            }
-            cameraActivityResult.launch(Intent(Intent(requireContext(), CameraMissionActivity::class.java)))
+            cameraActivityResult.launch(
+                Intent(
+                    Intent(
+                        requireContext(),
+                        CameraMissionActivity::class.java
+                    )
+                )
+            )
         }
         dialog.showNow(parentFragmentManager, "TakePictureDialog")
     }
 
-    private fun addLastMessage(){
+    private fun addLastMessage() {
         val chattingList = chattingAdapter.currentList.toMutableList()
-        chattingList.add(Script(2,"",0,0,999))
+        chattingList.add(Script(2, "", 0, 0, 999))
         chattingAdapter.submitList(chattingList)
         binding.rvChatting.smoothScrollToPosition(chattingList.lastIndex)
     }
