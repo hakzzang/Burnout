@@ -1,7 +1,10 @@
 package com.hbs.burnout.ui.chat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +14,7 @@ import com.hbs.burnout.databinding.FragmentChattingBinding
 import com.hbs.burnout.model.Script
 import com.hbs.burnout.ui.ext.dialog.AnswerDialog
 import com.hbs.burnout.ui.ext.dialog.TakePictureDialog
+import com.hbs.burnout.ui.mission.CameraMissionActivity
 import com.hbs.burnout.utils.ActivityNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -118,7 +122,12 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     private fun showTakePictureDialog() {
         val dialog = TakePictureDialog { dialog ->
             dialog.dismiss()
-            viewModel.takePicture()
+            val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                when (result.resultCode) {
+                    ActivityNavigation.CAMERA_TO_CHATTING -> viewModel.takePicture()
+                }
+            }
+            cameraActivityResult.launch(Intent(Intent(requireContext(), CameraMissionActivity::class.java)))
         }
         dialog.showNow(parentFragmentManager, "TakePictureDialog")
     }
