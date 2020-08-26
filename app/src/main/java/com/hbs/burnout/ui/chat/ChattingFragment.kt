@@ -88,6 +88,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         })
 
         viewModel.completedStage.observe(viewLifecycleOwner, EventObserver {
+            addLastMessage()
             viewModel.completeStage(stageNumber) {
                 binding.root.postDelayed({
                     (activity as? ChattingActivity)?.changeNavigationGraph(stageNumber)
@@ -143,5 +144,12 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
             cameraActivityResult.launch(Intent(Intent(requireContext(), CameraMissionActivity::class.java)))
         }
         dialog.showNow(parentFragmentManager, "TakePictureDialog")
+    }
+
+    private fun addLastMessage(){
+        val chattingList = chattingAdapter.currentList.toMutableList()
+        chattingList.add(Script(2,"",0,0,999))
+        chattingAdapter.submitList(chattingList)
+        binding.rvChatting.smoothScrollToPosition(chattingList.lastIndex)
     }
 }
