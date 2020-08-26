@@ -6,4 +6,11 @@
 
     <color name="color_your_chatting">#899dff</color>
 
+    <color name="color_dialog_bg">#272727</color>
+    <color name="color_dialog_text">#ffffff</color>
+
+    <color name="color_black_alpha_60">#A0000000</color>
+    <color name="color_badge_view_color">#F7F8FB</color>
+
+    <color name="splash_background_color">#3F3F3F</color>
 </resources>

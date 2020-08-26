@@ -37,4 +37,44 @@
     <dimen name="rect_button_width">80dp</dimen>
     <dimen name="rect_button_height">24dp</dimen>
     <dimen name="shutter_button_margin">80dp</dimen>
+
+    <!-- Material text size resources-->
+    <dimen name="material_text_overline">10sp</dimen>
+    <dimen name="material_text_caption">12sp</dimen>
+    <dimen name="material_text_body1">14sp</dimen>
+    <dimen name="material_text_body2">13sp</dimen>
+    <dimen name="material_text_subhead">16sp</dimen>
+    <dimen name="material_text_headline2">20sp</dimen>
+    <dimen name="material_text_headline">24sp</dimen>
+    <dimen name="material_text_display1">34sp</dimen>
+
+    <!-- Chatting resource -->
+    <dimen name="chatting_item_container_margin">12dp</dimen>
+    <dimen name="chatting_profile_image_size">36dp</dimen>
+    <dimen name="chatting_profile_image_elevation">2dp</dimen>
+    <dimen name="chatting_profile_image_outline">2dp</dimen>
+    <dimen name="chatting_dialog_margin_to_profile">18dp</dimen>
+    <dimen name="chatting_dialog_margin_text">16dp</dimen>
+    <dimen name="chatting_wait_animation_width">96dp</dimen>
+    <dimen name="chatting_wait_animation_height">46dp</dimen>
+
+
+    <!-- Selection Resources-->
+    <dimen name="view_selection_height">216dp</dimen>
+    <dimen name="selection_dialog_height">256dp</dimen>
+
+    <!-- ItemMission resources-->
+    <dimen name="item_mission_container_height">128dp</dimen>
+    <dimen name="item_mission_space">16dp</dimen>
+    <dimen name="item_mission_container_radius">16dp</dimen>
+    <dimen name="item_mission_not_completed_view_elevation">2dp</dimen>
+    <dimen name="item_mission_not_completed_view_padding">32dp</dimen>
+
+    <!-- Badge resources-->
+    <dimen name="item_badge_size">96dp</dimen>
+    <dimen name="item_badge_content_top_margin">24dp</dimen>
+    <dimen name="item_badge_drawer_height">600dp</dimen>
+    <dimen name="item_badge_list_top_bottom_margin">16dp</dimen>
+    <dimen name="item_take_picture_button_margin_right">16dp</dimen>
+
 </resources>

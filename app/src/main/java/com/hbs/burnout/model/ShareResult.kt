@@ -1,8 +1,8 @@
 package com.hbs.burnout.model
 
-import android.net.Uri
+import android.graphics.Bitmap
 
-data class ShareResult(val title:String, val image:String, val content:String){
+data class ShareResult(val title:String, val image:Bitmap?, val content:String) {
     //  type, uri, title, content, List<Result>
     var eventType : EventType = EventType.CHATTING
     var resultList:List<Result> = mutableListOf()
