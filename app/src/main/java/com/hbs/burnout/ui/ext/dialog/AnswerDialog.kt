@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hbs.burnout.R
@@ -30,6 +31,7 @@ class AnswerDialog(
         binding.viewSelection.setOnAnswerCallback{
             answerCallBack(this,it)
         }
+
         return binding.root
     }
 
@@ -38,6 +40,8 @@ class AnswerDialog(
         dialog?.let{
             val bottomSheetDialog = dialog as BottomSheetDialog
             bottomSheetDialog.behavior.isDraggable= false
+            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED;
+
         }
     }
 }
