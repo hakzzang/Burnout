@@ -1,6 +1,7 @@
 package com.hbs.burnout.ui.share
 
 
+import android.content.Intent
 import android.net.Uri
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,8 +20,10 @@ import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
 
 import com.hbs.burnout.ui.save.SaveDialog
+import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
 import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.label.Category
 import org.tensorflow.lite.support.model.Model
 
 
@@ -28,8 +31,8 @@ private const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private lateinit var uri: Uri
-    
-   private var bitmapImage: Bitmap? = null
+
+    private var bitmapImage: Bitmap? = null
 
     private val viewModel by viewModels<ShareViewModel>()
     private val progressAdapter = ProgressAdapter()
@@ -62,6 +65,30 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                     )
                 }
             })
+
+        viewModel.missionComplete.observe(this, Observer { isComplete ->
+            if (isComplete) {
+                binding.fabNext.apply {
+                    setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+                    text = "미션 완료"
+                    setOnClickListener {
+                        val intent = makeSuccessResultIntent()
+                        setResult(ActivityNavigation.SHARE_TO_CHATTING, intent)
+                        finish()
+                    }
+                }
+            } else {
+                binding.fabNext.apply {
+                    setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
+                    text = "미션 실패"
+                    setOnClickListener {
+                        val intent = makeFailResultIntent()
+                        setResult(ActivityNavigation.SHARE_TO_CHATTING, intent)
+                        finish()
+                    }
+                }
+            }
+        })
     }
 
     lateinit var bitmapImagePath: String
@@ -86,7 +113,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
         initView(binding)
 
-        observe();
+        observe()
     }
 
     override fun onStart() {
@@ -96,7 +123,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
     }
 
-    private fun alnalyzer (imageBitmap: Bitmap) {
+    private fun alnalyzer(imageBitmap: Bitmap) {
         val options = Model.Options.Builder().setDevice(Model.Device.GPU).build()
         val birdModel = BirdModel.newInstance(baseContext, options)
         val items = mutableListOf<ShareResult.Result>()
@@ -106,11 +133,11 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                 sortByDescending { it.score } // Sort with highest confidence first
             }.take(MAX_RESULT_DISPLAY) // take the top results
 
-        val completeMsg = if (outputs[0].label.equals("None") || (outputs[0].score*100) < 30) {
-            "실패~\n" +
-                    "다시 도전해보아요~~!"
+        val isCompleteAnalysis = isComplete(outputs)
+        val completeMsg = if (isCompleteAnalysis) {
+            "성공!\n다음 미션에 도전해 보아요!"
         } else {
-            "성공!\n 다음 미션에 도전해 보아요!"
+            "실패~\n다시 도전해보아요~~!"
         }
 
         var sample = ShareResult("이것은 새인가?", bitmapImage, completeMsg)
@@ -118,12 +145,13 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
         for (output in outputs) {
             Log.i(TAG, "label:${output.label} , score:${output.score}")
-            items.add(ShareResult.Result(output.label, (output.score*100).toInt()))
+            items.add(ShareResult.Result(output.label, (output.score * 100).toInt()))
         }
 
         sample.resultList = items
 
         viewModel.updateShareData(sample)
+        viewModel.setMissionComplete(isCompleteAnalysis)
     }
 
     private fun initView(binding: ActivityShareBinding) {
@@ -141,6 +169,31 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             val dialog = SaveDialog()
             dialog.show(supportFragmentManager, "SAVE_DIALOG")
         }
+
+        binding.fabNext.setOnClickListener {
+
+        }
+    }
+
+    private fun isComplete(outputs: List<Category>): Boolean {
+        return outputs[0].label != "None" && (outputs[0].score * 100) >= 30
+    }
+
+    private fun makeSuccessResultIntent(): Intent {
+        val intent = Intent()
+        val uri = FileUtils.saveImageToExternalFilesDir(
+            this,
+            binding.shareImage.drawable.toBitmap()
+        )
+        intent.putExtra(ActivityNavigation.ANALYZE_RESULT, uri.path)
+        intent.putExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, true)
+        return intent
+    }
+
+    private fun makeFailResultIntent(): Intent {
+        val intent = Intent()
+        intent.putExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, false)
+        return intent
     }
 
     companion object {

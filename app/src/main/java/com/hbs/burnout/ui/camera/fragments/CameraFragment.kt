@@ -42,7 +42,8 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import com.hbs.burnout.R
-import com.hbs.burnout.ui.mission.CameraMissionActivity
+import com.hbs.burnout.ui.camera.fragments.PermissionsFragment
+import com.hbs.burnout.utils.FileUtils
 import java.io.File
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
@@ -60,6 +61,7 @@ typealias LumaListener = (luma: Double) -> Unit
 /** Milliseconds used for UI animations */
 const val ANIMATION_FAST_MILLIS = 50L
 const val ANIMATION_SLOW_MILLIS = 100L
+
 /**
  * Main fragment for this app. Implements all camera operations including:
  * - Viewfinder
@@ -110,7 +112,7 @@ class CameraFragment : Fragment() {
         // user could have removed them while the app was in paused state.
         if (!PermissionsFragment.hasPermissions(requireContext())) {
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-                    CameraFragmentDirections.actionCameraToPermissions()
+                CameraFragmentDirections.actionCameraToPermissions()
             )
 
         }
@@ -125,10 +127,11 @@ class CameraFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_camera, container, false)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
+        inflater.inflate(R.layout.fragment_camera, container, false)
 
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -212,47 +215,47 @@ class CameraFragment : Fragment() {
 
         // CameraProvider
         val cameraProvider = cameraProvider
-                ?: throw IllegalStateException("Camera initialization failed.")
+            ?: throw IllegalStateException("Camera initialization failed.")
 
         // CameraSelector
         val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
 
         // Preview
         preview = Preview.Builder()
-                // We request aspect ratio but no resolution
-                .setTargetAspectRatio(screenAspectRatio)
-                // Set initial target rotation
-                .setTargetRotation(rotation)
-                .build()
+            // We request aspect ratio but no resolution
+            .setTargetAspectRatio(screenAspectRatio)
+            // Set initial target rotation
+            .setTargetRotation(rotation)
+            .build()
 
         // ImageCapture
         imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                // We request aspect ratio but no resolution to match preview config, but letting
-                // CameraX optimize for whatever specific resolution best fits our use cases
-                .setTargetAspectRatio(screenAspectRatio)
-                // Set initial target rotation, we will have to call this again if rotation changes
-                // during the lifecycle of this use case
-                .setTargetRotation(rotation)
-                .build()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            // We request aspect ratio but no resolution to match preview config, but letting
+            // CameraX optimize for whatever specific resolution best fits our use cases
+            .setTargetAspectRatio(screenAspectRatio)
+            // Set initial target rotation, we will have to call this again if rotation changes
+            // during the lifecycle of this use case
+            .setTargetRotation(rotation)
+            .build()
 
         // ImageAnalysis
         imageAnalyzer = ImageAnalysis.Builder()
-                // We request aspect ratio but no resolution
-                .setTargetAspectRatio(screenAspectRatio)
-                // Set initial target rotation, we will have to call this again if rotation changes
-                // during the lifecycle of this use case
-                .setTargetRotation(rotation)
-                .build()
-                // The analyzer can then be assigned to the instance
-                .also {
-                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                        // Values returned from our analyzer are passed to the attached listener
-                        // We log image analysis results here - you should do something useful
-                        // instead!
-                        Log.d(TAG, "Average luminosity: $luma")
-                    })
-                }
+            // We request aspect ratio but no resolution
+            .setTargetAspectRatio(screenAspectRatio)
+            // Set initial target rotation, we will have to call this again if rotation changes
+            // during the lifecycle of this use case
+            .setTargetRotation(rotation)
+            .build()
+            // The analyzer can then be assigned to the instance
+            .also {
+                it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
+                    // Values returned from our analyzer are passed to the attached listener
+                    // We log image analysis results here - you should do something useful
+                    // instead!
+                    Log.d(TAG, "Average luminosity: $luma")
+                })
+            }
 
         // Must unbind the use-cases before rebinding them
         cameraProvider.unbindAll()
@@ -261,7 +264,8 @@ class CameraFragment : Fragment() {
             // A variable number of use-cases can be passed here -
             // camera provides access to CameraControl & CameraInfo
             camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                this, cameraSelector, preview, imageCapture, imageAnalyzer
+            )
 
             // Attach the viewfinder's surface provider to preview use case
             preview?.setSurfaceProvider(viewFinder.createSurfaceProvider())
@@ -311,23 +315,31 @@ class CameraFragment : Fragment() {
 
                 // Setup image capture listener which is triggered after photo has been taken
                 imageCapture.takePicture(
-                        cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
+                    cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
 
-                    override fun onError(exc: ImageCaptureException) {
-                        Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
-                    }
+                        override fun onError(exc: ImageCaptureException) {
+                            Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                        }
 
-                    override fun onCaptureSuccess(image: ImageProxy) {
-                        // Use the image, then make sure to close it.
-                        Log.i(TAG, "onCaptureSuccess:size->"+image.width)
+                        override fun onCaptureSuccess(image: ImageProxy) {
+                            // Use the image, then make sure to close it.
+                            Log.i(TAG, "onCaptureSuccess:size->" + image.width)
 
-                        val bitmapImage: Bitmap? = imageProxyToBitmap(image)
-                        Log.i("onCaptureSuccess",": bitmap width:${bitmapImage?.width} height:${bitmapImage?.height}")
+                            val bitmapImage: Bitmap? = imageProxyToBitmap(image)
+                            Log.i(
+                                "onCaptureSuccess",
+                                ": bitmap width:${bitmapImage?.width} height:${bitmapImage?.height}"
+                            )
 
-                        image.close()
-                        bitmapImage?.let { it1 -> goToPreview(it1, image.imageInfo.rotationDegrees) }
-                    }
-                })
+                            image.close()
+                            bitmapImage?.let { bitmap ->
+                                val file = FileUtils.getOrMakeRecognizeFile(requireActivity())
+                                FileUtils.saveBitmapToFile(file, bitmap)
+                                goToPreview(file.path ?: "", image.imageInfo.rotationDegrees)
+                            }
+
+                        }
+                    })
 
                 // We can only change the foreground Drawable using API level 23+ API
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -336,9 +348,10 @@ class CameraFragment : Fragment() {
                     container.postDelayed({
                         container.foreground = ColorDrawable(Color.WHITE)
                         container.postDelayed(
-                                { container.foreground = null }, ANIMATION_FAST_MILLIS)
+                            { container.foreground = null }, ANIMATION_FAST_MILLIS
+                        )
                         container.postDelayed({
-                        },ANIMATION_SLOW_MILLIS)
+                        }, ANIMATION_SLOW_MILLIS)
                     }, ANIMATION_SLOW_MILLIS)
                 }
             }
@@ -346,7 +359,10 @@ class CameraFragment : Fragment() {
     }
 
     private fun imageProxyToBitmap(image: ImageProxy): Bitmap? {
-        Log.i("imageProxyTobitmap",": org width:${image.width} height:${image.height} rotation:${image.imageInfo.rotationDegrees}")
+        Log.i(
+            "imageProxyTobitmap",
+            ": org width:${image.width} height:${image.height} rotation:${image.imageInfo.rotationDegrees}"
+        )
         val planeProxy = image.planes[0]
         val buffer = planeProxy.buffer
         val bytes = ByteArray(buffer.remaining())
@@ -357,11 +373,12 @@ class CameraFragment : Fragment() {
             }
     }
 
-    private fun goToPreview(bitmap: Bitmap, targetRotation: Int) {
+    private fun goToPreview(imageFileUriPath: String, targetRotation: Int) {
         Log.i(TAG, "여기 들어오긴 함?")
         container.postDelayed({
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-                CameraFragmentDirections.actionCameraToPreview(bitmap,targetRotation))
+                CameraFragmentDirections.actionCameraToPreview(imageFileUriPath, targetRotation)
+            )
         }, ANIMATION_FAST_MILLIS)
     }
 
@@ -472,7 +489,9 @@ class CameraFragment : Fragment() {
 
         /** Helper function used to create a timestamped file */
         private fun createFile(baseFolder: File, format: String, extension: String) =
-                File(baseFolder, SimpleDateFormat(format, Locale.US)
-                        .format(System.currentTimeMillis()) + extension)
+            File(
+                baseFolder, SimpleDateFormat(format, Locale.US)
+                    .format(System.currentTimeMillis()) + extension
+            )
     }
 }

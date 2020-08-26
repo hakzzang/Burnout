@@ -5,13 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.view.WindowInsets
 import android.widget.FrameLayout
-import androidx.core.view.doOnLayout
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityCameraMissionBinding
+import com.hbs.burnout.utils.ActivityNavigation
 import java.io.File
 
 private const val IMMERSIVE_FLAG_TIMEOUT = 500L
@@ -61,5 +60,10 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
             return if (mediaDir != null && mediaDir.exists())
                 mediaDir else appContext.filesDir
         }
+    }
+
+    override fun onBackPressed() {
+        setResult(ActivityNavigation.CAMERA_TO_CHATTING)
+        super.onBackPressed()
     }
 }
