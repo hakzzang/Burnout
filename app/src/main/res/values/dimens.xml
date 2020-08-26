@@ -57,7 +57,8 @@
     <dimen name="chatting_dialog_margin_text">16dp</dimen>
     <dimen name="chatting_wait_animation_width">96dp</dimen>
     <dimen name="chatting_wait_animation_height">46dp</dimen>
-
+    <dimen name="chatting_recognize_image_width">128dp</dimen>
+    <dimen name="chatting_recognize_image_height">156dp</dimen>
 
     <!-- Selection Resources-->
     <dimen name="view_selection_height">216dp</dimen>
@@ -76,5 +77,6 @@
     <dimen name="item_badge_drawer_height">600dp</dimen>
     <dimen name="item_badge_list_top_bottom_margin">16dp</dimen>
     <dimen name="item_take_picture_button_margin_right">16dp</dimen>
+
 
 </resources>

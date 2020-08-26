@@ -47,37 +47,6 @@ object FileUtils {
 
     fun saveImageToMediaStore(context: Context, bitmap: Bitmap, fileName: String) {
         val resolver = context.contentResolver
-        val imageCollection =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                MediaStore.Images.Media
-                    .getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-            } else {
-                MediaStore.Images.Media
-                    .getContentUri(MediaStore.VOLUME_EXTERNAL)
-            }
-
-        val imageDetails = ContentValues().apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-                put(MediaStore.Images.Media.IS_PENDING, 1)
-            }
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/*")
-        }
-
-        val imageContentUri = resolver.insert(imageCollection, imageDetails)
-
-        imageContentUri?.let { uri ->
-            resolver.openFileDescriptor(uri, "w", null).use { pdf ->
-                val inputStream = getImageInputStream(bitmap)
-                val strToByte = getBytes(inputStream!!)
-                val fos = FileOutputStream(pdf?.getFileDescriptor())
-                fos.write(strToByte)
-                fos.close()
-                inputStream.close()
-                pdf?.close()
-                resolver.update(uri, imageDetails, null, null)
-            }
 
         val imageCollection =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
