@@ -4,9 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hbs.burnout.domain.local.usecase.ShareUseCase
 import com.hbs.burnout.model.ShareResult
 
-class ShareViewModel @ViewModelInject constructor() : ViewModel() {
+class ShareViewModel @ViewModelInject constructor(
+    private val shareUseCase: ShareUseCase
+)  : ViewModel() {
     var _shareData: MutableLiveData<ShareResult> = MutableLiveData()
     val shareData: LiveData<ShareResult> = _shareData
 
@@ -32,6 +35,9 @@ class ShareViewModel @ViewModelInject constructor() : ViewModel() {
 
     fun updateTagSelected(isSelected: Boolean) {
         tagSelected.value = isSelected
+    }
+
+    fun saveShareData(){
     }
 }
 

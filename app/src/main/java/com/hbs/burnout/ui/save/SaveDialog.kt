@@ -16,9 +16,11 @@ import com.hbs.burnout.databinding.DialogSaveBinding
 import com.hbs.burnout.ui.share.ShareViewModel
 import com.hbs.burnout.utils.FileUtils
 import com.hbs.burnout.utils.FileUtils.OnDownloadListener
+import dagger.hilt.android.AndroidEntryPoint
 
 const val TAG = "SaveDialog"
 
+@AndroidEntryPoint
 class SaveDialog() : DialogFragment(), OnDownloadListener {
 
     private lateinit var binding: DialogSaveBinding

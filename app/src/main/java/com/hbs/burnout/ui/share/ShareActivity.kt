@@ -22,10 +22,12 @@ import com.hbs.burnout.tfml.TFModelWorker
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
+import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.support.label.Category
 
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
+@AndroidEntryPoint
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private lateinit var itemName: String
     private var resultType: Int = 0
@@ -33,7 +35,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private var uri: Uri? = null
 
     private val tfWork = TFModelWorker()
-
 
     private var bitmapImage: Bitmap? = null
 

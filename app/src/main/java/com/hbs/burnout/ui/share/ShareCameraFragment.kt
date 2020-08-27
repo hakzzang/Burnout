@@ -9,7 +9,10 @@ import com.hbs.burnout.core.BaseFragment
 import androidx.lifecycle.Observer
 import com.hbs.burnout.databinding.FragmentShareCameraBinding
 import com.hbs.burnout.utils.FileUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class ShareCameraFragment : BaseFragment<FragmentShareCameraBinding>(){
 
     private val viewModel by activityViewModels<ShareViewModel>()
