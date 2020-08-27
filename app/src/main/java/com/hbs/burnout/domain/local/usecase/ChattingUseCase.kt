@@ -29,11 +29,6 @@ interface ChattingUseCase {
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
 
-    suspend fun drawingImageScriptLine(
-        readingLineCallback: (List<Script>) -> Unit,
-        completeReadingCallback: (Script) -> Unit
-    ): List<Script>
-
     fun clearScriptCache()
     fun saveStage(stage: Stage): Long
     fun saveScript(script: Script): Long
@@ -86,9 +81,4 @@ class ChattingUseCaseImpl @Inject constructor(
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script> = scriptManager.takePictureScriptLine(readingLineCallback, completeReadingCallback)
-
-    override suspend fun drawingImageScriptLine(
-        readingLineCallback: (List<Script>) -> Unit,
-        completeReadingCallback: (Script) -> Unit
-    ): List<Script> = scriptManager.drawingImageScriptLine(readingLineCallback, completeReadingCallback)
 }
