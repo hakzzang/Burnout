@@ -12,6 +12,12 @@ import java.io.*
 
 object FileUtils {
     const val RECOGNIZE_FILE_NAME = "recognize_result.jpg"
+
+    public interface OnDownloadListener{
+        fun onSuccess(uri:Uri)
+        fun onFailed(error:String?)
+    }
+
     fun getOrMakeRecognizeFile(context: Context): File {
         return File(context.filesDir, RECOGNIZE_FILE_NAME)
     }
@@ -22,9 +28,9 @@ object FileUtils {
         outputStream.close()
     }
 
-    fun saveImageToExternalFilesDir(context: Context, bitmap: Bitmap): Uri {
+    fun saveImageToExternalFilesDir(context: Context?, bitmap: Bitmap): Uri? {
         val file = File(
-            context.getExternalFilesDir(
+            context?.getExternalFilesDir(
                 Environment.DIRECTORY_PICTURES
             ), "BurnOut"
         )
@@ -37,12 +43,13 @@ object FileUtils {
             e.printStackTrace()
         }
 
-        val uri = FileProvider.getUriForFile(context, "com.hbs.burnout.fileprovider", file);
+        val uri =
+            context?.let { FileProvider.getUriForFile(it, "com.hbs.burnout.fileprovider", file) };
 
         return uri
     }
 
-    fun saveImageToMediaStore(context: Context, bitmap: Bitmap, fileName: String) {
+    fun saveImageToMediaStore(context: Context, bitmap: Bitmap, fileName: String, listener: OnDownloadListener? = null) {
         val resolver = context.contentResolver
         val relativeLocation = Environment.DIRECTORY_DCIM + "/" + "BurnOut"
 
@@ -74,11 +81,13 @@ object FileUtils {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
             } catch (e: IOException) {
                 resolver.delete(imageContentUri, null, null)
+                listener?.onFailed(e.message)
             } finally {
                 stream?.close()
                 contentValues.clear();
                 contentValues.put(MediaStore.Images.Media.IS_PENDING, 0);
                 resolver.update(uri, contentValues, null, null);
+                listener?.onSuccess(imageContentUri)
             }
         }
     }
