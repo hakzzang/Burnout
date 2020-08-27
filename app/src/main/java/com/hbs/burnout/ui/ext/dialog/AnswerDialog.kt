@@ -13,7 +13,6 @@ import com.hbs.burnout.databinding.DialogSelectionBinding
 import com.hbs.burnout.ui.chat.ChattingFragment
 
 class AnswerDialog : BottomSheetDialogFragment() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BaseBottomSheetDialog)
@@ -24,13 +23,14 @@ class AnswerDialog : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val chattingFragment = parentFragment as ChattingFragment
         val binding = DialogSelectionBinding.inflate(layoutInflater, container, false)
-        val fragment  = parentFragment as ChattingFragment
-        fragment.viewModel.lastScript.value?.run {
-            binding.viewSelection.setButtonAnswer(answer)
+        chattingFragment.viewModel.lastScript.value?.answer?.let {
+            binding.viewSelection.setButtonAnswer(it)
         }
         binding.viewSelection.setOnAnswerCallback {
-            fragment.answerCallback(this, it)
+            dismiss()
+            chattingFragment.answerCallback(this, it)
         }
         return binding.root
     }

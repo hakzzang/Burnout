@@ -14,6 +14,7 @@ import com.hbs.burnout.databinding.FragmentPreviewBinding
 import com.hbs.burnout.ui.ext.view.rotate
 import com.hbs.burnout.ui.share.ShareActivity
 import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.BurnLog
 import com.hbs.burnout.utils.TransitionConfigure
 import java.io.File
 import java.io.FileOutputStream
@@ -32,17 +33,14 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
         val rotationf = arguments?.getInt("targetRotation")?.toFloat()!!
         val imagetype = arguments?.getInt("typeImage",0)
         val bitmapImage = BitmapFactory.decodeFile(bitmapFileUriPath)
-        Log.d("SaveFile=2",bitmapFileUriPath)
-        Log.i("PreviewResultFragment", "rotation value:$rotationf")
+        BurnLog.Debug(this,"SaveFile=2 $bitmapFileUriPath")
+        BurnLog.Debug(this, "rotation value:$rotationf")
 
         binding.cancelButton.setOnClickListener {
-            Log.i("PREVIEW", "취소취소!! 카메라로 돌아가자!!")
             Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                 PreviewResultFragmentDirections.actionPreviewToCamera())
         }
         binding.analyzeButton.setOnClickListener {
-            Log.i("PREVIEW", "결과 화면으로 가자가자! ")
-//            outputDirectory = CameraMissionActivity.getOutputDirectory(requireContext())
 
             val out = FileOutputStream(bitmapFileUriPath)
 
@@ -58,7 +56,7 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
             Log.d("result-dada","start")
 
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
-                Log.d("result-dada",result.toString())
+                BurnLog.Debug(requireActivity(), "result-dada:$result")
                 when(result.resultCode){
                     ActivityNavigation.SHARE_TO_CHATTING -> {
                         requireActivity().setResult(result.resultCode, result.data)

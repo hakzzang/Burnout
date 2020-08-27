@@ -41,11 +41,13 @@ interface ScriptManager {
     ): MutableList<Script>
 
     suspend fun takePictureScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
 
     suspend fun drawingImageScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
@@ -187,6 +189,7 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
     }
 
     override suspend fun takePictureScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script> {
@@ -207,11 +210,15 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         }
         delay(ScriptConfiguration.LINE_ENTER_SPEED)
         val answerScript = scriptCache.last().parse()
+        if(answerScript.event == 4){
+            pageNumber++
+        }
         completeReadingCallback(answerScript)
         return scriptCache
     }
 
     override suspend fun drawingImageScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script> {
@@ -224,7 +231,11 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
             delay(ScriptConfiguration.READING_SPEED)
             newWord += word.toString()
             val newScriptLine =
-                ScriptBuilder(user, newWord, 6, stage, id).addAnswer(lastScript.answer).create()
+                ScriptBuilder(user, newWord, if(isCompleted){
+                    6
+                }else{
+                    5
+                }, stage, id).addAnswer(lastScript.answer).create()
             scriptCache.set(scriptCache.lastIndex, newScriptLine)
             withContext(Dispatchers.Main) {
                 readingLineCallback(scriptCache)
@@ -232,6 +243,9 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         }
         delay(ScriptConfiguration.LINE_ENTER_SPEED)
         val answerScript = scriptCache.last().parse()
+        if(answerScript.event == 6){
+            pageNumber++
+        }
         completeReadingCallback(answerScript)
         return scriptCache
     }

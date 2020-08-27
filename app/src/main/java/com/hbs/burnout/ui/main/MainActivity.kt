@@ -10,6 +10,7 @@ import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -90,9 +91,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         mainViewModel.stages.observe(this@MainActivity, Observer { stages ->
             initBottomDrawer(stages)
-            missionAdapter.submitList(stages.toList())
-            badgeAdapter.submitList(stages.toList())
-            missionAdapter.notifyDataSetChanged()
+            lifecycleScope.launchWhenResumed {
+                missionAdapter.submitList(stages.toList())
+                missionAdapter.notifyItemRangeChanged(0, missionAdapter.itemCount)
+                badgeAdapter.submitList(stages.toList())
+            }
+
+//            missionAdapter.notifyDataSetChanged()
         })
     }
 

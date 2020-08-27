@@ -14,12 +14,20 @@ import com.hbs.burnout.utils.script.MissionHelper
 class MissionAdapter(private val successCallback: (View, Int) -> (Unit), private val failCallback:(Boolean)->Unit) :
     ListAdapter<Stage, MissionAdapter.ViewHolder>(object : DiffUtil.ItemCallback<Stage>() {
         override fun areItemsTheSame(oldItem: Stage, newItem: Stage): Boolean =
-            oldItem.round == newItem.round && oldItem.progress == newItem.progress
+            oldItem == newItem
 
         override fun areContentsTheSame(oldItem: Stage, newItem: Stage): Boolean =
             oldItem.round == newItem.round && oldItem.progress == newItem.progress
 
     }) {
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).round.toLong()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(ItemMissionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
