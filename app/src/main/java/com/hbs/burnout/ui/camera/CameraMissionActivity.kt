@@ -1,4 +1,4 @@
-package com.hbs.burnout.ui.mission
+package com.hbs.burnout.ui.camera
 
 import android.content.Context
 import android.os.Build
@@ -52,6 +52,7 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
     }
 
     companion object {
+        val TAG = this.javaClass.name
         /** Use external media if it is available, our app's file directory otherwise */
         fun getOutputDirectory(context: Context): File {
             val appContext = context.applicationContext
@@ -66,4 +67,6 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
         setResult(ActivityNavigation.CAMERA_TO_CHATTING)
         super.onBackPressed()
     }
+
 }
+

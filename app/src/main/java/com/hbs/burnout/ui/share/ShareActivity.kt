@@ -2,9 +2,9 @@ package com.hbs.burnout.ui.share
 
 
 import android.content.Intent
-import android.net.Uri
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,20 +19,19 @@ import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
 import com.hbs.burnout.tfml.TFModelType
 import com.hbs.burnout.tfml.TFModelWorker
-
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
-import java.io.File
-import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
-import org.tensorflow.lite.support.model.Model
+import java.io.File
 
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
+    private lateinit var itemName: String
     private var resultType: Int = 0
     private lateinit var uri: Uri
+    private val tfWork = TFModelWorker()
 
     private var bitmapImage: Bitmap? = null
 
@@ -105,16 +104,28 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         this.bitmapImagePath = intent.getStringExtra("resultImagePath").toString()
-        this.resultType = intent.getIntExtra("resultImage",1)
+        this.resultType = intent.getIntExtra("resultImageType",0)
+        this.itemName = intent.getStringExtra("expectItemName").toString()
 
-        bitmapImagePath.let {
-            Log.d(TAG, "image path:" + bitmapImagePath)
-            this.bitmapImage = BitmapFactory.decodeFile(it)
+        if (resultType == TFModelType.SCETCHI.ordinal) {
+            Log.d(TAG, "image path2:" + FileUtils.RECOGNIZE_FILE_NAME2)
+            val tmpFileAnalyzer =  FileUtils.getOrMakeRecognizeFile2(baseContext)
+            this.bitmapImage = BitmapFactory.decodeFile(tmpFileAnalyzer.path)
+            var bitmapImageShare: Bitmap?
+            bitmapImagePath.let {
+                Log.d(TAG, "image path1:" + bitmapImagePath)
+                bitmapImageShare = BitmapFactory.decodeFile(it)
+            }
+            binding.shareImage.setImageBitmap(bitmapImageShare)
+        } else {
+            bitmapImagePath.let {
+                Log.d(TAG, "image path1:" + bitmapImagePath)
+                bitmapImage = BitmapFactory.decodeFile(it)
+            }
+            binding.shareImage.setImageBitmap(bitmapImage)
         }
 
         uri = Uri.fromFile(File(bitmapImagePath))
-
-        binding.shareImage.setImageBitmap(bitmapImage)
 
         initView(binding)
 
@@ -129,11 +140,12 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun runTFImageParser (imageBitmap: Bitmap) {
-        val tfWork = TFModelWorker()
 
         when (resultType) {
             TFModelType.BIRD.ordinal -> tfWork.initModel(baseContext, TFModelType.BIRD)
-            else -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
+            TFModelType.ANYTHING.ordinal -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
+            TFModelType.SCETCHI.ordinal -> tfWork.initModel(baseContext, TFModelType.SCETCHI)
+            else -> 0
         }
 
         val outputs = tfWork.alnalyze(imageBitmap)
@@ -148,11 +160,19 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
         val title = when (resultType) {
             TFModelType.BIRD.ordinal -> "이것은 새인가!"
-            else -> "이것을 찍은게 맞나요?"
+            TFModelType.ANYTHING.ordinal -> "이것을 찍은게 맞나요?"
+            TFModelType.SCETCHI.ordinal -> "${itemName}을/를 그린게 맞나요?"
+            else -> "이것이 맞나요?"
         }
 
         var sample = ShareResult( title, imageBitmap, completeMsg)
-        sample.eventType = EventType.CAMERA
+
+        sample.eventType = when (resultType) {
+            TFModelType.SCETCHI.ordinal ->
+                EventType.DRAWING
+            else ->
+                EventType.CAMERA
+        }
 
         for (output in outputs) {
             Log.i(TAG, "label:${output.label} , score:${output.score}")
@@ -187,7 +207,12 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun isComplete(outputs: List<Category>): Boolean {
-        return outputs[0].label != "None" && (outputs[0].score * 100) >= 30
+        return when (resultType) {
+            TFModelType.SCETCHI.ordinal ->
+                tfWork.find
+            else ->
+                outputs[0].label != "None" && (outputs[0].score * 100) >= 30
+        }
     }
 
     private fun makeSuccessResultIntent(): Intent {

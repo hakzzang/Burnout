@@ -97,6 +97,7 @@ class ScriptStorage @Inject constructor() {
         when (scriptNumber) {
             1 -> return mission1
             2 -> return mission2
+            3 -> return mission3
         }
 
         return mission1
