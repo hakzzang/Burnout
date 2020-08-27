@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 
 
 @Entity
-data class ShareResult(
-    @ColumnInfo @PrimaryKey var round: Int,
-    @ColumnInfo val title: String = "",
-    @ColumnInfo val content: String,
-    @ColumnInfo val uri: String? = "",
+data class ShareResult constructor(
+    @ColumnInfo @PrimaryKey var round: Int = 0,
+    @ColumnInfo var title: String = "",
+    @ColumnInfo var content: String = "",
+    @ColumnInfo var uri: String? = "",
     @ColumnInfo var resultList: List<Result> = mutableListOf()) {
 
     @Ignore
