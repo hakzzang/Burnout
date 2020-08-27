@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
+                android:src="@drawable/gamjatwigim"
                 tools:src="@drawable/gamjatwigim" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -148,6 +149,7 @@
             android:text="@string/text_save"
             android:textColor="@android:color/black"
             android:textStyle="bold"
+            android:onClick="@{()->handler.saveImage()}"
             app:layout_constraintBottom_toBottomOf="@id/cancel_btn"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toRightOf="@id/cancel_btn"

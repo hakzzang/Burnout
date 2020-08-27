@@ -5,27 +5,33 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.hbs.burnout.R
 import com.hbs.burnout.databinding.DialogSaveBinding
 import com.hbs.burnout.ui.share.ShareViewModel
 import com.hbs.burnout.utils.FileUtils
-
+import com.hbs.burnout.utils.FileUtils.OnDownloadListener
 
 const val TAG = "SaveDialog"
 
-class SaveDialog() : DialogFragment() {
+class SaveDialog() : DialogFragment(), OnDownloadListener {
 
     private lateinit var binding: DialogSaveBinding
     private val shareViewModel by activityViewModels<ShareViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    companion object {
+        fun newInstance(): SaveDialog {
+            val args = Bundle()
+            val fragment = SaveDialog()
+            fragment.arguments = args
+            return fragment
+        }
     }
-
     override fun onResume() {
         super.onResume()
         val dialog = dialog
@@ -35,7 +41,6 @@ class SaveDialog() : DialogFragment() {
             dialog.window!!.setLayout(width, height)
         }
     }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -66,14 +71,6 @@ class SaveDialog() : DialogFragment() {
             binding.saveImg.setImageBitmap(it.image)
         }
 
-        binding.saveBtn.setOnClickListener { v ->
-            val fileName = "BurnOut_${System.currentTimeMillis()}}"
-            getBitmapFromView(binding.tagContainer)?.let {
-                FileUtils.saveImageToMediaStore(v.context, it, fileName)
-            }
-            dismiss()
-        }
-
         return binding.root
     }
 
@@ -82,5 +79,23 @@ class SaveDialog() : DialogFragment() {
         val canvas = Canvas(bitmap)
         view.draw(canvas)
         return bitmap
+    }
+
+    fun saveImage(){
+        val fileName = "BurnOut_${System.currentTimeMillis()}}"
+        getBitmapFromView(binding.tagContainer)?.let { bitmap->
+            FileUtils.run {
+                context?.let { it1 -> saveImageToMediaStore(it1, bitmap, fileName, this@SaveDialog) }
+            }
+        }
+        dismiss()
+    }
+
+    override fun onSuccess(uri: Uri) {
+        Toast.makeText(context, "다운로드 완료!", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onFailed(error: String?) {
+        Toast.makeText(context, "다운로드 실패..!", Toast.LENGTH_SHORT).show()
     }
 }
