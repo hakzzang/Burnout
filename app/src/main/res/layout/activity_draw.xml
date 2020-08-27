@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+<RelativeLayout
+    android:id="@+id/activity_draw"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hbs.burnout.ui.drawable.PaintView
+        android:id="@+id/paintView"
+        android:layout_width="380dp"
+        android:layout_height="380dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="49dp" />
+
+    <Button
+        android:id="@+id/btn_detect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_next"
+        android:layout_alignParentStart="true"
+        android:onClick="onDetectClick"
+        android:text="결과 확인" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onNextClick"
+        android:text="다른거" />
+
+    <Button
+        android:id="@+id/btn_clear3"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onClearClick"
+        android:text="다시그리기" />
+
+    <TextView
+        android:id="@+id/txt_draw_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="13dp"
+        android:text="그러보자!"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txt_result_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="105dp"
+        android:text="TextView" />
+</RelativeLayout>
+</layout>
