@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.circularreveal.cardview.CircularRevealCardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/selection_dialog_height"
+        app:cardBackgroundColor="@android:color/white"
+        app:shapeAppearance="@style/SelectContainerStyle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_dialog_selection_title"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="DRAWING IMAGE"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="@dimen/material_text_headline"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_draw_image"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:drawableLeft="@drawable/ic_baseline_drawing_brush"
+                android:fontFamily="sans-serif"
+                android:textSize="@dimen/material_text_display1"
+                android:text="그림그리기"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_dialog_selection_title"
+                app:shapeAppearance="@style/TakePictureContainerStyle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+</layout>

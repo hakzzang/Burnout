@@ -86,6 +86,19 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
+    fun drawingImage(){
+        viewModelScope.launch(Dispatchers.IO){
+            chattingUseCase.drawingImageScriptLine( { scriptCache ->
+                _parsedScript.value = Event(scriptCache)
+            },{lastScript->
+                chattingUseCase.saveScript(lastScript)
+                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                    _completedReadingScript.value = Event(lastScript)
+                }
+            })
+        }
+    }
+
     fun loadStage(scriptNumber: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val script = chattingUseCase.loadScriptOf(scriptNumber)
