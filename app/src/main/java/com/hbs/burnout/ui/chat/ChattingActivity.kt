@@ -1,5 +1,6 @@
 package com.hbs.burnout.ui.chat
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -48,6 +49,9 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         super.onCreate(savedInstanceState)
         initView(binding)
         bindNavigationGraph(R.navigation.nav_chatting_graph)
+        val stageRound = intent.getIntExtra(ActivityNavigation.STAGE_ROUND, 0)
+
+        updateShortcuts(this, stageRound)
         showBubble()
     }
 
@@ -86,6 +90,10 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
             Bundle().apply {
                 putInt("stageNumber", stageNumber)
             })
+    }
+
+    private fun updateShortcuts(context: Context, stageNumber: Int) {
+        notificationHelper.updateShortcuts(context, stageNumber)
     }
 
     private fun showBubble() {

@@ -3,8 +3,9 @@ package com.hbs.burnout.utils
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import androidx.core.content.getSystemService
 import com.hbs.burnout.R
 import com.hbs.burnout.ui.chat.ChattingActivity
 import java.util.*
@@ -64,7 +65,7 @@ class NotificationHelper {
 
             val notification = Notification.Builder(context, NotificationConfiguration.CHANNEL_ID)
                 .setContentIntent(bubbleIntent)
-                .setContentTitle("미션")
+                .setContentTitle("새로운 미션 진행")
                 .setContentText("버블 알림을 통해서 미션을 확인해보세요")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setBubbleMetadata(bubbleData)
@@ -76,6 +77,21 @@ class NotificationHelper {
 
             notificationManager?.notify(NotificationConfiguration.NOTIFICATION_ID, notification)
         }
+    }
 
+
+    fun updateShortcuts(context: Context, stageNumber:Int) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val shortcutManager: ShortcutManager = context.getSystemService(ShortcutManager::class.java)
+            val icon = Icon.createWithResource(context, R.mipmap.ic_launcher_round)
+            val shortcut = ShortcutInfo.Builder(context, "ID$stageNumber")
+                .setShortLabel("미션${stageNumber}으로 이동하기")
+                .setLongLabel("미션${stageNumber}으로 이동하기")
+                .setIcon(icon)
+                .setIntent(Intent(context, ChattingActivity::class.java).setAction(Intent.ACTION_VIEW).putExtra(ActivityNavigation.STAGE_ROUND, stageNumber))
+                .build()
+
+            shortcutManager.dynamicShortcuts = listOf(shortcut)
+        }
     }
 }
