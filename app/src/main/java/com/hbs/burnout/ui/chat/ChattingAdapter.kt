@@ -1,6 +1,5 @@
 package com.hbs.burnout.ui.chat
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,13 @@ import com.hbs.burnout.R
 import com.hbs.burnout.databinding.ItemLastChattingBinding
 import com.hbs.burnout.databinding.ItemMyChattingBinding
 import com.hbs.burnout.databinding.ItemYourChattingBinding
-import com.hbs.burnout.model.Script
 import com.hbs.burnout.model.EventType
+import com.hbs.burnout.model.Script
 import com.hbs.burnout.utils.FileUtils
 
 class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Script>() {
     override fun areItemsTheSame(oldItem: Script, newItem: Script): Boolean = oldItem.message == newItem.message
-    override fun areContentsTheSame(oldItem: Script, newItem: Script): Boolean = oldItem.user == newItem.user && oldItem.message == newItem.message
+    override fun areContentsTheSame(oldItem: Script, newItem: Script): Boolean = oldItem.message == newItem.message
 }) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == 0){
@@ -30,6 +29,9 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.toLong()
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
