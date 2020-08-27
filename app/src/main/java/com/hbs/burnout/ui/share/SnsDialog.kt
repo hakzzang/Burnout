@@ -34,7 +34,7 @@ class SnsDialog() : BottomSheetDialogFragment() {
         private val EXTRA_TITLE = "EXTRA_TITLE"
         private val EXTRA_URI = "EXTRA_URI"
 
-        fun newInstance(title: String, uri: Uri): SnsDialog {
+        fun newInstance(title: String, uri: Uri?): SnsDialog {
             val args = Bundle()
             args.putString(EXTRA_TITLE, title)
             args.putString(EXTRA_URI, uri.toString())
