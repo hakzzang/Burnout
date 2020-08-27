@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/camera_fragment"
         tools:layout="@layout/fragment_camera"
-        android:name="com.hbs.burnout.ui.mission.fragments.CameraFragment"
+        android:name="com.hbs.burnout.ui.camera.fragments.CameraFragment"
         android:label="CameraFragment" >
 
         <action

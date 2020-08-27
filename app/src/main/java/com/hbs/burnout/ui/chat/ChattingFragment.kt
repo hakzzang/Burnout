@@ -18,7 +18,7 @@ import com.hbs.burnout.ui.drawable.DrawImageActivity
 import com.hbs.burnout.ui.ext.dialog.AnswerDialog
 import com.hbs.burnout.ui.ext.dialog.DrawingImageDialog
 import com.hbs.burnout.ui.ext.dialog.TakePictureDialog
-import com.hbs.burnout.ui.mission.CameraMissionActivity
+import com.hbs.burnout.ui.camera.CameraMissionActivity
 import com.hbs.burnout.utils.ActivityNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
