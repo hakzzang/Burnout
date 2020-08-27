@@ -2,37 +2,33 @@ package com.hbs.burnout.ui.share
 
 
 import android.content.Intent
-import android.net.Uri
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import androidx.activity.viewModels
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Observer
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityShareBinding
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
 import com.hbs.burnout.tfml.TFModelType
 import com.hbs.burnout.tfml.TFModelWorker
-
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
-import java.io.File
-import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
-import org.tensorflow.lite.support.model.Model
 
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private var resultType: Int = 0
-    private lateinit var uri: Uri
+    private var uri: Uri? = null
 
     private var bitmapImage: Bitmap? = null
 
@@ -56,18 +52,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun observe() {
-        viewModel.shareData.observe(
-            this,
-            Observer { data ->
-                run {
-                    progressAdapter.submitList(data.resultList)
-                    uri = FileUtils.saveImageToExternalFilesDir(
-                        this,
-                        binding.shareImage.drawable.toBitmap()
-                    )
-                }
-            })
-
         viewModel.missionComplete.observe(this, Observer { isComplete ->
             if (isComplete) {
                 binding.fabNext.apply {
@@ -105,16 +89,22 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         this.bitmapImagePath = intent.getStringExtra("resultImagePath").toString()
-        this.resultType = intent.getIntExtra("resultImage",1)
+        this.resultType = intent.getIntExtra("resultImage", 1)
 
         bitmapImagePath.let {
             Log.d(TAG, "image path:" + bitmapImagePath)
             this.bitmapImage = BitmapFactory.decodeFile(it)
+            uri = bitmapImage?.let {
+                FileUtils.saveImageToExternalFilesDir(
+                    this,
+                    it
+                )
+            }
         }
 
-        uri = Uri.fromFile(File(bitmapImagePath))
-
-        binding.shareImage.setImageBitmap(bitmapImage)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, ShareCameraFragment())
+            .commit()
 
         initView(binding)
 
@@ -128,7 +118,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
     }
 
-    private fun runTFImageParser (imageBitmap: Bitmap) {
+    private fun runTFImageParser(imageBitmap: Bitmap) {
         val tfWork = TFModelWorker()
 
         when (resultType) {
@@ -151,7 +141,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             else -> "이것을 찍은게 맞나요?"
         }
 
-        var sample = ShareResult( title, imageBitmap, completeMsg)
+        var sample = ShareResult(title, imageBitmap, completeMsg)
         sample.eventType = EventType.CAMERA
 
         for (output in outputs) {
@@ -166,9 +156,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun initView(binding: ActivityShareBinding) {
-        binding.shareImage.clipToOutline = true
-        binding.progressList.adapter = progressAdapter
-
         binding.fabShare.setOnClickListener {
             val data = viewModel.shareData.value
 
@@ -177,7 +164,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         binding.fabSave.setOnClickListener {
-            val dialog = SaveDialog()
+            val dialog = SaveDialog.newInstance()
             dialog.show(supportFragmentManager, "SAVE_DIALOG")
         }
 
@@ -192,11 +179,10 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
     private fun makeSuccessResultIntent(): Intent {
         val intent = Intent()
-        val uri = FileUtils.saveImageToExternalFilesDir(
-            this,
-            binding.shareImage.drawable.toBitmap()
-        )
-        intent.putExtra(ActivityNavigation.ANALYZE_RESULT, uri.path)
+        uri = bitmapImage?.let {
+            FileUtils.saveImageToExternalFilesDir(this, it)
+        }
+        intent.putExtra(ActivityNavigation.ANALYZE_RESULT, uri?.path)
         intent.putExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, true)
         return intent
     }
