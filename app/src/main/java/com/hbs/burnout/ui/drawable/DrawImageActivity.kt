@@ -3,12 +3,10 @@ package com.hbs.burnout.ui.drawable
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.FileUtils
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -20,14 +18,13 @@ import androidx.core.net.toUri
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityDrawBinding
-import com.hbs.burnout.tfml.classifier.CFResult
+import com.hbs.burnout.tfml.TFModelType
 import com.hbs.burnout.tfml.classifier.ImageClassifier
 import com.hbs.burnout.ui.share.ShareActivity
 import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.FileUtils
 import com.hbs.burnout.utils.TransitionConfigure
-import java.io.File
 import java.io.IOException
-import java.lang.String
 import java.util.*
 
 
@@ -72,48 +69,45 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
         )
     }
 
-    fun onDetectClick(view: View?) {
+    fun onDetectClick(view : View?) {
         Log.i(TAG, "Detect sketch event triggers")
         if (classifier == null) {
             Log.e(TAG, "Cannot initialize tfLite model!")
         } else {
             val sketch = binding.paintView.normalizedBitmap
-            var orgBitmap:Bitmap? = binding.paintView.getmBitmap()
+            val orgBitmap:Bitmap? = binding.paintView.getmBitmap()
+            val intent = Intent(baseContext, ShareActivity::class.java)
 
             if (orgBitmap != null) {
 
-                val file = com.hbs.burnout.utils.FileUtils.getOrMakeRecognizeFile(this)
-                val file2 = com.hbs.burnout.utils.FileUtils.getOrMakeRecognizeFile2(this)
-                com.hbs.burnout.utils.FileUtils.saveBitmapToFile(file, orgBitmap)
-                com.hbs.burnout.utils.FileUtils.saveBitmapToFile(file2, sketch)
-
-                val intent = Intent(baseContext, ShareActivity::class.java)
+                val file = FileUtils.getOrMakeRecognizeFile(this)
+                val file2 = FileUtils.getOrMakeRecognizeFile2(this)
+                FileUtils.saveBitmapToFile(file, orgBitmap)
+                FileUtils.saveBitmapToFile(file2, sketch)
 
                 intent.putExtra(
                     TransitionConfigure.TRANSITION_TYPE,
                     TransitionConfigure.LINEAR_TYPE
                 )
                 intent.putExtra("resultImagePath", file.toUri().path)
-                intent.putExtra("resultImageType", 3)
+                intent.putExtra("resultImageType", TFModelType.SCETCHI.ordinal)
                 intent.putExtra("expectItemName", classifier?.getLabel(classifier!!.expectedIndex))
+                intent.putExtra("expectedIndex", classifier!!.expectedIndex)
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
+                    Log.d("result-dada",result.toString())
+                    when(result.resultCode){
+                        ActivityNavigation.SHARE_TO_CHATTING -> {
+                            setResult(result.resultCode, result.data)
+                            finish()
+
+                        }
+                        ActivityNavigation.DRAWING_TO_CHATTING-> {
+                            setResult(result.resultCode, result.data)
+                            finish()
+                        }
+                    }
+                }.launch(intent)
             }
-
-            Log.d("result-dada","start")
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
-                Log.d("result-dada",result.toString())
-                when(result.resultCode){
-                    ActivityNavigation.SHARE_TO_CHATTING -> {
-                        setResult(result.resultCode, result.data)
-                        finish()
-
-                    }
-                    ActivityNavigation.DRAWING_TO_CHATTING-> {
-                        setResult(result.resultCode, result.data)
-                        finish()
-                    }
-                }
-            }.launch(intent)
-
 //            showImage(binding.paintView.scaleBitmap(40, sketch));
         }
     }
