@@ -22,6 +22,7 @@ import com.hbs.burnout.tfml.TFModelType
 import com.hbs.burnout.tfml.classifier.ImageClassifier
 import com.hbs.burnout.ui.share.ShareActivity
 import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.BurnLog
 import com.hbs.burnout.utils.FileUtils
 import com.hbs.burnout.utils.TransitionConfigure
 import java.io.IOException
@@ -54,7 +55,7 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
     }
 
     fun onClearClick(view: View?) {
-        Log.i(TAG, "Clear sketch event triggers")
+        BurnLog.Info(this, "Clear sketch event triggers")
         binding.paintView.clear()
     }
 
@@ -70,7 +71,7 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
     }
 
     fun onDetectClick(view : View?) {
-        Log.i(TAG, "Detect sketch event triggers")
+        BurnLog.Info(this, "Detect sketch event triggers")
         if (classifier == null) {
             Log.e(TAG, "Cannot initialize tfLite model!")
         } else {
@@ -94,7 +95,7 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
                 intent.putExtra("expectItemName", classifier?.getLabel(classifier!!.expectedIndex))
                 intent.putExtra("expectedIndex", classifier!!.expectedIndex)
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
-                    Log.d("result-dada",result.toString())
+                    BurnLog.Debug(this, "result-dada: $result")
                     when(result.resultCode){
                         ActivityNavigation.SHARE_TO_CHATTING -> {
                             setResult(result.resultCode, result.data)
@@ -162,10 +163,10 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
         TODO("Not yet implemented")
     }
 
-    override fun onBackPressed() {
-        setResult(ActivityNavigation.DRAWING_TO_CHATTING)
-        super.onBackPressed()
-    }
+//    override fun onBackPressed() {
+//        setResult(ActivityNavigation.DRAWING_TO_CHATTING)
+//        super.onBackPressed()
+//    }
 
     companion object {
         val TAG = this.javaClass.name
