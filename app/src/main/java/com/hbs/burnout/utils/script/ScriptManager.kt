@@ -44,11 +44,6 @@ interface ScriptManager {
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
-
-    suspend fun drawingImageScriptLine(
-        readingLineCallback: (List<Script>) -> Unit,
-        completeReadingCallback: (Script) -> Unit
-    ): List<Script>
 }
 
 class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptStorage) :
@@ -130,24 +125,6 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
             }
             //TODO : 사진을 보여주는 로직 추가하기
         }
-        else if(newScript.eventType == EventType.DRAWING_RESULT){
-            message.toCharArray().forEachIndexed { index, word ->
-                delay(ScriptConfiguration.READING_SPEED)
-                newWord += word.toString()
-                val newScriptLine =
-                    ScriptBuilder(user, newWord, event, stage, id).addAnswer(newScript.answer)
-                        .create()
-                if (index == 0) {
-                    scriptCache.add(newScriptLine)
-                } else {
-                    scriptCache.set(scriptCache.lastIndex, newScriptLine)
-                }
-                withContext(Dispatchers.Main) {
-                    readingLineCallback(scriptCache)
-                }
-            }
-            //TODO : 사진을 보여주는 로직 추가하기
-        }
         else {
             scriptCache.add(newScript)
             withContext(Dispatchers.Main) {
@@ -211,36 +188,12 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
         return scriptCache
     }
 
-    override suspend fun drawingImageScriptLine(
-        readingLineCallback: (List<Script>) -> Unit,
-        completeReadingCallback: (Script) -> Unit
-    ): List<Script> {
-        var newWord = ""
-        val lastScript = scriptCache.last().parse()
-        val (user, message, _, stage, id) = lastScript
-//        TODO("그림 그렸을 때 여기로")
-
-        message.toCharArray().forEachIndexed { index, word ->
-            delay(ScriptConfiguration.READING_SPEED)
-            newWord += word.toString()
-            val newScriptLine =
-                ScriptBuilder(user, newWord, 4, stage, id).addAnswer(lastScript.answer).create()
-            scriptCache.set(scriptCache.lastIndex, newScriptLine)
-            withContext(Dispatchers.Main) {
-                readingLineCallback(scriptCache)
-            }
-        }
-        delay(ScriptConfiguration.LINE_ENTER_SPEED)
-        val answerScript = scriptCache.last().parse()
-        completeReadingCallback(answerScript)
-        return scriptCache
-    }
-
     override fun resetScript() {
         isStopScript = true
         selectedScriptNumber = -1
         scriptCache.clear()
     }
+
 
     override fun readNextScriptLine(
         scriptPageNumber: Int,

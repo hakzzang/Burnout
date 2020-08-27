@@ -22,7 +22,7 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        container = findViewById(R.id.fragment_camera_container)
+        container = findViewById(R.id.fragment_container)
     }
 
     override fun onResume() {

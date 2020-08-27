@@ -31,10 +31,8 @@ import org.tensorflow.lite.support.model.Model
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
-    private lateinit var itemName: String
     private var resultType: Int = 0
     private lateinit var uri: Uri
-    private val tfWork = TFModelWorker()
 
     private var bitmapImage: Bitmap? = null
 
@@ -107,23 +105,16 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         }
 
         this.bitmapImagePath = intent.getStringExtra("resultImagePath").toString()
-        this.resultType = intent.getIntExtra("resultImageType",0)
-        this.itemName = intent.getStringExtra("expectItemName").toString()
+        this.resultType = intent.getIntExtra("resultImage",1)
 
-        if (resultType == TFModelType.SCETCHI.ordinal) {
-            Log.d(TAG, "image path:" + FileUtils.RECOGNIZE_FILE_NAME2)
-            val tmpFileAnalyzer =  FileUtils.getOrMakeRecognizeFile2(baseContext)
-            this.bitmapImage = BitmapFactory.decodeFile(tmpFileAnalyzer.path)
-        } else {
-            var bitmapImageShare: Bitmap?
-            bitmapImagePath.let {
-                Log.d(TAG, "image path:" + bitmapImagePath)
-                bitmapImageShare = BitmapFactory.decodeFile(it)
-            }
-            binding.shareImage.setImageBitmap(bitmapImageShare)
+        bitmapImagePath.let {
+            Log.d(TAG, "image path:" + bitmapImagePath)
+            this.bitmapImage = BitmapFactory.decodeFile(it)
         }
 
         uri = Uri.fromFile(File(bitmapImagePath))
+
+        binding.shareImage.setImageBitmap(bitmapImage)
 
         initView(binding)
 
@@ -138,12 +129,11 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun runTFImageParser (imageBitmap: Bitmap) {
+        val tfWork = TFModelWorker()
 
         when (resultType) {
             TFModelType.BIRD.ordinal -> tfWork.initModel(baseContext, TFModelType.BIRD)
-            TFModelType.ANYTHING.ordinal -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
-            TFModelType.SCETCHI.ordinal -> tfWork.initModel(baseContext, TFModelType.SCETCHI)
-            else -> 0
+            else -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
         }
 
         val outputs = tfWork.alnalyze(imageBitmap)
@@ -158,19 +148,11 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
         val title = when (resultType) {
             TFModelType.BIRD.ordinal -> "이것은 새인가!"
-            TFModelType.ANYTHING.ordinal -> "이것을 찍은게 맞나요?"
-            TFModelType.SCETCHI.ordinal -> "${itemName}을/를 그린게 맞나요?"
-            else -> "이것이 맞나요?"
+            else -> "이것을 찍은게 맞나요?"
         }
 
         var sample = ShareResult( title, imageBitmap, completeMsg)
-
-        sample.eventType = when (resultType) {
-            TFModelType.SCETCHI.ordinal ->
-                EventType.DRAWING
-            else ->
-                EventType.CAMERA
-        }
+        sample.eventType = EventType.CAMERA
 
         for (output in outputs) {
             Log.i(TAG, "label:${output.label} , score:${output.score}")
@@ -205,12 +187,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun isComplete(outputs: List<Category>): Boolean {
-        return when (resultType) {
-            TFModelType.SCETCHI.ordinal ->
-                tfWork.find
-            else ->
-                outputs[0].label != "None" && (outputs[0].score * 100) >= 30
-        }
+        return outputs[0].label != "None" && (outputs[0].score * 100) >= 30
     }
 
     private fun makeSuccessResultIntent(): Intent {

@@ -17,7 +17,7 @@ ext{
             retrofit : '2.9.0',
             okhttp3_logging_interceptor: '4.5.0',
             androidx_test: '1.2.0',
-            camerax: '1.0.0-beta07',
+            camerax: '1.0.0-beta04',
             navigation: '2.3.0',
             lottie : '3.4.1',
             room : '2.2.5',
@@ -57,7 +57,7 @@ ext{
             camerax_core : "androidx.camera:camera-core:${versions.camerax}",
             camerax_extentions : "androidx.camera:camera-camera2:${versions.camerax}",
             camerax_lifecycle : "androidx.camera:camera-lifecycle:${versions.camerax}",
-            camerax_view : "androidx.camera:camera-view:1.0.0-alpha14",
+            camerax_view : "androidx.camera:camera-view:1.0.0-alpha11",
 
             //Navigation
             navigation_gradle_plugin: "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.2",
