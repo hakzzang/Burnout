@@ -36,8 +36,8 @@ class ScriptStorage @Inject constructor() {
     )
 
     private val mission2 = listOf(
-        Script(0, "2번째 미션에 도착했어.", 0, 2, 9),
-        ScriptBuilder(1, "", 1, 2, 10).addAnswer(
+        Script(0, "2번째 미션에 도착했어.", 0, 2, 0),
+        ScriptBuilder(1, "", 1, 2, 1).addAnswer(
             mapOf(
                 0 to "좋아. 뭐지?",
                 1 to "..."
@@ -72,25 +72,25 @@ class ScriptStorage @Inject constructor() {
                 1 to "..."
             )
         ).create(),
-        ScriptBuilder(0, "2번째 미션은 집 근처의 새를 찾는거야.", 0, 2, 11).create(),
-        ScriptBuilder(0, "가끔은 집 근처의 새에 관심을 갖는 것도 의미있지 않을까?", 0, 2, 12).create(),
-        ScriptBuilder(1, "", 1, 2, 13).addAnswer(
-          mapOf(
+        ScriptBuilder(0, "3번째 미션은 집 근처의 새를 찾는거야.", 0, 3, 2).create(),
+        ScriptBuilder(0, "가끔은 집 근처의 새에 관심을 갖는 것도 의미있지 않을까?", 0, 3, 3).create(),
+        ScriptBuilder(1, "", 1, 3, 4).addAnswer(
+            mapOf(
                 0 to "좋아. 새를 찾으면 뭐를 하면 되지?",
                 1 to "흠~~ 귀찮은데~~"
             )
         ).create(),
-        ScriptBuilder(0, "새를 찾으면, 카메라로 사진을 찍을거야.", 2, 2, 14).addAnswer(
+        ScriptBuilder(0, "새를 찾으면, 카메라로 사진을 찍을거야.", 2, 3, 5).addAnswer(
             mapOf(
                 0 to "새를 찾으면, 카메라로 사진을 찍을거야.",
                 1 to "움직이다보면 귀찮은 것도 금방 사라질거야."
             )
         ).create(),
-        Script(0, "새를 찾으면 나에게 말을 걸어줘", 0, 2, 15),
-        Script(1, "새를 찾았어!!", 3, 2, 16),
-        Script(0, "봐봐. 해낼 줄 알았어.", 0, 2, 17),
-        Script(0, "축하해. 벌써 2번째 미션이 종료되었어.", 0, 2, 18),
-        Script(0, "너에게 또 뱃지를 줄게.", 0, 2, 19)
+        Script(0, "새를 찾으면 나에게 말을 걸어줘", 0, 2, 6),
+        Script(1, "새를 찾았어!!", 3, 3, 7),
+        Script(0, "봐봐. 해낼 줄 알았어.", 0, 3, 8),
+        Script(0, "축하해. 벌써 2번째 미션이 종료되었어.", 0, 3, 9),
+        Script(0, "너에게 또 뱃지를 줄게.", 0, 3, 10)
     )
 
     fun search(scriptNumber: Int): List<Script> {

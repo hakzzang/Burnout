@@ -2,9 +2,9 @@ package com.hbs.burnout.ui.share
 
 
 import android.content.Intent
-import android.net.Uri
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,14 +19,11 @@ import com.hbs.burnout.model.EventType
 import com.hbs.burnout.model.ShareResult
 import com.hbs.burnout.tfml.TFModelType
 import com.hbs.burnout.tfml.TFModelWorker
-
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
-import java.io.File
-import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
-import org.tensorflow.lite.support.model.Model
+import java.io.File
 
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
@@ -111,16 +108,21 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         this.itemName = intent.getStringExtra("expectItemName").toString()
 
         if (resultType == TFModelType.SCETCHI.ordinal) {
-            Log.d(TAG, "image path:" + FileUtils.RECOGNIZE_FILE_NAME2)
+            Log.d(TAG, "image path2:" + FileUtils.RECOGNIZE_FILE_NAME2)
             val tmpFileAnalyzer =  FileUtils.getOrMakeRecognizeFile2(baseContext)
             this.bitmapImage = BitmapFactory.decodeFile(tmpFileAnalyzer.path)
-        } else {
             var bitmapImageShare: Bitmap?
             bitmapImagePath.let {
-                Log.d(TAG, "image path:" + bitmapImagePath)
+                Log.d(TAG, "image path1:" + bitmapImagePath)
                 bitmapImageShare = BitmapFactory.decodeFile(it)
             }
             binding.shareImage.setImageBitmap(bitmapImageShare)
+        } else {
+            bitmapImagePath.let {
+                Log.d(TAG, "image path1:" + bitmapImagePath)
+                bitmapImage = BitmapFactory.decodeFile(it)
+            }
+            binding.shareImage.setImageBitmap(bitmapImage)
         }
 
         uri = Uri.fromFile(File(bitmapImagePath))
