@@ -68,7 +68,7 @@ class SaveDialog() : DialogFragment(), OnDownloadListener {
 
         shareViewModel.shareData.value?.let {
             binding.tagTitle.text = resources.getString(R.string.tag_title, it.title)
-            binding.saveImg.setImageBitmap(it.image)
+            binding.saveImg.setImageURI(Uri.parse(it.uri))
         }
 
         return binding.root

@@ -163,7 +163,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             else -> "이것이 맞나요?"
         }
 
-        val sample = ShareResult( title, imageBitmap, completeMsg)
+        val sample = ShareResult(0, title, completeMsg, uri.toString())
 
         sample.eventType = when (resultType) {
             TFModelType.SCETCHI.ordinal ->

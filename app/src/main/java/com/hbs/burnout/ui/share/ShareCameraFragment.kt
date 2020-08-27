@@ -2,7 +2,6 @@ package com.hbs.burnout.ui.share
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
@@ -26,12 +25,11 @@ class ShareCameraFragment : BaseFragment<FragmentShareCameraBinding>(){
         viewModel.shareData.observe(
             requireActivity(),
             Observer { data ->
-                Log.d("shareTest", "[ShareCameraFragment] observe() : data = "+data.title)
                 run {
                     progressAdapter.submitList(data.resultList)
 
-                    data.image?.let {
-                        binding.shareImage.setImageBitmap(it)
+                    data.uri?.let {
+                        binding.shareImage.setImageURI(Uri.parse(it))
                     }
 
                     uri = FileUtils.saveImageToExternalFilesDir(
