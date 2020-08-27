@@ -6,7 +6,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_mission_container_height"
-        android:layout_margin="@dimen/item_mission_space"
+        android:layout_marginBottom="@dimen/item_mission_space"
         android:backgroundTint="@color/colorPrimary"
         android:transitionName="mission"
         app:cardCornerRadius="@dimen/item_mission_container_radius">
@@ -21,24 +21,26 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/material_text_headline"
-                android:textStyle="bold"
+                android:textSize="@dimen/material_text_headline2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.15"
+                app:layout_constraintVertical_bias="0.2"
                 tools:text="Mission1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_mission_content"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="sans-serif-thin"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/material_text_subhead"
+                android:textSize="@dimen/material_text_body1"
+                android:layout_marginRight="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintRight_toLeftOf="@id/iv_mission_badge"
                 app:layout_constraintLeft_toLeftOf="@id/tv_mission_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_mission_title"
                 app:layout_constraintVertical_bias="0.1"
@@ -46,10 +48,10 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_mission_badge"
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +64,7 @@
                 android:background="@color/color_black_alpha_60"
                 android:elevation="@dimen/item_mission_not_completed_view_elevation"
                 android:padding="@dimen/item_mission_not_completed_view_padding"
-                android:src="@drawable/ic_lock" />
+                android:src="@drawable/ic_lock"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

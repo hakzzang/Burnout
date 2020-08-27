@@ -16,7 +16,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hbs.burnout.R
 import com.hbs.burnout.databinding.DialogSnsBinding
 import com.hbs.burnout.utils.IntentUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SnsDialog() : BottomSheetDialogFragment() {
 
     private val viewModel by viewModels<ShareViewModel>()

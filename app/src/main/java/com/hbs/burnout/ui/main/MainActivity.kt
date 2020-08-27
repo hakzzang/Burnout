@@ -103,7 +103,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun initView(binding: ActivityMainBinding) {
         binding.rvMission.adapter = missionAdapter
-        binding.rvMission.layoutManager = LinearLayoutManager(binding.root.context)
         binding.bar.setNavigationOnClickListener { toggleBottomDrawer() }
         binding.bottomDrawer.hideBottomDrawer()
     }

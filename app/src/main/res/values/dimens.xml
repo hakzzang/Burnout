@@ -65,11 +65,11 @@
     <dimen name="selection_dialog_height">256dp</dimen>
 
     <!-- ItemMission resources-->
-    <dimen name="item_mission_container_height">128dp</dimen>
+    <dimen name="item_mission_container_height">120dp</dimen>
     <dimen name="item_mission_space">16dp</dimen>
     <dimen name="item_mission_container_radius">16dp</dimen>
     <dimen name="item_mission_not_completed_view_elevation">2dp</dimen>
-    <dimen name="item_mission_not_completed_view_padding">32dp</dimen>
+    <dimen name="item_mission_not_completed_view_padding">36dp</dimen>
 
     <!-- Badge resources-->
     <dimen name="item_badge_size">96dp</dimen>
