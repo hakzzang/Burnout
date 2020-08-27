@@ -37,7 +37,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
     private val tfWork = TFModelWorker()
 
-    var sample:ShareResult = ShareResult()
+    val sample:ShareResult = ShareResult()
 
     private var bitmapImage: Bitmap? = null
 
@@ -113,7 +113,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                 uri = bitmapImageShare?.let {
                     FileUtils.saveImageToExternalFilesDir(this, it)
                 }
-                sample.apply { this.uri = uri }
+                sample.uri = uri.toString()
             }
         } else {
             bitmapImagePath.let {
@@ -123,7 +123,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                     FileUtils.saveImageToExternalFilesDir(this, it)
                 }
                 // 실제로 공유허는 이미지와 ml에서 사용하는 이미지의 종류차이가 존재하여 분기하여 처리함
-                sample.apply { this.uri = uri }
+                sample.uri = uri.toString()
             }
         }
 
