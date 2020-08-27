@@ -16,6 +16,10 @@ object FileUtils {
         return File(context.filesDir, RECOGNIZE_FILE_NAME)
     }
 
+    fun getOrMakeRecognizeFile2(context: Context): File {
+        return File(context.filesDir, RECOGNIZE_FILE_NAME2)
+    }
+
     fun saveBitmapToFile(file: File, bitmap: Bitmap) {
         val outputStream = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
