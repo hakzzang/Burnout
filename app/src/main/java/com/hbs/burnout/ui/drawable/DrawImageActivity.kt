@@ -61,6 +61,17 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
         binding.paintView.clear()
     }
 
+    // scale original bitmap down to network size (28x28)
+    fun getNormalizedBitmap(mBitmap: Bitmap): Bitmap {
+        val scaleFactor: Float = ImageClassifier.DIM_IMG_SIZE_HEIGHT / mBitmap.height.toFloat()
+        // todo: cut empty space around sketch
+        return Bitmap.createScaledBitmap(
+            mBitmap,
+            (mBitmap.width * scaleFactor).toInt(),
+            (mBitmap.height * scaleFactor).toInt(), true
+        )
+    }
+
     fun onDetectClick(view: View?) {
         Log.i(TAG, "Detect sketch event triggers")
         if (classifier == null) {

@@ -22,11 +22,11 @@ import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.rotationMatrix
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import com.hbs.burnout.R
-import com.hbs.burnout.ui.camera.fragments.PermissionsFragment
 import com.hbs.burnout.utils.FileUtils
 import java.io.File
 import java.nio.ByteBuffer
@@ -95,7 +95,7 @@ class CameraFragment : Fragment() {
         // Make sure that all permissions are still present, since the
         // user could have removed them while the app was in paused state.
         if (!PermissionsFragment.hasPermissions(requireContext())) {
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                 CameraFragmentDirections.actionCameraToPermissions()
             )
 
@@ -319,7 +319,7 @@ class CameraFragment : Fragment() {
                             bitmapImage?.let { bitmap ->
                                 val file = FileUtils.getOrMakeRecognizeFile(requireActivity())
                                 FileUtils.saveBitmapToFile(file, bitmap)
-                                goToPreview(file.path ?: "", image.imageInfo.rotationDegrees)
+                                goToPreview(file.toUri().path ?: "", image.imageInfo.rotationDegrees)
                             }
 
                         }
@@ -360,7 +360,7 @@ class CameraFragment : Fragment() {
     private fun goToPreview(imageFileUriPath: String, targetRotation: Int) {
         Log.i(TAG, "여기 들어오긴 함?")
         container.postDelayed({
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                 CameraFragmentDirections.actionCameraToPreview(imageFileUriPath, targetRotation)
             )
         }, ANIMATION_FAST_MILLIS)

@@ -22,7 +22,7 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        container = findViewById(R.id.fragment_container)
+        container = findViewById(R.id.fragment_camera_container)
     }
 
     override fun onResume() {
@@ -67,6 +67,4 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
         setResult(ActivityNavigation.CAMERA_TO_CHATTING)
         super.onBackPressed()
     }
-
 }
-
