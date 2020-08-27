@@ -14,6 +14,7 @@ import com.hbs.burnout.databinding.ItemYourChattingBinding
 import com.hbs.burnout.model.Script
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.utils.FileUtils
+import kotlin.math.E
 
 class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Script>() {
     override fun areItemsTheSame(oldItem: Script, newItem: Script): Boolean = oldItem.message == newItem.message
@@ -68,6 +69,18 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                     binding.ivChattingRecognizeImage.visibility = View.GONE
                 }
                 EventType.CAMERA_RESULT -> {
+                    binding.tvChatting.text = getItem(position).message
+                    binding.lottieViewWait.visibility = View.GONE
+                    binding.ivChattingRecognizeImage.visibility = View.VISIBLE
+                    val fileUri = FileUtils.getOrMakeRecognizeFile(binding.root.context).toUri()
+                    binding.ivChattingRecognizeImage.setImageURI(fileUri)
+                }
+                EventType.DRAWING -> {
+                    binding.tvChatting.text = ""
+                    binding.lottieViewWait.visibility = View.VISIBLE
+                    binding.ivChattingRecognizeImage.visibility = View.GONE
+                }
+                EventType.DRAWING_RESULT -> {
                     binding.tvChatting.text = getItem(position).message
                     binding.lottieViewWait.visibility = View.GONE
                     binding.ivChattingRecognizeImage.visibility = View.VISIBLE
