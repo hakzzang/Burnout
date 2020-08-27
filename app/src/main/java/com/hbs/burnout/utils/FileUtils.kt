@@ -8,12 +8,19 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import com.hbs.burnout.R
 import java.io.*
 
 object FileUtils {
     const val RECOGNIZE_FILE_NAME = "recognize_result.jpg"
+    const val RECOGNIZE_FILE_NAME2 = "recognize_result2.jpg"
+
     fun getOrMakeRecognizeFile(context: Context): File {
         return File(context.filesDir, RECOGNIZE_FILE_NAME)
+    }
+
+    fun getOrMakeRecognizeFile2(context: Context): File {
+        return File(context.filesDir, RECOGNIZE_FILE_NAME2)
     }
 
     fun saveBitmapToFile(file: File, bitmap: Bitmap) {
