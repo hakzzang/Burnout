@@ -1,5 +1,6 @@
 package com.hbs.burnout.ui.chat
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -51,6 +52,7 @@ class ChattingViewModel @ViewModelInject constructor(
             }, { lastScript ->
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
+                    Log.d("emit-event-lastscript",lastScript.event.toString())
                     _completedReadingScript.value = Event(lastScript)
                     _lastScript.value = lastScript
                 }
@@ -78,6 +80,7 @@ class ChattingViewModel @ViewModelInject constructor(
             chattingUseCase.takePictureScriptLine({ scriptCache ->
                 _parsedScript.value = Event(scriptCache)
             }, { lastScript ->
+                Log.d("take-event-lastscript",lastScript.event.toString())
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
