@@ -140,11 +140,10 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     }
 
     private fun runTFImageParser (imageBitmap: Bitmap) {
-
         when (resultType) {
             TFModelType.BIRD.ordinal -> tfWork.initModel(baseContext, TFModelType.BIRD)
             TFModelType.ANYTHING.ordinal -> tfWork.initModel(baseContext, TFModelType.ANYTHING)
-            TFModelType.SCETCHI.ordinal -> tfWork.initModel(baseContext, TFModelType.SCETCHI)
+            TFModelType.SCETCHI.ordinal -> tfWork.initModel(baseContext, TFModelType.SCETCHI, intent.getIntExtra("expectedIndex", 0))
             else -> 0
         }
 
@@ -165,7 +164,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             else -> "이것이 맞나요?"
         }
 
-        var sample = ShareResult( title, imageBitmap, completeMsg)
+        val sample = ShareResult( title, imageBitmap, completeMsg)
 
         sample.eventType = when (resultType) {
             TFModelType.SCETCHI.ordinal ->
