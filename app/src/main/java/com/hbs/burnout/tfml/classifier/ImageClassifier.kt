@@ -3,6 +3,7 @@ package com.hbs.burnout.tfml.classifier
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
+import com.hbs.burnout.utils.BurnLog
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.label.Category
 import java.nio.ByteBuffer
@@ -87,7 +88,7 @@ class ImageClassifier(ctx: Context) {
     init {
         // load model
         val modelBuffered: MappedByteBuffer = ModelInput.loadModelFile(ctx, MODEL_FILE)
-        Log.i("ImageClassifier", "" + modelBuffered.isLoaded)
+        BurnLog.Info(this, "load buffer: ${modelBuffered.isLoaded}")
         val option = Interpreter.Options()
         tflite = Interpreter(modelBuffered, option)
 
@@ -98,6 +99,6 @@ class ImageClassifier(ctx: Context) {
         // allocate memory for model input
         imgData = ByteBuffer.allocateDirect(4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_HEIGHT * DIM_IMG_SIZE_WIDTH * DIM_PIXEL_SIZE)
         imgData.order(ByteOrder.nativeOrder())
-        Log.i("ImageClassifier", "Successfully created a Tensorflow Lite sketch classifier.")
+        BurnLog.Info(this,"Successfully created a Tensorflow Lite sketch classifier.")
     }
 }

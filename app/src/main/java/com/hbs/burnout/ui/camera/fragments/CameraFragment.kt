@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import com.hbs.burnout.R
+import com.hbs.burnout.utils.BurnLog
 import com.hbs.burnout.utils.FileUtils
 import java.io.File
 import java.nio.ByteBuffer
@@ -307,12 +308,11 @@ class CameraFragment : Fragment() {
 
                         override fun onCaptureSuccess(image: ImageProxy) {
                             // Use the image, then make sure to close it.
-                            Log.i(TAG, "onCaptureSuccess:size->" + image.width)
+                            BurnLog.Info(this, "onCaptureSuccess:size->" + image.width)
 
                             val bitmapImage: Bitmap? = imageProxyToBitmap(image)
-                            Log.i(
-                                "onCaptureSuccess",
-                                ": bitmap width:${bitmapImage?.width} height:${bitmapImage?.height}"
+                            BurnLog.Info(this,
+                                "onCaptureSuccess: bitmap width:${bitmapImage?.width} height:${bitmapImage?.height}"
                             )
 
                             image.close()
@@ -343,9 +343,8 @@ class CameraFragment : Fragment() {
     }
 
     private fun imageProxyToBitmap(image: ImageProxy): Bitmap? {
-        Log.i(
-            "imageProxyTobitmap",
-            ": org width:${image.width} height:${image.height} rotation:${image.imageInfo.rotationDegrees}"
+        BurnLog.Info(this,
+            "imageProxyTobitmap: org width:${image.width} height:${image.height} rotation:${image.imageInfo.rotationDegrees}"
         )
         val planeProxy = image.planes[0]
         val buffer = planeProxy.buffer
@@ -358,7 +357,6 @@ class CameraFragment : Fragment() {
     }
 
     private fun goToPreview(imageFileUriPath: String, targetRotation: Int) {
-        Log.i(TAG, "여기 들어오긴 함?")
         container.postDelayed({
             Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                 CameraFragmentDirections.actionCameraToPreview(imageFileUriPath, targetRotation)

@@ -21,6 +21,7 @@ import com.hbs.burnout.tfml.TFModelType
 import com.hbs.burnout.tfml.TFModelWorker
 import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
+import com.hbs.burnout.utils.BurnLog
 import com.hbs.burnout.utils.FileUtils
 import org.tensorflow.lite.support.label.Category
 
@@ -34,6 +35,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
     private val tfWork = TFModelWorker()
 
+    var sample:ShareResult = ShareResult()
 
     private var bitmapImage: Bitmap? = null
 
@@ -106,19 +108,20 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             bitmapImagePath.let {
                 Log.d(TAG, "image path1:" + bitmapImagePath)
                 bitmapImageShare = BitmapFactory.decodeFile(it)
+                sample.apply { image = bitmapImageShare }
+                uri = bitmapImageShare?.let {
+                    FileUtils.saveImageToExternalFilesDir(this, it)
+                }
             }
         } else {
             bitmapImagePath.let {
                 Log.d(TAG, "image path1:" + bitmapImagePath)
                 bitmapImage = BitmapFactory.decodeFile(it)
-            }
-        }
-      
-        bitmapImagePath.let {
-            Log.d(TAG, "image path:" + bitmapImagePath)
-            this.bitmapImage = BitmapFactory.decodeFile(it)
-            uri = bitmapImage?.let {
-                FileUtils.saveImageToExternalFilesDir(this, it)
+                uri = bitmapImage?.let {
+                    FileUtils.saveImageToExternalFilesDir(this, it)
+                }
+                // 실제로 공유허는 이미지와 ml에서 사용하는 이미지의 종류차이가 존재하여 분기하여 처리함
+                sample.apply { image = bitmapImage }
             }
         }
 
@@ -163,21 +166,27 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             else -> "이것이 맞나요?"
         }
 
-        val sample = ShareResult( title, imageBitmap, completeMsg)
-
-        sample.eventType = when (resultType) {
-            TFModelType.SCETCHI.ordinal ->
-                EventType.DRAWING
-            else ->
-                EventType.CAMERA
+        sample.apply {
+            this.title = title
+            this.content = completeMsg
+            eventType = when (resultType) {
+                TFModelType.SCETCHI.ordinal ->
+                    EventType.DRAWING
+                else ->
+                    EventType.CAMERA
+            }
+            resultList = outputs.map{ it ->
+                BurnLog.Debug(this, "label:${it.label} , score:${it.score}")
+                ShareResult.Result(it.label, (it.score * 100).toInt())
+            }
         }
 
-        for (output in outputs) {
-            Log.i(TAG, "label:${output.label} , score:${output.score}")
-            items.add(ShareResult.Result(output.label, (output.score * 100).toInt()))
-        }
-
-        sample.resultList = items
+//        for (output in outputs) {
+//            Log.i(TAG, "label:${output.label} , score:${output.score}")
+//            items.add(ShareResult.Result(output.label, (output.score * 100).toInt()))
+//        }
+//
+//        sample.resultList = items
 
         viewModel.updateShareData(sample)
         viewModel.setMissionComplete(isCompleteAnalysis)

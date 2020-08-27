@@ -48,11 +48,13 @@
         <activity android:name=".ui.share.ShareActivity" />
         <activity android:name=".ui.camera.CameraMissionActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.drawable.DrawImageActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
