@@ -1,4 +1,4 @@
-package com.hbs.burnout.ui.mission
+package com.hbs.burnout.ui.camera
 
 import android.content.Context
 import android.os.Build
@@ -22,7 +22,7 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        container = findViewById(R.id.fragment_container)
+        container = findViewById(R.id.fragment_camera_container)
     }
 
     override fun onResume() {
@@ -52,6 +52,7 @@ class CameraMissionActivity : BaseActivity<ActivityCameraMissionBinding>(){
     }
 
     companion object {
+        val TAG = this.javaClass.name
         /** Use external media if it is available, our app's file directory otherwise */
         fun getOutputDirectory(context: Context): File {
             val appContext = context.applicationContext

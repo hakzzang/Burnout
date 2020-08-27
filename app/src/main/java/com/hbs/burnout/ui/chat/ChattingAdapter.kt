@@ -89,6 +89,18 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                     val fileUri = FileUtils.getOrMakeRecognizeFile(binding.root.context).toUri()
                     binding.ivChattingRecognizeImage.setImageURI(fileUri)
                 }
+                EventType.DRAWING -> {
+                    binding.tvChatting.text = ""
+                    binding.lottieViewWait.visibility = View.VISIBLE
+                    binding.ivChattingRecognizeImage.visibility = View.GONE
+                }
+                EventType.DRAWING_RESULT -> {
+                    binding.tvChatting.text = getItem(position).message
+                    binding.lottieViewWait.visibility = View.GONE
+                    binding.ivChattingRecognizeImage.visibility = View.VISIBLE
+                    val fileUri = FileUtils.getOrMakeRecognizeFile(binding.root.context).toUri()
+                    binding.ivChattingRecognizeImage.setImageURI(fileUri)
+                }
             }
         }
     }

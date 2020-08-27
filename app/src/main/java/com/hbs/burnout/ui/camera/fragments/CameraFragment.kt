@@ -1,20 +1,4 @@
-/*
- * Copyright 2020 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.hbs.burnout.ui.mission.fragments
+package com.hbs.burnout.ui.camera.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -38,11 +22,11 @@ import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.rotationMatrix
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import com.hbs.burnout.R
-import com.hbs.burnout.ui.camera.fragments.PermissionsFragment
 import com.hbs.burnout.utils.FileUtils
 import java.io.File
 import java.nio.ByteBuffer
@@ -111,7 +95,7 @@ class CameraFragment : Fragment() {
         // Make sure that all permissions are still present, since the
         // user could have removed them while the app was in paused state.
         if (!PermissionsFragment.hasPermissions(requireContext())) {
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                 CameraFragmentDirections.actionCameraToPermissions()
             )
 
@@ -335,7 +319,7 @@ class CameraFragment : Fragment() {
                             bitmapImage?.let { bitmap ->
                                 val file = FileUtils.getOrMakeRecognizeFile(requireActivity())
                                 FileUtils.saveBitmapToFile(file, bitmap)
-                                goToPreview(file.path ?: "", image.imageInfo.rotationDegrees)
+                                goToPreview(file.toUri().path ?: "", image.imageInfo.rotationDegrees)
                             }
 
                         }
@@ -376,7 +360,7 @@ class CameraFragment : Fragment() {
     private fun goToPreview(imageFileUriPath: String, targetRotation: Int) {
         Log.i(TAG, "여기 들어오긴 함?")
         container.postDelayed({
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                 CameraFragmentDirections.actionCameraToPreview(imageFileUriPath, targetRotation)
             )
         }, ANIMATION_FAST_MILLIS)

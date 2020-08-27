@@ -1,19 +1,3 @@
-/*
- * Copyright 2020 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.hbs.burnout.ui.camera.fragments
 
 import android.Manifest
@@ -21,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -40,22 +25,21 @@ class PermissionsFragment : Fragment() {
 
         if (!hasPermissions(requireContext())) {
             // Request camera-related permissions
-            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
+            ActivityCompat.requestPermissions(requireActivity(),PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
         } else {
             // If permissions have already been granted, proceed
-            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                     PermissionsFragmentDirections.actionPermissionsToCamera())
         }
     }
 
     override fun onRequestPermissionsResult(
             requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             if (PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()) {
                 // Take the user to the success fragment when permission is granted
                 Toast.makeText(context, "Permission request granted", Toast.LENGTH_LONG).show()
-                Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+                Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
                         PermissionsFragmentDirections.actionPermissionsToCamera())
             } else {
                 Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
