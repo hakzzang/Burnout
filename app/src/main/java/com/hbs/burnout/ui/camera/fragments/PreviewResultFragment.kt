@@ -28,21 +28,20 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
     override fun isUseTransition(): Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val bitmapFileUriPath = arguments?.getString("imageFileUriPath")?:return
+        val bitmapFileUriPath = arguments?.getString("resultImage")?:return
         val rotationf = arguments?.getInt("targetRotation")?.toFloat()!!
-        val imagetype = arguments?.getInt("typeImage",0)
         val bitmapImage = BitmapFactory.decodeFile(bitmapFileUriPath)
         Log.d("SaveFile=2",bitmapFileUriPath)
         Log.i("PreviewResultFragment", "rotation value:$rotationf")
 
         binding.cancelButton.setOnClickListener {
             Log.i("PREVIEW", "취소취소!! 카메라로 돌아가자!!")
-            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
+            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
                 PreviewResultFragmentDirections.actionPreviewToCamera())
         }
         binding.analyzeButton.setOnClickListener {
             Log.i("PREVIEW", "결과 화면으로 가자가자! ")
-//            outputDirectory = CameraMissionActivity.getOutputDirectory(requireContext())
+            outputDirectory = CameraMissionActivity.getOutputDirectory(requireContext())
 
             val out = FileOutputStream(bitmapFileUriPath)
 
@@ -54,9 +53,7 @@ class PreviewResultFragment : BaseFragment<FragmentPreviewBinding>() {
 
             intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
             intent.putExtra("resultImagePath", bitmapFileUriPath)
-            intent.putExtra("resultImageType", imagetype)
             Log.d("result-dada","start")
-
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
                 Log.d("result-dada",result.toString())
                 when(result.resultCode){

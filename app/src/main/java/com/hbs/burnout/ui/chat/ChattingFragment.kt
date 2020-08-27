@@ -14,9 +14,7 @@ import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.core.EventObserver
 import com.hbs.burnout.databinding.FragmentChattingBinding
 import com.hbs.burnout.model.Script
-import com.hbs.burnout.ui.drawable.DrawImageActivity
 import com.hbs.burnout.ui.ext.dialog.AnswerDialog
-import com.hbs.burnout.ui.ext.dialog.DrawingImageDialog
 import com.hbs.burnout.ui.ext.dialog.TakePictureDialog
 import com.hbs.burnout.ui.camera.CameraMissionActivity
 import com.hbs.burnout.utils.ActivityNavigation
@@ -91,14 +89,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                 4 -> {
                     viewModel.readNextScriptLine(stageNumber)
                 }
-                5 -> {
-                    binding.root.post {
-                        showDrawingImageDialog()
-                    }
-                }
-                6 -> {
-                    viewModel.readNextScriptLine(stageNumber)
-                }
             }
         })
 
@@ -135,29 +125,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
             (fragment as AnswerDialog).dismiss()
         }
         AnswerDialog().showNow(childFragmentManager, "AnswerDialog")
-    }
-
-    private fun showDrawingImageDialog() {
-        val dialog = DrawingImageDialog { dialog ->
-            dialog.dismiss()
-            viewModel.drawingImage()
-            val drawingActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                when (result.resultCode) {
-                    ActivityNavigation.SHARE_TO_CHATTING -> {
-                        val receiveIntent = result.data?: return@registerForActivityResult
-                        val isComplete = receiveIntent.getBooleanExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, false)
-                        if(isComplete){
-                            viewModel.drawingImage()
-                        }else{
-                            showDrawingImageDialog()
-                        }
-                    }
-                    ActivityNavigation.DRAWING_TO_CHATTING-> showDrawingImageDialog()
-                }
-            }
-            drawingActivityResult.launch(Intent(Intent(requireContext(), DrawImageActivity::class.java)))
-        }
-        dialog.showNow(parentFragmentManager, "DrawingImageDialog")
     }
 
     private fun showTakePictureDialog() {
