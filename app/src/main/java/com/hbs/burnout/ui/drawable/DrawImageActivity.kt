@@ -163,10 +163,10 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
         TODO("Not yet implemented")
     }
 
-//    override fun onBackPressed() {
-//        setResult(ActivityNavigation.DRAWING_TO_CHATTING)
-//        super.onBackPressed()
-//    }
+    override fun onBackPressed() {
+        setResult(ActivityNavigation.DRAWING_TO_CHATTING)
+        super.onBackPressed()
+    }
 
     companion object {
         val TAG = this.javaClass.name
