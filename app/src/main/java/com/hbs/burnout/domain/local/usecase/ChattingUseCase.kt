@@ -25,11 +25,13 @@ interface ChattingUseCase {
     ): MutableList<Script>
 
     suspend fun takePictureScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
 
     suspend fun drawingImageScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
     ): List<Script>
@@ -37,7 +39,7 @@ interface ChattingUseCase {
     fun clearScriptCache()
     fun saveStage(stage: Stage): Long
     fun saveScript(script: Script): Long
-    fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback:()->Unit): Script?
+    fun readNextScriptLine(scriptPageNumber: Int, completedStageCallback: () -> Unit): Script?
 
 }
 
@@ -67,7 +69,7 @@ class ChattingUseCaseImpl @Inject constructor(
     override fun readNextScriptLine(
         scriptPageNumber: Int,
         completedStageCallback: () -> Unit
-    ):Script? = scriptManager.readNextScriptLine(scriptPageNumber, completedStageCallback)
+    ): Script? = scriptManager.readNextScriptLine(scriptPageNumber, completedStageCallback)
 
     override suspend fun readScriptLine(
         newScript: Script,
@@ -80,15 +82,20 @@ class ChattingUseCaseImpl @Inject constructor(
         answerNumber: Int,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
-    ): MutableList<Script> = scriptManager.answerScriptLine(answerNumber, readingLineCallback, completeReadingCallback)
+    ): MutableList<Script> =
+        scriptManager.answerScriptLine(answerNumber, readingLineCallback, completeReadingCallback)
 
     override suspend fun takePictureScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
-    ): List<Script> = scriptManager.takePictureScriptLine(readingLineCallback, completeReadingCallback)
+    ): List<Script> =
+        scriptManager.takePictureScriptLine(isCompleted, readingLineCallback, completeReadingCallback)
 
     override suspend fun drawingImageScriptLine(
+        isCompleted: Boolean,
         readingLineCallback: (List<Script>) -> Unit,
         completeReadingCallback: (Script) -> Unit
-    ): List<Script> = scriptManager.drawingImageScriptLine(readingLineCallback, completeReadingCallback)
+    ): List<Script> =
+        scriptManager.drawingImageScriptLine(isCompleted, readingLineCallback, completeReadingCallback)
 }
