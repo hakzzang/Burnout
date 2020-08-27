@@ -15,19 +15,42 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentInsetStart="0dp"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_title3"
+                    android:textColor="@color/color_black_for_night"
+                    android:textSize="@dimen/material_text_headline"
+                    android:textStyle="bold"
+                    android:layout_margin="24dp"/>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mission"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
             android:orientation="vertical"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingLeft="@dimen/item_mission_space"
+            android:paddingRight="@dimen/item_mission_space"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:spanCount="2"
             tools:itemCount="10"
-            tools:listitem="@layout/sample_item_grid_card" />
+            tools:listitem="@layout/item_mission" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bar"

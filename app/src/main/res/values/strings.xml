@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Burnout</string>
 
+    <string name="main_title">번아웃 챌린지 &#x1F525;</string>
+    <string name="main_title2">번아웃 챌린지 &#x1F60E;</string>
+    <string name="main_title3">번아웃 챌린지 &#x1F61B;</string>
+
     <string name="text_download">다운로드</string>
     <string name="text_cancel">취소</string>
     <string name="text_save">저장</string>
