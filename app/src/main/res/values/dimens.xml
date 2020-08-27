@@ -73,10 +73,13 @@
 
     <!-- Badge resources-->
     <dimen name="item_badge_size">96dp</dimen>
-    <dimen name="item_badge_content_top_margin">24dp</dimen>
+    <dimen name="item_badge_content_top_margin">40dp</dimen>
     <dimen name="item_badge_drawer_height">600dp</dimen>
     <dimen name="item_badge_list_top_bottom_margin">16dp</dimen>
     <dimen name="item_take_picture_button_margin_right">16dp</dimen>
+
+    <!-- CompletedStage resources -->
+    <dimen name="completed_stage_margin_top">24dp</dimen>
 
 
 </resources>

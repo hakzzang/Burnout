@@ -3,6 +3,7 @@ package com.hbs.burnout.ui.chat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -73,6 +74,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         })
 
         viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript ->
+            Log.d("lastScript-event",lastScript.event.toString())
             when (lastScript.event) {
                 0 -> {
                     viewModel.readNextScriptLine(stageNumber)
@@ -180,7 +182,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                             }
                         }
                         ActivityNavigation.CAMERA_TO_CHATTING -> showTakePictureDialog()
-
                     }
                 }
             cameraActivityResult.launch(

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Burnout</string>
 
@@ -28,5 +29,8 @@
 
     <!-- Badge -->
     <string name="title_badge">BADGE</string>
+    <string name="completed_stage1_text">
+
+    </string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.hbs.burnout.tfml.classifier
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
@@ -42,7 +41,9 @@ class ImageClassifier(ctx: Context) {
         for (index in result.topK) {
             val category = Category(getLabel(index), getProbability(index))
             out.add(category)
-            find = expectedIndex == index
+            if(expectedIndex == index && category.score > 0.6){
+                find = true
+            }
         }
 
         return out

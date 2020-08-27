@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 object ScriptConfiguration {
     const val LINE_ENTER_SPEED = 100L
-    const val READING_SPEED = 120L
+    const val READING_SPEED = 20L
 }
 
 @FragmentScoped
@@ -224,7 +224,7 @@ class ScriptManagerImpl @Inject constructor(private val scriptStorage: ScriptSto
             delay(ScriptConfiguration.READING_SPEED)
             newWord += word.toString()
             val newScriptLine =
-                ScriptBuilder(user, newWord, 4, stage, id).addAnswer(lastScript.answer).create()
+                ScriptBuilder(user, newWord, 6, stage, id).addAnswer(lastScript.answer).create()
             scriptCache.set(scriptCache.lastIndex, newScriptLine)
             withContext(Dispatchers.Main) {
                 readingLineCallback(scriptCache)
