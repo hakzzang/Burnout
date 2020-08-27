@@ -15,7 +15,6 @@ import com.hbs.burnout.databinding.ItemYourChattingBinding
 import com.hbs.burnout.model.Script
 import com.hbs.burnout.model.EventType
 import com.hbs.burnout.utils.FileUtils
-import kotlin.math.E
 
 class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Script>() {
     override fun areItemsTheSame(oldItem: Script, newItem: Script): Boolean = oldItem.message == newItem.message
