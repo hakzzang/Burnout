@@ -24,8 +24,6 @@ import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.FileUtils
 import org.tensorflow.lite.support.label.Category
 
-import java.io.File
-
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
@@ -109,13 +107,11 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                 Log.d(TAG, "image path1:" + bitmapImagePath)
                 bitmapImageShare = BitmapFactory.decodeFile(it)
             }
-            binding.shareImage.setImageBitmap(bitmapImageShare)
         } else {
             bitmapImagePath.let {
                 Log.d(TAG, "image path1:" + bitmapImagePath)
                 bitmapImage = BitmapFactory.decodeFile(it)
             }
-            binding.shareImage.setImageBitmap(bitmapImage)
         }
       
         bitmapImagePath.let {
