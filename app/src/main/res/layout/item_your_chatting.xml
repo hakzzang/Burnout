@@ -6,7 +6,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/chatting_item_container_margin">
+        android:layout_marginStart="@dimen/chatting_item_container_margin"
+        android:layout_marginTop="@dimen/chatting_item_container_margin"
+        android:layout_marginEnd="@dimen/chatting_item_container_margin">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_profile"
@@ -14,30 +16,33 @@
             android:layout_height="@dimen/chatting_profile_image_size"
             android:background="@android:color/black"
             android:elevation="@dimen/chatting_profile_image_elevation"
-            app:strokeColor="@android:color/white"
-            app:strokeWidth="@dimen/chatting_profile_image_outline"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/CircleImageView" />
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="@dimen/chatting_profile_image_outline" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/chatting_dialog_margin_to_profile"
             android:layout_marginTop="@dimen/chatting_dialog_margin_to_profile"
+            android:layout_marginRight="@dimen/chatting_small_margin_dimen"
             app:cardBackgroundColor="@color/color_your_chatting"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/iv_profile"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_profile">
 
             <com.google.android.material.textview.MaterialTextView
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:id="@+id/tv_chatting"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/chatting_dialog_margin_text"
                 android:textColor="@android:color/white"
-                tools:text="안녕~~~~"
-                />
+                tools:text="안녕~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" />
 
         </com.google.android.material.card.MaterialCardView>
 
