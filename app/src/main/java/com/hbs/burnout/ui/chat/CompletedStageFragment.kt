@@ -5,9 +5,11 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.fragment.app.findFragment
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.databinding.FragmentCompletedStageBinding
+import com.hbs.burnout.ui.share.ShareCameraFragment
 import com.hbs.burnout.utils.script.MissionHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,8 +30,15 @@ class CompletedStageFragment : BaseFragment<FragmentCompletedStageBinding>(){
         binding.ivBadge.setImageResource(MissionHelper.getBadge(stageNumber))
         binding.tvCongratulateTitle.text = resources.getString(R.string.complete_stage_message, stageNumber.toString())
         if(stageNumber > 1){
+            val fragment = ShareCameraFragment()
             binding.lottieViewCongratulate.visibility = View.GONE
             binding.tvCongratulateContent.visibility = View.GONE
+            childFragmentManager.beginTransaction()
+                .add(binding.fragmentContainerShare.id, fragment, "ShareCameraFragment")
+                .commit()
+            fragment.observeShareResult(stageNumber)
+        }else{
+            binding.fragmentContainerShare.visibility = View.INVISIBLE
         }
     }
 

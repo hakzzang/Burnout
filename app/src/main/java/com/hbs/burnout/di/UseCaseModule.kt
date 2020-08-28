@@ -25,6 +25,9 @@ object UseCaseModule {
         MainUseCaseImpl(stageRepository)
 
     @Provides
-    fun provideShareUseCase(shareRepository: ShareRepository): ShareUseCase =
-        ShareUseCaseImpl(shareRepository)
+    fun provideShareUseCase(
+        stageRepository: StageRepository,
+        shareRepository: ShareRepository
+    ): ShareUseCase =
+        ShareUseCaseImpl(stageRepository, shareRepository)
 }
