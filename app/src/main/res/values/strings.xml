@@ -29,6 +29,10 @@
     <string name="title_chatting">Chatting</string>
     <string name="item_chatting_take_picture">사진 찍기</string>
 
+    <!-- DRAW -->
+    <string name="title_draw">%s &#x1F3A8;</string>
+
+    .
     <!-- Answer-->
     <string name="title_answer">Answer</string>
     <string name="text_new_message_mission">새로운 번아웃 미션 알림</string>
