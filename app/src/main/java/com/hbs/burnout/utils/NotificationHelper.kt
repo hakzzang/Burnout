@@ -37,7 +37,6 @@ class NotificationHelper {
     fun showBubble(context: Context, stageNumber:Int) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             val notificationManager: NotificationManager? = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            Log.d("stageNumber-2",stageNumber.toString())
             val target = Intent(context, ChattingActivity::class.java).apply {
                 putExtra(ActivityNavigation.STAGE_ROUND, stageNumber)
             }
