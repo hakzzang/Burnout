@@ -182,7 +182,6 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                 BurnLog.Debug(this, "label:${it.label} , score:${it.score}")
                 ShareResult.Result(it.label, (it.score * 100).toInt())
             }
-
         }
 
 //        for (output in outputs) {
@@ -193,7 +192,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 //        sample.resultList = items
 
         viewModel.updateShareData(sample)
-        viewModel.setMissionComplete(isCompleteAnalysis)
+        viewModel.setMissionComplete(isCompleteAnalysis, sample)
     }
 
     private fun initView(binding: ActivityShareBinding) {
