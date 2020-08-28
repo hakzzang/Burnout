@@ -36,5 +36,6 @@
 
     <!-- Completed Stage Resources-->
     <string name="complete_stage_message">- 미션%s을 쉽게 해결했다. -</string>
+    <string name="title_ending">ENDING</string>
 
 </resources>
