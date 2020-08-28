@@ -42,20 +42,29 @@ class MissionAdapter(private val successCallback: (View, Int) -> (Unit), private
             binding.tvMissionTitle.text = stage.title
             binding.tvMissionContent.text = stage.content
             binding.ivMissionBadge.setImageResource(MissionHelper.getBadge(stage.round))
+            if(position >= 3){
+                binding.ivNotCompletedImage.visibility = View.VISIBLE
+                binding.root.setOnClickListener(makeSuccessClickListener(position))
+                return
+            }
             when (stage.progress) {
                 StageProgress.PLAYING -> {
+                    binding.ivLockIcon.visibility = View.GONE
                     binding.ivNotCompletedImage.visibility = View.GONE
                     binding.root.setOnClickListener(makeSuccessClickListener(position))
                 }
                 StageProgress.COMPLETED -> {
+                    binding.ivLockIcon.visibility = View.GONE
                     binding.ivNotCompletedImage.visibility = View.GONE
                     binding.root.setOnClickListener(makeSuccessClickListener(position))
                 }
                 StageProgress.NOT_COMPLETED -> {
+                    binding.ivLockIcon.visibility = View.VISIBLE
                     binding.ivNotCompletedImage.visibility = View.VISIBLE
                     binding.root.setOnClickListener(makeFailClickListener(stage.progress))
                 }
                 else -> {
+                    binding.ivLockIcon.visibility = View.VISIBLE
                     binding.ivNotCompletedImage.visibility = View.VISIBLE
                     binding.root.setOnClickListener(makeFailClickListener(stage.progress))
                 }

@@ -42,9 +42,9 @@ class ChattingViewModel @ViewModelInject constructor(
         val script = chattingUseCase.readNextScriptLine(scriptNumber) {
             _completedStage.value = Event(Unit)
         } ?: return
-        if(script.event == 4 || script.event == 6){
+        if (script.event == 4 || script.event == 6) {
 
-        }else{
+        } else {
             _readingScript.value = Event(script)
         }
     }
@@ -56,7 +56,6 @@ class ChattingViewModel @ViewModelInject constructor(
             }, { lastScript ->
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
-                    Log.d("emit-event-lastscript",lastScript.event.toString())
                     _completedReadingScript.value = Event(lastScript)
                     _lastScript.value = lastScript
                 }
@@ -79,11 +78,12 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun takePicture(isCompleted: Boolean) {
+    fun takePicture(isCompleted: Boolean, imagePath: String) {
         viewModelScope.launch(Dispatchers.IO) {
             chattingUseCase.takePictureScriptLine(isCompleted, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
             }, { lastScript ->
+                lastScript.imagePath = imagePath
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
@@ -92,13 +92,14 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun drawingImage(isCompleted:Boolean){
-        viewModelScope.launch(Dispatchers.IO){
+    fun drawingImage(isCompleted: Boolean, imagePath: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             chattingUseCase.drawingImageScriptLine(isCompleted, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
-            },{lastScript->
+            }, { lastScript ->
+                lastScript.imagePath = imagePath
                 chattingUseCase.saveScript(lastScript)
-                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
                 }
             })

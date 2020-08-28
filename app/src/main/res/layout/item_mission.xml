@@ -59,20 +59,23 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/banana" />
 
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_not_completed_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="@color/color_black_alpha_60"
+                android:background="@color/color_black_alpha_60"
                 app:shapeAppearanceOverlay="@style/MissionContainerStyle"
                 android:elevation="@dimen/item_mission_not_completed_view_elevation">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_lock"
-                    android:padding="16dp" />
-            </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.imageview.ShapeableImageView>
+
+            <ImageView
+                android:id="@+id/iv_lock_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_lock"
+                android:padding="32dp"
+                android:elevation="2dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
