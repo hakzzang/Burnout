@@ -1,9 +1,10 @@
 package com.hbs.burnout.ui.chat
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -88,7 +89,7 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                     binding.tvChatting.text = chatting.message
                     binding.lottieViewWait.visibility = View.GONE
                     binding.ivChattingRecognizeImage.visibility = View.VISIBLE
-                    binding.ivChattingRecognizeImage.setImageURI(chatting.imagePath.toUri())
+                    binding.ivChattingRecognizeImage.setImageURI(Uri.parse(FileUtils.getOrMakeRecognizeFile(binding.root.context).path))
                 }
                 EventType.DRAWING -> {
                     binding.tvChatting.text = ""
@@ -99,7 +100,8 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                     binding.tvChatting.text = chatting.message
                     binding.lottieViewWait.visibility = View.GONE
                     binding.ivChattingRecognizeImage.visibility = View.VISIBLE
-                    binding.ivChattingRecognizeImage.setImageURI(chatting.imagePath.toUri())
+                    Log.d("chatting.imagePath",chatting.imagePath)
+                    binding.ivChattingRecognizeImage.setImageURI(Uri.parse(FileUtils.getOrMakeRecognizeFile2(binding.root.context).path))
                 }
             }
         }

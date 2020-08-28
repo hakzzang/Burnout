@@ -82,6 +82,7 @@
 
     <!-- CompletedStage resources -->
     <dimen name="completed_stage_margin_top">24dp</dimen>
+    <dimen name="chatting_small_margin_dimen">4dp</dimen>
 
 
 </resources>

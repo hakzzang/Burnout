@@ -192,7 +192,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 completedStage++
             }
         }
-        if (completedStage > MissionConfiguration.ALL_MISSION_SIZE) {
+         if (completedStage >= MissionConfiguration.ALL_MISSION_SIZE) {
             supportFragmentManager.nullCheckAndDismiss("EndingDialog")
             EndingDialog().show(supportFragmentManager, "EndingDialog")
         }
@@ -214,7 +214,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 completedStage++
             }
         }
-        val spannableString = SpannableString("당신은 ${completedStage}번째 미션으로\n아래의 뱃지를 획득했습니다")
+        var spannableString = SpannableString("당신은 ${completedStage}번째 미션으로\n아래의 뱃지를 획득했습니다")
+
         if (stageList.size < 10) {
             spannableString.setSpan(
                 ForegroundColorSpan(resources.getColor(R.color.colorPrimary)),
@@ -228,6 +229,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 4, 6,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
+        }
+        if(completedStage == 0){
+            spannableString = SpannableString("뱃지를 획득하기 위해서는\n미션을 진행해야 합니다.")
         }
         binding.tvBadgeTitle.text = resources.getString(R.string.title_badge)
         binding.tvBadgeContent.text = spannableString
