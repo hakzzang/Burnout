@@ -32,6 +32,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
             window.sharedElementsUseOverlay = false
+            window.statusBarColor =  resources.getColor(R.color.color_dialog_bg)
             setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
         }
     }
@@ -39,16 +40,18 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
     override fun transitionLogic() {
         val transitionType = intent.getStringExtra(TransitionConfigure.TRANSITION_TYPE)
         if (transitionType == TransitionConfigure.ARC_TYPE) {
-            setArcTransition(binding.root, TransitionNavigation.CHATTING)
+            setArcTransition(binding.root, TransitionNavigation.CHATTING_TRANSITION_ARC)
         } else {
-            setHoldContainerTransition(binding.root, TransitionNavigation.CHATTING)
+            setHoldContainerTransition(binding.root, TransitionNavigation.CHATTING_TRANSITION_LINEAR)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initView(binding)
+        startPostponedEnterTransition()
+
         bindNavigationGraph(R.navigation.nav_chatting_graph)
+        initView(binding)
         val stageRound = intent.getIntExtra(ActivityNavigation.STAGE_ROUND, 0)
 
         updateShortcuts(this, stageRound)

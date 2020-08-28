@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
@@ -33,7 +34,6 @@ import com.hbs.burnout.utils.TransitionNavigation
 import com.hbs.burnout.utils.script.MissionConfiguration
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -88,6 +88,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun observeMainViewModel(mainViewModel: MainViewModel) {
         mainViewModel.startChatting.observe(this, EventObserver {
+            Log.d("TransitionType","hhhh")
             startChattingActivityWithArcTransition(it)
         })
 
@@ -111,6 +112,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun startChattingActivityWithArcTransition(view: View) {
+        Log.d("TransitionType", "ARC")
+
         val intent = Intent(view.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
         var stageRound = 0
@@ -127,11 +130,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             view,
             intent,
             ActivityNavigation.CHATTING,
-            TransitionNavigation.CHATTING
+            TransitionNavigation.CHATTING_TRANSITION_ARC
         )
     }
 
     private fun startActivityWithLinearTransition(itemView: View, position: Int) {
+        Log.d("TransitionType", "LINEAR")
         val intent = Intent(itemView.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
         intent.putExtra(ActivityNavigation.STAGE_ROUND, position + 1)
@@ -139,7 +143,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             itemView,
             intent,
             ActivityNavigation.CHATTING,
-            TransitionNavigation.CHATTING
+            TransitionNavigation.CHATTING_TRANSITION_LINEAR
         )
     }
 

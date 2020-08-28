@@ -59,8 +59,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postponeEnterTransition()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
