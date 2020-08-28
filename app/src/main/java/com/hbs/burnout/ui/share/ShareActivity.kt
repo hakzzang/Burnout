@@ -23,10 +23,12 @@ import com.hbs.burnout.ui.save.SaveDialog
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.BurnLog
 import com.hbs.burnout.utils.FileUtils
+import dagger.hilt.android.AndroidEntryPoint
 import org.tensorflow.lite.support.label.Category
 
 internal const val MAX_RESULT_DISPLAY = 3 // Maximum number of results displayed
 
+@AndroidEntryPoint
 class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private lateinit var itemName: String
     private var resultType: Int = 0
@@ -35,7 +37,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
 
     private val tfWork = TFModelWorker()
 
-    var sample:ShareResult = ShareResult()
+    val sample:ShareResult = ShareResult()
 
     private var bitmapImage: Bitmap? = null
 
@@ -108,10 +110,10 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
             bitmapImagePath.let {
                 Log.d(TAG, "image path1:" + bitmapImagePath)
                 bitmapImageShare = BitmapFactory.decodeFile(it)
-                sample.apply { image = bitmapImageShare }
                 uri = bitmapImageShare?.let {
                     FileUtils.saveImageToExternalFilesDir(this, it)
                 }
+                sample.uri = uri.toString()
             }
         } else {
             bitmapImagePath.let {
@@ -121,7 +123,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                     FileUtils.saveImageToExternalFilesDir(this, it)
                 }
                 // 실제로 공유허는 이미지와 ml에서 사용하는 이미지의 종류차이가 존재하여 분기하여 처리함
-                sample.apply { image = bitmapImage }
+                sample.uri = uri.toString()
             }
         }
 
@@ -169,6 +171,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
         sample.apply {
             this.title = title
             this.content = completeMsg
+            this.uri = uri.toString()
             eventType = when (resultType) {
                 TFModelType.SCETCHI.ordinal ->
                     EventType.DRAWING
@@ -179,6 +182,7 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
                 BurnLog.Debug(this, "label:${it.label} , score:${it.score}")
                 ShareResult.Result(it.label, (it.score * 100).toInt())
             }
+
         }
 
 //        for (output in outputs) {
