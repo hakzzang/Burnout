@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,12 +17,13 @@ import com.hbs.burnout.databinding.DialogSnsBinding
 import com.hbs.burnout.utils.IntentUtils
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class SnsDialog() : BottomSheetDialogFragment() {
 
     private val viewModel by viewModels<ShareViewModel>()
 
-    private val instagramLauncher =
+    private val snsLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             // do something here
         }
@@ -51,14 +51,17 @@ class SnsDialog() : BottomSheetDialogFragment() {
         viewModel.snsType.observe(requireActivity(), Observer { type ->
             when (type) {
                 SnsType.KAKAOTALK -> {
-                    Toast.makeText(context, "준비중,,, (_ _)", Toast.LENGTH_SHORT).show()
+                    val intent = IntentUtils.createKakaotalkIntent(context, uri)
+                    snsLauncher.launch(intent)
                 }
                 SnsType.FACEBOOK -> {
-                    Toast.makeText(context, "준비중,,, (_ _)", Toast.LENGTH_SHORT).show()
+                    val result:String = "'$title' 미션을 완료했어요!\n\n #번아웃_챌린지 #$title"
+                    val intent = IntentUtils.createFacebookIntent(context, result)
+                    snsLauncher.launch(intent)
                 }
                 SnsType.INSTAGRAM -> {
                     val intent = IntentUtils.createInstagramFeedIntent(context, uri)
-                    instagramLauncher.launch(intent)
+                    snsLauncher.launch(intent)
                 }
             }
             dismiss()
