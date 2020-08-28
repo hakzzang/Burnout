@@ -9,6 +9,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import java.io.*
+import java.util.*
 
 object FileUtils {
     const val RECOGNIZE_FILE_NAME = "recognize_result.jpg"
@@ -38,7 +39,7 @@ object FileUtils {
         val file = File(
             context?.getExternalFilesDir(
                 Environment.DIRECTORY_PICTURES
-            ), "BurnOut"
+            ), "BurnOut_"+ Date().time
         )
         try {
             file.createNewFile()

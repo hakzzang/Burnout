@@ -80,17 +80,14 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
             val intent = Intent(baseContext, ShareActivity::class.java)
 
             if (orgBitmap != null) {
-
-                val file = FileUtils.getOrMakeRecognizeFile(this)
                 val file2 = FileUtils.getOrMakeRecognizeFile2(this)
-                FileUtils.saveBitmapToFile(file, orgBitmap)
                 FileUtils.saveBitmapToFile(file2, sketch)
 
                 intent.putExtra(
                     TransitionConfigure.TRANSITION_TYPE,
                     TransitionConfigure.LINEAR_TYPE
                 )
-                intent.putExtra("resultImagePath", file.toUri().path)
+                intent.putExtra("resultImagePath", file2.toUri().path)
                 intent.putExtra("resultImageType", TFModelType.SCETCHI.ordinal)
                 intent.putExtra("expectItemName", classifier?.getLabel(classifier!!.expectedIndex))
                 intent.putExtra("expectedIndex", classifier!!.expectedIndex)

@@ -10,8 +10,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:transitionName="CHATTING_TRANSITION_LINEAR"
         app:shapeAppearanceOverlay="@style/MissionContainerStyle"
-        app:cardPreventCornerOverlap="false"
-        >
+        app:cardPreventCornerOverlap="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
