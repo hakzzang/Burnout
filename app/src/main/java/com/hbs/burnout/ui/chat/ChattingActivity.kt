@@ -49,13 +49,21 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startPostponedEnterTransition()
+        val stageRound = intent.getIntExtra(ActivityNavigation.STAGE_ROUND, -1)
 
-        bindNavigationGraph(R.navigation.nav_chatting_graph)
+        if(stageRound != -1){
+            updateShortcuts(this, stageRound)
+            showBubble(stageRound)
+            bindNavigationGraph(R.navigation.nav_chatting_graph, stageRound)
+        }else{
+            val stageRound = intent.extras?.getInt(ActivityNavigation.STAGE_ROUND)?:-1
+            if(stageRound != -1){
+                updateShortcuts(this, stageRound)
+                showBubble(stageRound)
+                bindNavigationGraph(R.navigation.nav_chatting_graph, stageRound)
+            }
+        }
         initView(binding)
-        val stageRound = intent.getIntExtra(ActivityNavigation.STAGE_ROUND, 0)
-
-        updateShortcuts(this, stageRound)
-        showBubble()
     }
 
     private fun initView(binding: ActivityChattingBinding) {
@@ -72,11 +80,10 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun bindNavigationGraph(@NavigationRes graphId: Int) {
+    private fun bindNavigationGraph(@NavigationRes graphId: Int ,stageNumber: Int) {
         val navHostFragment =
             supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
         val navController = navHostFragment.navController
-        val stageNumber = intent.getIntExtra(ActivityNavigation.STAGE_ROUND, 0)
         navController.setGraph(graphId, Bundle().apply {
             putInt(ActivityNavigation.STAGE_ROUND, stageNumber)
         })
@@ -99,8 +106,8 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         notificationHelper.updateShortcuts(context, stageNumber)
     }
 
-    private fun showBubble() {
+    private fun showBubble(stageRound:Int) {
         notificationHelper.makeNotificationChannel(this)
-        notificationHelper.showBubble(this)
+        notificationHelper.showBubble(this, stageRound)
     }
 }
