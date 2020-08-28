@@ -133,7 +133,11 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     }
 
     private fun updateRecyclerView(scriptCache: List<Script>) {
-        chattingAdapter.submitList(scriptCache.toList())
+        chattingAdapter.submitList(scriptCache.toList()){
+            if(scriptCache.lastIndex>0){
+                binding.rvChatting.smoothScrollToPosition(scriptCache.lastIndex)
+            }
+        }
     }
 
     private fun showAnswerDialog() {
