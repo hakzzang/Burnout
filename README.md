@@ -58,10 +58,25 @@
 
 ## Week 2
 ### 채팅 프로젝트 만들기
-
 ![image](https://user-images.githubusercontent.com/22374750/90979282-0b3f4000-e58f-11ea-91f3-57298ba9601f.png)
+
+### 이미지 인식
+#### 사용된 Android 기능 및 기술
+- CameraX: https://developer.android.com/training/camerax
+ -- 카메라 priview와 캡쳐 기능 사용
+- Navigation: https://developer.android.com/guide/navigation
+ -- 카메라의 프리뷰와 캡쳐 결과 화면, 퍼미션 화면간 이동에 사용
+- TensorFlow Lite: https://developer.android.com/ml
+ -- 사용된 tf lite 용 모델 및 예제
+  1. 새 이미지 인식 (TF 허브) :https://tfhub.dev/google/aiy/vision/classifier/birds_V1/1
+  2. 이미지 인식 (TF 허브) :https://tfhub.dev/tensorflow/lite-model/efficientnet/lite4/fp32/1
+  3. 스케치 인식 : https://github.com/jtheiner/SketchRecognition/
+- ML binding: https://developer.android.com/studio/preview/features?hl=fr#tensor-flow-lite-models
+ -- tflite 모델 바인딩에 사용
+
 
 ## Week 3
 ### 스테이지 & 뱃지함 리스트 추가
 
 ![image](https://user-images.githubusercontent.com/22374750/91059945-4f9d0f80-e665-11ea-902f-347f73792a88.png)
+
