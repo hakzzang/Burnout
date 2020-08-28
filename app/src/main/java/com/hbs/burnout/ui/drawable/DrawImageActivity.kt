@@ -16,6 +16,7 @@ import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseActivity
 import com.hbs.burnout.databinding.ActivityDrawBinding
 import com.hbs.burnout.tfml.TFModelType
@@ -140,7 +141,7 @@ class DrawImageActivity : BaseActivity<ActivityDrawBinding>() {
 
         // get a random label and set as expected class
         classifier?.expectedIndex = Random().nextInt(classifier!!.numberOfClasses)
-        binding.txtDrawLabel.text = classifier?.getLabel(classifier!!.expectedIndex) + "(을/를) 그려보자!"
+        binding.txtDrawLabel.text = resources.getString(R.string.title_draw, classifier?.getLabel(classifier!!.expectedIndex) + "(을/를) 그려보자!")
     }
 
 

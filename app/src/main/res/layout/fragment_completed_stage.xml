@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_hideable="true"
-        app:layout_behavior="@string/bottom_sheet_behavior"
         app:shapeAppearanceOverlay="@style/SelectContainerStyle">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,33 +29,30 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.1" />
+                app:layout_constraintVertical_bias="0.05" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_badge_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/item_badge_content_top_margin"
-                android:fontFamily="sans-serif"
                 android:lineSpacingExtra="4dp"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="@dimen/material_text_headline"
+                android:textSize="@dimen/material_text_headline2"
                 app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_badge_title"
-                tools:text="당신은 1번째 미션으로\n아래의 뱃지를 획득했습니다" />
+                tools:text="당신은 1번째 미션으로\n뱃지를 획득했습니다" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_badge"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="16dp"
-                android:nestedScrollingEnabled="true"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintDimensionRatio="H,1:1"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintRight_toRightOf="@id/guideline_badge_view_end"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintWidth_percent="0.25"
-                app:spanCount="3"
+                app:layout_constraintVertical_bias="0.01"
                 tools:src="@drawable/orange" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -64,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.9" />
+                app:layout_constraintGuide_percent="0.98" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_view_congratulate"

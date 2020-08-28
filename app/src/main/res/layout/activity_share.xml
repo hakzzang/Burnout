@@ -21,25 +21,26 @@
             android:id="@+id/back_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
             android:onClick="@{()->handler.finish()}"
             android:padding="8dp"
             android:src="@drawable/ic_btn_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/share_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/background_dark"
+            android:textSize="@dimen/material_text_headline2"
+            android:layout_marginRight="24dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="36dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{viewModel.shareData.title}"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/material_text_body2"
             app:layout_constraintBottom_toBottomOf="@id/back_btn"
             app:layout_constraintLeft_toRightOf="@id/back_btn"
             app:layout_constraintRight_toRightOf="parent"
@@ -52,13 +53,14 @@
             android:layout_height="0dp"
             android:tag="FRAGMENT_SHARE"
             app:layout_constraintBottom_toTopOf="@id/fab_save"
-            app:layout_constraintTop_toBottomOf="@id/share_title"/>
+            app:layout_constraintTop_toBottomOf="@id/share_title"
+            tools:layout="@layout/fragment_share_camera"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="24dp"
             android:src="@drawable/ic_btn_save"
             app:backgroundTint="@color/color_your_chatting"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -69,8 +71,8 @@
             android:id="@+id/fab_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="24dp"
             android:src="@drawable/ic_btn_share"
             app:backgroundTint="@color/color_your_chatting"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -81,14 +83,15 @@
             android:id="@+id/fab_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
             android:text="미션 완료"
             android:textColor="@android:color/white"
             app:backgroundTint="@android:color/holo_green_light"
-            app:icon="@drawable/ic_complete"
+            app:icon="@drawable/ic_btn_send"
             app:iconTint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@android:color/white"
+            android:layout_marginRight="24dp"
             app:layout_constraintRight_toRightOf="parent"
-            app:tint="@android:color/white" />
+            app:layout_constraintTop_toTopOf="@id/fab_share"
+            app:layout_constraintBottom_toBottomOf="@id/fab_share"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

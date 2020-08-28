@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/preview_image_layout"
         android:layout_width="match_parent"
@@ -13,20 +14,24 @@
             android:scaleType="fitXY"
             android:contentDescription="TODO" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_btn_refresh"
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/margin_medium"
-            android:text="CANCEL"/>
+            app:backgroundTint="@color/color_progress_0"
+            app:tint="@android:color/white" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/analyze_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_btn_next"
             android:layout_gravity="bottom|right"
-            android:text="SAVE" />
+            android:layout_margin="@dimen/margin_medium"
+            app:backgroundTint="@color/color_your_chatting"
+            app:tint="@android:color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
