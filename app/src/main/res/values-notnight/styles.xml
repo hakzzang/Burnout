@@ -37,7 +37,12 @@
 
     <style name="ShapeAppearance.Shrine.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">cut</item>
-        <item name="cornerSize">24dp</item>
+        <item name="cornerSize">36dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Shrine.XLargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">36dp</item>
     </style>
 
     <style name="ShapeAppearance.LargeComponent.Round" parent="ShapeAppearance.MaterialComponents.LargeComponent">
@@ -84,5 +89,11 @@
     <style name="TakePictureContainerStyle" parent="ShapeAppearance.Shrine.LargeComponent">
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="EndingContainerStyle" parent="ShapeAppearance.Shrine.XLargeComponent">
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 </resources>
