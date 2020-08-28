@@ -108,6 +108,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun initView(binding: ActivityMainBinding) {
         binding.rvMission.adapter = missionAdapter
         binding.bar.setNavigationOnClickListener { toggleBottomDrawer() }
+        binding.bar.setOnMenuItemClickListener { item: MenuItem? ->
+            toggleDarkTheme()
+            item?.let { toggleDarkThemeMenuIcon(it) }
+            true
+        }
+        binding.bar.drawEdgeShapeAppearance()
         binding.bottomDrawer.hideBottomDrawer()
     }
 

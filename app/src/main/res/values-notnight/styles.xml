@@ -62,7 +62,7 @@
 
     <style name="Widget.MaterialComponents.FloatingActionButton.Outline.Cut" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="cornerFamily">cut</item>>
-        <item name="cornerSize">24dp</item>
+        <item name="cornerSize">26dp</item>
     </style>
 
     <style name="OutlinedCutDialog" parent="">
@@ -108,4 +108,9 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
+    <style name="FloatingContainerStyle" parent="Widget.MaterialComponents.FloatingActionButton.Outline.Cut" />
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">4dp</item>
+    </style>
 </resources>
