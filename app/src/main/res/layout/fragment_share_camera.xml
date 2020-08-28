@@ -20,7 +20,7 @@
             android:layout_margin="36dp"
             android:background="@drawable/bg_img_rounded"
             android:scaleType="centerCrop"
-            android:src="@drawable/gamjatwigim"
+            tools:src="@drawable/gamjatwigim"
             app:layout_constraintDimensionRatio="H, 1:0.8"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

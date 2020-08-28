@@ -5,9 +5,11 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.fragment.app.findFragment
 import com.hbs.burnout.R
 import com.hbs.burnout.core.BaseFragment
 import com.hbs.burnout.databinding.FragmentCompletedStageBinding
+import com.hbs.burnout.ui.share.ShareCameraFragment
 import com.hbs.burnout.utils.script.MissionHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,12 +21,33 @@ class CompletedStageFragment : BaseFragment<FragmentCompletedStageBinding>(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val stageNumber = receiveStageNumber()
+        initView(binding, stageNumber)
+    }
+
+    private fun initView(binding: FragmentCompletedStageBinding, stageNumber:Int){
+        binding.tvBadgeContent.text = setBadgeContentTextView(stageNumber)
+        binding.ivBadge.setImageResource(MissionHelper.getBadge(stageNumber))
+        binding.tvCongratulateTitle.text = resources.getString(R.string.complete_stage_message, stageNumber.toString())
+        if(stageNumber > 1){
+            val fragment = ShareCameraFragment()
+            binding.lottieViewCongratulate.visibility = View.GONE
+            binding.tvCongratulateContent.visibility = View.GONE
+            childFragmentManager.beginTransaction()
+                .add(binding.fragmentContainerShare.id, fragment, "ShareCameraFragment")
+                .commit()
+            fragment.observeShareResult(stageNumber)
+        }else{
+            binding.fragmentContainerShare.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun receiveStageNumber(): Int {
         var stageNumber = arguments?.getInt("stageNumber")?:0
         if(stageNumber==-1){
             stageNumber = 0
         }
-        binding.tvBadgeContent.text = setBadgeContentTextView(stageNumber)
-        binding.ivBadge.setImageResource(MissionHelper.getBadge(stageNumber))
+        return stageNumber
     }
 
     private fun setBadgeContentTextView(completedStage:Int): SpannableString {

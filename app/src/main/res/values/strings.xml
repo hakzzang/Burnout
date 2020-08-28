@@ -33,8 +33,8 @@
 
     <!-- Badge -->
     <string name="title_badge">BADGE</string>
-    <string name="completed_stage1_text">
 
-    </string>
+    <!-- Completed Stage Resources-->
+    <string name="complete_stage_message">- 미션%s을 쉽게 해결했다. -</string>
 
 </resources>
