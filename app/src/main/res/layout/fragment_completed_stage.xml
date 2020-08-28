@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_hideable="true"
-        app:cardBackgroundColor="@color/color_badge_view_color"
         app:layout_behavior="@string/bottom_sheet_behavior"
         app:shapeAppearanceOverlay="@style/SelectContainerStyle">
 
@@ -40,7 +39,7 @@
                 android:layout_marginTop="@dimen/item_badge_content_top_margin"
                 android:fontFamily="sans-serif"
                 android:lineSpacingExtra="4dp"
-                android:textColor="@android:color/background_dark"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="@dimen/material_text_headline"
                 app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_badge_title"
@@ -56,7 +55,7 @@
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.3"
+                app:layout_constraintWidth_percent="0.25"
                 app:spanCount="3"
                 tools:src="@drawable/orange" />
 
@@ -87,6 +86,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/completed_stage_margin_top"
+                tools:layout="@layout/fragment_share_camera"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
@@ -99,12 +99,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:text="오렌지 먹은지 오렌지...\n최근에 새를 주의 깊게 본적이 있던가..?\n기억이 가물가물한데, 밖에 나가서 바람이나 좀 쐴까?"
                 android:textSize="@dimen/material_text_caption"
                 android:textColor="@android:color/tertiary_text_light"
                 app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
-                app:layout_constraintTop_toBottomOf="@id/lottie_view_congratulate" />
+                app:layout_constraintTop_toBottomOf="@id/fragment_container_share"/>
 
             <TextView
                 android:id="@+id/tv_congratulate_title"
@@ -116,7 +116,6 @@
                 app:layout_constraintLeft_toLeftOf="@id/tv_badge_title"
                 app:layout_constraintRight_toRightOf="@id/guideline_badge_view_end"
                 app:layout_constraintTop_toBottomOf="@id/tv_congratulate_content" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
