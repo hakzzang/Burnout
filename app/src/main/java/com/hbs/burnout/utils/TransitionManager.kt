@@ -15,7 +15,8 @@ object TransitionConfigure {
 }
 
 object TransitionNavigation{
-    const val CHATTING = "CHATTING"
+    const val CHATTING_TRANSITION_LINEAR = "CHATTING_TRANSITION_LINEAR"
+    const val CHATTING_TRANSITION_ARC = "CHATTING_TRANSITION_ARC"
 }
 
 interface BurnoutTransitionManager {
@@ -57,10 +58,11 @@ class BurnoutTransitionManagerImpl : BurnoutTransitionManager {
             return MaterialContainerTransform().apply {
                 scrimColor = Color.TRANSPARENT
                 duration = TransitionConfigure.END_DURATION
+                interpolator = FastOutSlowInInterpolator()
                 fadeMode = if(isForward){
-                    MaterialContainerTransform.FIT_MODE_AUTO
+                    MaterialContainerTransform.FADE_MODE_IN
                 }else{
-                    MaterialContainerTransform.FIT_MODE_AUTO
+                    MaterialContainerTransform.FADE_MODE_OUT
                 }
             }
         }
