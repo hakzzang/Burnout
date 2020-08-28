@@ -7,9 +7,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.view.Window
+import android.widget.ImageView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -23,6 +26,7 @@ import com.hbs.burnout.model.Stage
 import com.hbs.burnout.model.StageProgress
 import com.hbs.burnout.ui.chat.ChattingActivity
 import com.hbs.burnout.ui.ext.dialog.EndingDialog
+import com.hbs.burnout.ui.ext.view.drawEdgeShapeAppearance
 import com.hbs.burnout.ui.ext.view.hideBottomDrawer
 import com.hbs.burnout.ui.ext.view.nullCheckAndDismiss
 import com.hbs.burnout.ui.main.adapter.BadgeAdapter
@@ -88,7 +92,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun observeMainViewModel(mainViewModel: MainViewModel) {
         mainViewModel.startChatting.observe(this, EventObserver {
-            Log.d("TransitionType","hhhh")
+            Log.d("TransitionType", "hhhh")
             startChattingActivityWithArcTransition(it)
         })
 
@@ -115,11 +119,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         binding.bar.drawEdgeShapeAppearance()
         binding.bottomDrawer.hideBottomDrawer()
+        addFloatButtonToggleCallback(binding)
+        toggleDarkThemeMenuIcon(binding.bar.menu.findItem(R.id.item_darktheme))
     }
 
     private fun startChattingActivityWithArcTransition(view: View) {
-        Log.d("TransitionType", "ARC")
-
         val intent = Intent(view.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.ARC_TYPE)
         var stageRound = 0
@@ -141,7 +145,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun startActivityWithLinearTransition(itemView: View, position: Int) {
-        Log.d("TransitionType", "LINEAR")
         val intent = Intent(itemView.context, ChattingActivity::class.java)
         intent.putExtra(TransitionConfigure.TRANSITION_TYPE, TransitionConfigure.LINEAR_TYPE)
         intent.putExtra(ActivityNavigation.STAGE_ROUND, position + 1)
@@ -165,7 +168,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun checkAndShowEndingDialog(stages:List<Stage>){
+    private fun checkAndShowEndingDialog(stages: List<Stage>){
         var completedStage = 0
         for (stage in stages) {
             if (stage.isCompleted()) {
@@ -176,7 +179,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             supportFragmentManager.nullCheckAndDismiss("EndingDialog")
             EndingDialog().show(supportFragmentManager, "EndingDialog")
         }
-
     }
 
     private fun toggleBottomDrawer() {
@@ -213,6 +215,43 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.tvBadgeTitle.text = resources.getString(R.string.title_badge)
         binding.tvBadgeContent.text = spannableString
         binding.rvBadge.adapter = badgeAdapter
+    }
+
+    private fun addFloatButtonToggleCallback(binding: ActivityMainBinding){
+        val bottomDrawerBehavior = BottomSheetBehavior.from(binding.bottomDrawer)
+        bottomDrawerBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    binding.fabChatting.hide()
+                } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    binding.fabChatting.show()
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+    }
+
+    private fun checkDarkTheme(): Boolean {
+        val defaultNightMode = AppCompatDelegate.getDefaultNightMode()
+        return defaultNightMode == AppCompatDelegate.MODE_NIGHT_YES || defaultNightMode == AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
+    }
+
+    private fun toggleDarkTheme() {
+        if (checkDarkTheme()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+    }
+
+    private fun toggleDarkThemeMenuIcon(menuItem: MenuItem){
+        if (checkDarkTheme()) {
+            menuItem.icon = resources.getDrawable(R.drawable.ic_moon_color)
+        } else {
+            menuItem.icon = resources.getDrawable(R.drawable.ic_moon)
+        }
     }
 
     override fun onBackPressed() {

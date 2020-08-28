@@ -66,6 +66,7 @@
             app:fabCradleRoundedCornerRadius="12dp"
             app:fabCradleVerticalOffset="0dp"
             app:hideOnScroll="true"
+            app:menu="@menu/main_menu"
             app:navigationIcon="@drawable/ic_drawer_menu_24px" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -77,6 +78,7 @@
             android:transitionName="CHATTING_TRANSITION_ARC"
             app:backgroundTint="@color/colorAccent"
             app:layout_anchor="@id/bar"
+            app:shapeAppearanceOverlay="@style/FloatingContainerStyle"
             app:srcCompat="@drawable/ic_baseline_message_24" />
 
         <com.google.android.material.card.MaterialCardView
@@ -85,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_badge_drawer_height"
             app:behavior_hideable="true"
+            android:visibility="visible"
             app:cardBackgroundColor="@color/color_badge_view_color"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:shapeAppearanceOverlay="@style/SelectContainerStyle">
