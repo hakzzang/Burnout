@@ -21,7 +21,7 @@ class BurnLog {
             Log.e(TAG, "$tag:$mesage")
         }
 
-        fun setTag(context: Any): String {
+        private fun setTag(context: Any): String {
             return "[ ${context.javaClass.simpleName} ]"
         }
     }

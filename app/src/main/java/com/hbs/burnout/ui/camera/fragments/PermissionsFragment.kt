@@ -3,13 +3,13 @@ package com.hbs.burnout.ui.camera.fragments
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.hbs.burnout.R
+import com.hbs.burnout.utils.ActivityNavigation
 
 private const val PERMISSIONS_REQUEST_CODE = 10
 private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
@@ -20,29 +20,37 @@ private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
  */
 class PermissionsFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (!hasPermissions(requireContext())) {
-            // Request camera-related permissions
-            ActivityCompat.requestPermissions(requireActivity(),PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
-        } else {
-            // If permissions have already been granted, proceed
-            Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
-                    PermissionsFragmentDirections.actionPermissionsToCamera())
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-            requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == PERMISSIONS_REQUEST_CODE) {
-            if (PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()) {
-                // Take the user to the success fragment when permission is granted
-                Toast.makeText(context, "Permission request granted", Toast.LENGTH_LONG).show()
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
                 Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
-                        PermissionsFragmentDirections.actionPermissionsToCamera())
+                    PermissionsFragmentDirections.actionPermissionsToCamera())
             } else {
-                Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(),"카메라 권한이 없으므로 이번 미션을 수행하지 못해요.",Toast.LENGTH_SHORT).show()
+                requireActivity().setResult(ActivityNavigation.CAMERA_TO_CHATTING)
+            }
+        }
+
+    override fun onResume() {
+        super.onResume()
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                Navigation.findNavController(requireActivity(), R.id.fragment_camera_container).navigate(
+                    PermissionsFragmentDirections.actionPermissionsToCamera())
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                Toast.makeText(requireContext(),"카메라 권한이 없으면 이번 미션을 수행하지 못해요. 꼭 확인해주세요~",Toast.LENGTH_SHORT).show()
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA)
+            }
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA)
             }
         }
     }
