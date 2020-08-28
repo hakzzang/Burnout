@@ -42,9 +42,9 @@ class ChattingViewModel @ViewModelInject constructor(
         val script = chattingUseCase.readNextScriptLine(scriptNumber) {
             _completedStage.value = Event(Unit)
         } ?: return
-        if(script.event == 4 || script.event == 6){
+        if (script.event == 4 || script.event == 6) {
 
-        }else{
+        } else {
             _readingScript.value = Event(script)
         }
     }
@@ -56,7 +56,6 @@ class ChattingViewModel @ViewModelInject constructor(
             }, { lastScript ->
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
-                    Log.d("emit-event-lastscript",lastScript.event.toString())
                     _completedReadingScript.value = Event(lastScript)
                     _lastScript.value = lastScript
                 }
