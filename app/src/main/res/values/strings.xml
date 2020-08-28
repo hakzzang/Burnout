@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Burnout</string>
 
+    <string name="main_title">번아웃 챌린지 &#x1F525;</string>
+    <string name="main_title2">번아웃 챌린지 &#x1F60E;</string>
+    <string name="main_title3">번아웃 챌린지 &#x1F61B;</string>
+
     <string name="text_download">다운로드</string>
     <string name="text_cancel">취소</string>
     <string name="text_save">저장</string>
@@ -29,8 +33,9 @@
 
     <!-- Badge -->
     <string name="title_badge">BADGE</string>
-    <string name="completed_stage1_text">
 
-    </string>
+    <!-- Completed Stage Resources-->
+    <string name="complete_stage_message">- 미션%s을 쉽게 해결했다. -</string>
+    <string name="title_ending">ENDING</string>
 
 </resources>

@@ -1,18 +1,14 @@
 package com.hbs.burnout.di
 
 import com.hbs.burnout.domain.local.repository.ScriptRepository
+import com.hbs.burnout.domain.local.repository.ShareRepository
 import com.hbs.burnout.domain.local.repository.StageRepository
-import com.hbs.burnout.domain.local.usecase.ChattingUseCase
-import com.hbs.burnout.domain.local.usecase.ChattingUseCaseImpl
-import com.hbs.burnout.domain.local.usecase.MainUseCase
-import com.hbs.burnout.domain.local.usecase.MainUseCaseImpl
+import com.hbs.burnout.domain.local.usecase.*
 import com.hbs.burnout.utils.script.ScriptManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.scopes.FragmentScoped
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -27,4 +23,11 @@ object UseCaseModule {
     @Provides
     fun provideMainUseCase(stageRepository: StageRepository): MainUseCase =
         MainUseCaseImpl(stageRepository)
+
+    @Provides
+    fun provideShareUseCase(
+        stageRepository: StageRepository,
+        shareRepository: ShareRepository
+    ): ShareUseCase =
+        ShareUseCaseImpl(stageRepository, shareRepository)
 }

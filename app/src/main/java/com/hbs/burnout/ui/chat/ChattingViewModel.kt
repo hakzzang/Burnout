@@ -42,7 +42,11 @@ class ChattingViewModel @ViewModelInject constructor(
         val script = chattingUseCase.readNextScriptLine(scriptNumber) {
             _completedStage.value = Event(Unit)
         } ?: return
-        _readingScript.value = Event(script)
+        if(script.event == 4 || script.event == 6){
+
+        }else{
+            _readingScript.value = Event(script)
+        }
     }
 
     fun emitParsingScript(newScript: Script) {
@@ -75,12 +79,11 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun takePicture() {
+    fun takePicture(isCompleted: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            chattingUseCase.takePictureScriptLine({ scriptCache ->
+            chattingUseCase.takePictureScriptLine(isCompleted, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
             }, { lastScript ->
-                Log.d("take-event-lastscript",lastScript.event.toString())
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
@@ -89,9 +92,9 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun drawingImage(){
+    fun drawingImage(isCompleted:Boolean){
         viewModelScope.launch(Dispatchers.IO){
-            chattingUseCase.drawingImageScriptLine( { scriptCache ->
+            chattingUseCase.drawingImageScriptLine(isCompleted, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
             },{lastScript->
                 chattingUseCase.saveScript(lastScript)

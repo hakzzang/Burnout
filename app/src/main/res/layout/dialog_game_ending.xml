@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shapeAppearanceOverlay="@style/EndingContainerStyle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_dialog_game_ending_title"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/title_ending"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/material_text_headline"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_view_congratulate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/completed_stage_margin_top"
+                app:layout_constraintDimensionRatio="H,1:1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@id/tv_dialog_game_ending_title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_dialog_game_ending_title"
+                app:layout_constraintVertical_bias="0.0"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="gameover.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:id="@+id/tv_congratulate_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="우리가 해줄 이야기는 여기까지야.\n이 프로젝트는 우리의 삶에 작은 성취감을 얻었으면 하는 바람으로 시작했고,\n누구나 열심히 살다보면 문득 와있는 '번아웃'과 '무기력함'에\n과일같은 상큼함으로 이겨냈으면 하는 바람으로 만들었어.\n짧은 시간이었지만, 재미있는 시간이었길 바랄게."
+                android:textColor="@android:color/tertiary_text_light"
+                android:textSize="@dimen/material_text_caption"
+                android:visibility="visible"
+                app:layout_constraintLeft_toLeftOf="@id/lottie_view_congratulate"
+                app:layout_constraintTop_toBottomOf="@id/lottie_view_congratulate" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_ending_btn"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_margin="16dp"
+                android:text="모든 미션을 클리어했습니다."
+                app:backgroundTint="@android:color/holo_green_light"
+                app:layout_constraintTop_toBottomOf="@id/tv_congratulate_content" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

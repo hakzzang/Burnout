@@ -16,15 +16,17 @@ class BadgeAdapter(private val clickCallBack: (Boolean) -> (Unit)) :
     ListAdapter<Stage, BadgeAdapter.ViewHolder>(object :
         DiffUtil.ItemCallback<Stage>() {
         override fun areItemsTheSame(oldItem: Stage, newItem: Stage): Boolean =
-            oldItem.round == newItem.round
+            oldItem == newItem
 
         override fun areContentsTheSame(oldItem: Stage, newItem: Stage): Boolean =
-            oldItem == newItem
+            oldItem.round == newItem.round && oldItem.progress == newItem.progress
+
     }) {
 
     init {
         setHasStableIds(true)
     }
+
     override fun getItemId(position: Int): Long {
         return getItem(position).round.toLong()
     }

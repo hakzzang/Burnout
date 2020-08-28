@@ -3,9 +3,9 @@ package com.hbs.burnout.ui.chat
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -20,6 +20,7 @@ import com.hbs.burnout.ui.drawable.DrawImageActivity
 import com.hbs.burnout.ui.ext.dialog.AnswerDialog
 import com.hbs.burnout.ui.ext.dialog.DrawingImageDialog
 import com.hbs.burnout.ui.ext.dialog.TakePictureDialog
+import com.hbs.burnout.ui.ext.view.nullCheckAndDismiss
 import com.hbs.burnout.utils.ActivityNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,8 +37,19 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     }
 
     val answerCallback: (DialogFragment, Int) -> Unit = { dialog, answerNumber ->
-        dialog.dismiss()
         viewModel.selectAnswer(answerNumber)
+    }
+
+    private val takePictureCallback: (DialogFragment) -> Unit = { dialog ->
+        val cameraActivityResult = makeTakePictureActivityResultContracts()
+        val intent = Intent(requireContext(), CameraMissionActivity::class.java)
+        cameraActivityResult.launch(intent)
+    }
+
+    private val drawingImageCallback: (DialogFragment) -> Unit = { dialog ->
+        val cameraActivityResult = makeDrawingImageActivityResultContracts()
+        val intent = Intent(requireContext(), DrawImageActivity::class.java)
+        cameraActivityResult.launch(intent)
     }
 
     override fun isUseTransition(): Boolean = true
@@ -47,8 +59,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postponeEnterTransition()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +84,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         })
 
         viewModel.completedReadingScript.observe(viewLifecycleOwner, EventObserver { lastScript ->
-            Log.d("lastScript-event",lastScript.event.toString())
             when (lastScript.event) {
                 0 -> {
                     viewModel.readNextScriptLine(stageNumber)
@@ -86,17 +95,13 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                     viewModel.readNextScriptLine(stageNumber)
                 }
                 3 -> {
-                    binding.root.post {
-                        showTakePictureDialog()
-                    }
+                    binding.root.post { showTakePictureDialog() }
                 }
                 4 -> {
                     viewModel.readNextScriptLine(stageNumber)
                 }
                 5 -> {
-                    binding.root.post {
-                        showDrawingImageDialog()
-                    }
+                    binding.root.post { showDrawingImageDialog() }
                 }
                 6 -> {
                     viewModel.readNextScriptLine(stageNumber)
@@ -128,72 +133,30 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     }
 
     private fun updateRecyclerView(scriptCache: List<Script>) {
-        chattingAdapter.submitList(scriptCache.toList())
+        chattingAdapter.submitList(scriptCache.toList()){
+            if(scriptCache.lastIndex>0){
+                binding.rvChatting.smoothScrollToPosition(scriptCache.lastIndex)
+            }
+        }
     }
 
     private fun showAnswerDialog() {
-        if(childFragmentManager.findFragmentByTag("AnswerDialog") != null){
-            val fragment = childFragmentManager.findFragmentByTag("AnswerDialog")
-            (fragment as AnswerDialog).dismiss()
-        }
-        AnswerDialog().showNow(childFragmentManager, "AnswerDialog")
-    }
-
-    private fun showDrawingImageDialog() {
-        val dialog = DrawingImageDialog { dialog ->
-            dialog.dismiss()
-            viewModel.drawingImage()
-            val drawingActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                when (result.resultCode) {
-                    ActivityNavigation.SHARE_TO_CHATTING -> {
-                        val receiveIntent = result.data?: return@registerForActivityResult
-                        val isComplete = receiveIntent.getBooleanExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, false)
-                        if(isComplete){
-                            viewModel.drawingImage()
-                        }else{
-                            showDrawingImageDialog()
-                        }
-                    }
-                    ActivityNavigation.DRAWING_TO_CHATTING-> showDrawingImageDialog()
-                }
-            }
-            drawingActivityResult.launch(Intent(Intent(requireContext(), DrawImageActivity::class.java)))
-        }
-        dialog.showNow(parentFragmentManager, "DrawingImageDialog")
+        childFragmentManager.nullCheckAndDismiss("AnswerDialog")
+        AnswerDialog().showNow (childFragmentManager, "AnswerDialog")
     }
 
     private fun showTakePictureDialog() {
-        val dialog = TakePictureDialog { dialog ->
-            dialog.dismiss()
-            viewModel.takePicture()
-            val cameraActivityResult =
-                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                    when (result.resultCode) {
-                        ActivityNavigation.SHARE_TO_CHATTING -> {
-                            val receiveIntent = result.data ?: return@registerForActivityResult
-                            val isComplete = receiveIntent.getBooleanExtra(
-                                ActivityNavigation.ANALYZE_IS_COMPLETE,
-                                false
-                            )
-                            if (isComplete) {
-                                viewModel.takePicture()
-                            } else {
-                                showTakePictureDialog()
-                            }
-                        }
-                        ActivityNavigation.CAMERA_TO_CHATTING -> showTakePictureDialog()
-                    }
-                }
-            cameraActivityResult.launch(
-                Intent(
-                    Intent(
-                        requireContext(),
-                        CameraMissionActivity::class.java
-                    )
-                )
-            )
-        }
-        dialog.showNow(parentFragmentManager, "TakePictureDialog")
+        parentFragmentManager.nullCheckAndDismiss("TakePictureDialog")
+        TakePictureDialog().apply {
+            this.passPictureCallback = takePictureCallback
+        }.showNow(parentFragmentManager, "TakePictureDialog")
+    }
+
+    private fun showDrawingImageDialog() {
+        parentFragmentManager.nullCheckAndDismiss("DrawingImageDialog")
+        DrawingImageDialog().apply {
+            this.passPictureCallback = drawingImageCallback
+        }.showNow(parentFragmentManager, "DrawingImageDialog")
     }
 
     private fun addLastMessage() {
@@ -201,5 +164,45 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
         chattingList.add(Script(2, "", 0, 0, 999))
         chattingAdapter.submitList(chattingList)
         binding.rvChatting.smoothScrollToPosition(chattingList.lastIndex)
+    }
+
+    private fun makeTakePictureActivityResultContracts(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            when (result.resultCode) {
+                ActivityNavigation.SHARE_TO_CHATTING -> {
+                    val receiveIntent = result.data ?: return@registerForActivityResult
+                    val isComplete = receiveIntent.getBooleanExtra(
+                        ActivityNavigation.ANALYZE_IS_COMPLETE,
+                        false
+                    )
+                    if (isComplete) {
+                        viewModel.takePicture(true)
+                    } else {
+                        showTakePictureDialog()
+                    }
+                }
+                ActivityNavigation.CAMERA_TO_CHATTING -> showTakePictureDialog()
+            }
+        }
+    }
+
+    private fun makeDrawingImageActivityResultContracts(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            when (result.resultCode) {
+                ActivityNavigation.SHARE_TO_CHATTING -> {
+                    val receiveIntent = result.data ?: return@registerForActivityResult
+                    val isComplete = receiveIntent.getBooleanExtra(
+                        ActivityNavigation.ANALYZE_IS_COMPLETE,
+                        false
+                    )
+                    if (isComplete) {
+                        viewModel.drawingImage(true)
+                    } else {
+                        showDrawingImageDialog()
+                    }
+                }
+                ActivityNavigation.DRAWING_TO_CHATTING -> showDrawingImageDialog()
+            }
+        }
     }
 }
