@@ -11,7 +11,6 @@ import android.view.Window
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -22,13 +21,16 @@ import com.hbs.burnout.databinding.ActivityMainBinding
 import com.hbs.burnout.model.Stage
 import com.hbs.burnout.model.StageProgress
 import com.hbs.burnout.ui.chat.ChattingActivity
+import com.hbs.burnout.ui.ext.dialog.EndingDialog
 import com.hbs.burnout.ui.ext.view.hideBottomDrawer
+import com.hbs.burnout.ui.ext.view.nullCheckAndDismiss
 import com.hbs.burnout.ui.main.adapter.BadgeAdapter
 import com.hbs.burnout.ui.main.adapter.MissionAdapter
 import com.hbs.burnout.utils.ActivityNavigation
 import com.hbs.burnout.utils.NotificationHelper
 import com.hbs.burnout.utils.TransitionConfigure
 import com.hbs.burnout.utils.TransitionNavigation
+import com.hbs.burnout.utils.script.MissionConfiguration
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -97,6 +99,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 badgeAdapter.submitList(stages.toList())
             }
 
+            checkAndShowEndingDialog(stages)
 //            missionAdapter.notifyDataSetChanged()
         })
     }
@@ -150,6 +153,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     dialog.dismiss()
                 }.show()
         }
+    }
+
+    private fun checkAndShowEndingDialog(stages:List<Stage>){
+        var completedStage = 0
+        for (stage in stages) {
+            if (stage.isCompleted()) {
+                completedStage++
+            }
+        }
+        if(completedStage > MissionConfiguration.ALL_MISSION_SIZE){
+            supportFragmentManager.nullCheckAndDismiss("EndingDialog")
+            EndingDialog().show(supportFragmentManager, "EndingDialog")
+        }
+
     }
 
     private fun toggleBottomDrawer() {

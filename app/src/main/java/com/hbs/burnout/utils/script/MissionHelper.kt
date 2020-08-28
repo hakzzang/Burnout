@@ -70,3 +70,7 @@ object MissionHelper {
         return editableCompletedStages
     }
 }
+
+object MissionConfiguration{
+    const val ALL_MISSION_SIZE = 4
+}
