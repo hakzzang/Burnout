@@ -57,10 +57,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
     override fun bindBinding(): FragmentChattingBinding =
         FragmentChattingBinding.inflate(layoutInflater)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.startStage(stageNumber) {
@@ -176,7 +172,8 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                         false
                     )
                     if (isComplete) {
-                        viewModel.takePicture(true)
+                        val picturePath = receiveIntent.getStringExtra(ActivityNavigation.ANALYZE_RESULT)?:""
+                        viewModel.takePicture(true, picturePath)
                     } else {
                         showTakePictureDialog()
                     }
@@ -196,7 +193,8 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding>() {
                         false
                     )
                     if (isComplete) {
-                        viewModel.drawingImage(true)
+                        val picturePath = receiveIntent.getStringExtra(ActivityNavigation.ANALYZE_RESULT)?:""
+                        viewModel.drawingImage(true, picturePath)
                     } else {
                         showDrawingImageDialog()
                     }

@@ -9,6 +9,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import java.io.*
+import java.util.*
 
 object FileUtils {
     const val RECOGNIZE_FILE_NAME = "recognize_result.jpg"
@@ -34,11 +35,11 @@ object FileUtils {
         outputStream.close()
     }
 
-    fun saveImageToExternalFilesDir(context: Context?, bitmap: Bitmap): Uri? {
+    fun saveImageToExternalFilesDir(context: Context?, bitmap: Bitmap, bitmapFileCallback:((String)->Unit)? = null): Uri? {
         val file = File(
             context?.getExternalFilesDir(
                 Environment.DIRECTORY_PICTURES
-            ), "BurnOut"
+            ), "BurnOut_"+ Date().time
         )
         try {
             file.createNewFile()
@@ -48,7 +49,7 @@ object FileUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
+        bitmapFileCallback?.let { it(file.path) }
         val uri =
             context?.let { FileProvider.getUriForFile(it, "com.hbs.burnout.fileprovider", file) };
 

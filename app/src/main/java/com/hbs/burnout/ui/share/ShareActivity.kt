@@ -225,9 +225,11 @@ class ShareActivity : BaseActivity<ActivityShareBinding>() {
     private fun makeSuccessResultIntent(): Intent {
         val intent = Intent()
         uri = bitmapImage?.let {
-            FileUtils.saveImageToExternalFilesDir(this, it)
+            FileUtils.saveImageToExternalFilesDir(this, it){filePath->
+                intent.putExtra(ActivityNavigation.ANALYZE_RESULT, filePath)
+            }
         }
-        intent.putExtra(ActivityNavigation.ANALYZE_RESULT, uri?.path)
+
         intent.putExtra(ActivityNavigation.ANALYZE_IS_COMPLETE, true)
         return intent
     }

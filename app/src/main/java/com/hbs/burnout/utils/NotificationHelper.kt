@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.util.Log
 import com.hbs.burnout.R
 import com.hbs.burnout.ui.chat.ChattingActivity
 import java.util.*
@@ -33,23 +34,16 @@ class NotificationHelper {
         }
     }
 
-    fun showBubble(context: Context) {
+    fun showBubble(context: Context, stageNumber:Int) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             val notificationManager: NotificationManager? = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            val target = Intent(context, ChattingActivity::class.java)
-            val bubbleIntent = PendingIntent.getActivity(context, 0, target, 0 /* flags */)
+            val target = Intent(context, ChattingActivity::class.java).apply {
+                putExtra(ActivityNavigation.STAGE_ROUND, stageNumber)
+            }
+            val bubbleIntent = PendingIntent.getActivity(context, 0, target, PendingIntent.FLAG_UPDATE_CURRENT /* flags */)
             val icon = Icon.createWithResource(context, R.mipmap.ic_launcher_round)
 
-            val bubbleData = Notification.BubbleMetadata.Builder(
-                PendingIntent.getActivity(
-                    context,
-                    NotificationConfiguration.REQUEST_BUBBLE,
-                    // Launch BubbleActivity as the expanded bubble.
-                    Intent(context, ChattingActivity::class.java)
-                        .setAction(Intent.ACTION_VIEW),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                ), icon
-            )
+            val bubbleData = Notification.BubbleMetadata.Builder(bubbleIntent, icon)
                 .setDesiredHeight(600)
                 .setAutoExpandBubble(false)
                 .setSuppressNotification(true)

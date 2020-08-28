@@ -10,7 +10,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hbs.burnout.R
 import com.hbs.burnout.databinding.DialogTakePictureBinding
-import com.hbs.burnout.ui.chat.ChattingFragment
 
 class TakePictureDialog : BottomSheetDialogFragment() {
     lateinit var passPictureCallback: (DialogFragment) -> Unit

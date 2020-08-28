@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class Script(
     @ColumnInfo var user: Int, @ColumnInfo var message: String,
-    @ColumnInfo var event: Int, @ColumnInfo var stage: Int, @PrimaryKey var id: Int
+    @ColumnInfo var event: Int, @ColumnInfo var stage: Int, @PrimaryKey var id: Int,
+    @ColumnInfo var imagePath: String = ""
 ) {
     @Ignore
     val answer = hashMapOf<Int, String>()
