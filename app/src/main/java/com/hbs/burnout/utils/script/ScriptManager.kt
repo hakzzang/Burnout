@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 object ScriptConfiguration {
     const val LINE_ENTER_SPEED = 100L
-    const val READING_SPEED = 120L
+    const val READING_SPEED = 85L
 }
 
 @FragmentScoped
