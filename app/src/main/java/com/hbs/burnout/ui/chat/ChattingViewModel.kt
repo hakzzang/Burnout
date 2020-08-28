@@ -78,11 +78,12 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun takePicture(isCompleted: Boolean) {
+    fun takePicture(isCompleted: Boolean, imagePath: String) {
         viewModelScope.launch(Dispatchers.IO) {
             chattingUseCase.takePictureScriptLine(isCompleted, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
             }, { lastScript ->
+                lastScript.imagePath = imagePath
                 chattingUseCase.saveScript(lastScript)
                 viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
@@ -91,13 +92,14 @@ class ChattingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun drawingImage(isCompleted:Boolean){
-        viewModelScope.launch(Dispatchers.IO){
+    fun drawingImage(isCompleted: Boolean, imagePath: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             chattingUseCase.drawingImageScriptLine(isCompleted, { scriptCache ->
                 _parsedScript.value = Event(scriptCache)
-            },{lastScript->
+            }, { lastScript ->
+                lastScript.imagePath = imagePath
                 chattingUseCase.saveScript(lastScript)
-                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main){
+                viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.Main) {
                     _completedReadingScript.value = Event(lastScript)
                 }
             })

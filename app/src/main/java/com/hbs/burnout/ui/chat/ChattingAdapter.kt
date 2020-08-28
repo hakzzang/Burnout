@@ -76,7 +76,7 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                 }
                 EventType.CHATTING -> {
                     binding.lottieViewWait.visibility = View.GONE
-                    binding.tvChatting.text = getItem(position).message
+                    binding.tvChatting.text = chatting.message
                     binding.ivChattingRecognizeImage.visibility = View.GONE
                 }
                 EventType.CAMERA -> {
@@ -85,11 +85,10 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                     binding.ivChattingRecognizeImage.visibility = View.GONE
                 }
                 EventType.CAMERA_RESULT -> {
-                    binding.tvChatting.text = getItem(position).message
+                    binding.tvChatting.text = chatting.message
                     binding.lottieViewWait.visibility = View.GONE
                     binding.ivChattingRecognizeImage.visibility = View.VISIBLE
-                    val fileUri = FileUtils.getOrMakeRecognizeFile(binding.root.context).toUri()
-                    binding.ivChattingRecognizeImage.setImageURI(fileUri)
+                    binding.ivChattingRecognizeImage.setImageURI(chatting.imagePath.toUri())
                 }
                 EventType.DRAWING -> {
                     binding.tvChatting.text = ""
@@ -97,11 +96,10 @@ class ChattingAdapter : ListAdapter<Script, RecyclerView.ViewHolder>(object : Di
                     binding.ivChattingRecognizeImage.visibility = View.GONE
                 }
                 EventType.DRAWING_RESULT -> {
-                    binding.tvChatting.text = getItem(position).message
+                    binding.tvChatting.text = chatting.message
                     binding.lottieViewWait.visibility = View.GONE
                     binding.ivChattingRecognizeImage.visibility = View.VISIBLE
-                    val fileUri = FileUtils.getOrMakeRecognizeFile(binding.root.context).toUri()
-                    binding.ivChattingRecognizeImage.setImageURI(fileUri)
+                    binding.ivChattingRecognizeImage.setImageURI(chatting.imagePath.toUri())
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.hbs.burnout.ui.main
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
@@ -45,7 +46,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     lateinit var notificationHelper: NotificationHelper
     private val mainViewModel by viewModels<MainViewModel>()
     private val missionAdapter = MissionAdapter(
-        { itemView, position -> startActivityWithLinearTransition(itemView, position) },
+        { itemView, position ->
+            if (position < 3) {
+                startActivityWithLinearTransition(itemView, position)
+            } else {
+                showEndingHintDialog()
+            }
+        },
         { isCompleted -> showMissionHintDialog(isCompleted) }
     )
     private val badgeAdapter = BadgeAdapter { isCompleted -> showMissionHintDialog(isCompleted) }
@@ -105,11 +112,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
 
             checkAndShowEndingDialog(stages)
-//            missionAdapter.notifyDataSetChanged()
         })
     }
 
     private fun initView(binding: ActivityMainBinding) {
+        binding.rvMission.setHasFixedSize(true)
         binding.rvMission.adapter = missionAdapter
         binding.bar.setNavigationOnClickListener { toggleBottomDrawer() }
         binding.bar.setOnMenuItemClickListener { item: MenuItem? ->
@@ -168,14 +175,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun checkAndShowEndingDialog(stages: List<Stage>){
+    private fun showEndingHintDialog(){
+        MaterialAlertDialogBuilder(this, R.style.OutlinedCutDialog)
+            .setTitle("미션진행 불가")
+            .setMessage("현재 프로젝트는 Mission3까지 진행할 수 있습니다.\n완성을 위해서는 조금 더 시간이 필요합니다.")
+            .setIcon(R.mipmap.ic_launcher_round)
+            .setPositiveButton("확인") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+    }
+
+    private fun checkAndShowEndingDialog(stages: List<Stage>) {
         var completedStage = 0
         for (stage in stages) {
             if (stage.isCompleted()) {
                 completedStage++
             }
         }
-        if(completedStage > MissionConfiguration.ALL_MISSION_SIZE){
+        if (completedStage > MissionConfiguration.ALL_MISSION_SIZE) {
             supportFragmentManager.nullCheckAndDismiss("EndingDialog")
             EndingDialog().show(supportFragmentManager, "EndingDialog")
         }
@@ -217,7 +234,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.rvBadge.adapter = badgeAdapter
     }
 
-    private fun addFloatButtonToggleCallback(binding: ActivityMainBinding){
+    private fun addFloatButtonToggleCallback(binding: ActivityMainBinding) {
         val bottomDrawerBehavior = BottomSheetBehavior.from(binding.bottomDrawer)
         bottomDrawerBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -234,8 +251,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun checkDarkTheme(): Boolean {
-        val defaultNightMode = AppCompatDelegate.getDefaultNightMode()
-        return defaultNightMode == AppCompatDelegate.MODE_NIGHT_YES || defaultNightMode == AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
+        val defaultNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return defaultNightMode == Configuration.UI_MODE_NIGHT_YES
     }
 
     private fun toggleDarkTheme() {
@@ -246,7 +263,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun toggleDarkThemeMenuIcon(menuItem: MenuItem){
+    private fun toggleDarkThemeMenuIcon(menuItem: MenuItem) {
         if (checkDarkTheme()) {
             menuItem.icon = resources.getDrawable(R.drawable.ic_moon_color)
         } else {
