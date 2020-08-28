@@ -72,5 +72,5 @@ object MissionHelper {
 }
 
 object MissionConfiguration{
-    const val ALL_MISSION_SIZE = 4
+    const val ALL_MISSION_SIZE = 3
 }
