@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/main_fab_chatting_description"
             android:onClick="@{(view)-> viewModel.passChattingActivity(view)}"
-            android:transitionName="mission"
+            android:transitionName="CHATTING_TRANSITION_ARC"
             app:backgroundTint="@color/colorAccent"
             app:layout_anchor="@id/bar"
             app:srcCompat="@drawable/ic_baseline_message_24" />

@@ -10,9 +10,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/color_dialog_bg"
+            android:elevation="@dimen/toolbar_elevation"
             app:layout_constraintTop_toTopOf="parent"
             app:title="chatting" />
-
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"
