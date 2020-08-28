@@ -5,7 +5,9 @@
 
     <ImageView
         android:id="@+id/iv_badge"
-        android:layout_width="@dimen/item_badge_size"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/item_badge_size"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         tools:src="@drawable/watermelon" />
 </layout>
