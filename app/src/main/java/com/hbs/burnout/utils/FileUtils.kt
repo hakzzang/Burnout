@@ -15,11 +15,11 @@ object FileUtils {
 
     const val RECOGNIZE_FILE_NAME2 = "recognize_result2.jpg"
 
-    public interface OnDownloadListener{
-        fun onSuccess(uri:Uri)
-        fun onFailed(error:String?)
+    public interface OnDownloadListener {
+        fun onSuccess(uri: Uri)
+        fun onFailed(error: String?)
     }
-  
+
     fun getOrMakeRecognizeFile(context: Context): File {
         return File(context.filesDir, RECOGNIZE_FILE_NAME)
     }
@@ -55,25 +55,29 @@ object FileUtils {
         return uri
     }
 
-    fun saveImageToMediaStore(context: Context, bitmap: Bitmap, fileName: String, listener: OnDownloadListener? = null) {
+    fun saveImageToMediaStore(
+        context: Context,
+        bitmap: Bitmap,
+        fileName: String,
+        listener: OnDownloadListener? = null
+    ) {
         val resolver = context.contentResolver
         val relativeLocation = Environment.DIRECTORY_DCIM + "/" + "BurnOut"
+        val imageCollection = /*MediaStore.Images.Media.EXTERNAL_CONTENT_URI*/
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Images.Media
+                    .getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+            } else {
+                MediaStore.Images.Media
+                    .getContentUri(MediaStore.VOLUME_EXTERNAL)
+            }
 
-     val imageCollection = /*MediaStore.Images.Media.EXTERNAL_CONTENT_URI*/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Images.Media
-                .getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else {
-            MediaStore.Images.Media
-                .getContentUri(MediaStore.VOLUME_EXTERNAL)
-        }
 
         val contentValues = ContentValues().apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-                put(MediaStore.Images.Media.IS_PENDING, 1)
                 put(MediaStore.Images.Media.RELATIVE_PATH, relativeLocation)
-
+//                put(MediaStore.Images.Media.IS_PENDING, 1)
             }
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
@@ -91,7 +95,10 @@ object FileUtils {
             } finally {
                 stream?.close()
                 contentValues.clear();
-                contentValues.put(MediaStore.Images.Media.IS_PENDING, 0);
+                /*    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    };
+                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+    */
                 resolver.update(uri, contentValues, null, null);
                 listener?.onSuccess(imageContentUri)
             }
