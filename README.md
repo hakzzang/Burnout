@@ -1,17 +1,32 @@
 <img src="https://user-images.githubusercontent.com/22374750/90978874-f01f0100-e58b-11ea-9b35-ec1d4529ee57.png" width="128" height="128">
 
-# Burnout 🧯
-번아웃을 재미있게 해결해보고자, 멘탈을 건강하게 하는 Health를 주제로 프로젝트를 진행합니다.
+# Burnout Challenge 🧯
 
 [![Android11](https://img.shields.io/badge/Android11-📱-green.svg)](https://developer.android.com/preview)
 [![Wiki](https://img.shields.io/badge/Wiki-📚-pink.svg)](https://github.com/hakzzang/Burnout/wiki)
 ![Last Commit](https://img.shields.io/github/last-commit/hakzzang/Burnout)
-<img src="https://img.shields.io/github/languages/top/hakzzang/Burnout"/>
+
+번아웃을 재미있게 해결해보고자, 멘탈을 건강하게 하는 `Health`를 주제로 프로젝트를 진행합니다.<br/>
+<a href="https://festa.io/events/1111" target="_blank">안드로이드11 끝장개발대회</a> 참여 프로젝트입니다.
+
+<br/>
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/25583321/91629470-5bd9f180-ea04-11ea-9cbb-b986cf77605b.png"  
+     width="520px" height="292.5px" href="https://github.com/ggujangi/ggu.system.ui/files/4094927/System.UI.Visibility.ppt.pptx"/>
+</p>
+<p align="center">
+    👆👆
+  <br/> <br/>
+    <a href="https://github.com/hakzzang/Burnout/files/5144815/BURNOUT_._._.pptx" target="_blank">번아웃_챌린지 발표자료</a>
+</p>
+
+
 
 
 # About
 
-### 🔥 팀 HBS 
+### 🔥 팀 HBS
 - 문병학<br/>
     ✔️ AAC, Jetpack, Coroutine, Material Design <br/>
     ✔️ 채팅 UI, 기능 개발
