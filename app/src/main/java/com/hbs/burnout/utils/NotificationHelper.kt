@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.util.Log
 import com.hbs.burnout.R
 import com.hbs.burnout.ui.chat.ChattingActivity
 import java.util.*
@@ -39,8 +38,9 @@ class NotificationHelper {
             val notificationManager: NotificationManager? = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             val target = Intent(context, ChattingActivity::class.java).apply {
                 putExtra(ActivityNavigation.STAGE_ROUND, stageNumber)
+                flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS //or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
-            val bubbleIntent = PendingIntent.getActivity(context, 0, target, PendingIntent.FLAG_UPDATE_CURRENT /* flags */)
+            val bubbleIntent = PendingIntent.getActivity(context, 0, target, PendingIntent.FLAG_ONE_SHOT /* flags */)
             val icon = Icon.createWithResource(context, R.mipmap.ic_launcher_round)
 
             val bubbleData = Notification.BubbleMetadata.Builder(bubbleIntent, icon)
@@ -55,18 +55,18 @@ class NotificationHelper {
                 .setBot(true)
                 .setName("Burnout")
                 .setImportant(true)
+                .setIcon(icon)
                 .build()
 
             val notification = Notification.Builder(context, NotificationConfiguration.CHANNEL_ID)
                 .setContentIntent(bubbleIntent)
-                .setContentTitle("새로운 미션 진행")
-                .setContentText("버블 알림을 통해서 미션을 확인해보세요")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setBubbleMetadata(bubbleData)
                 .addPerson(person)
                 .setCategory(Notification.CATEGORY_MESSAGE)
                 .setShowWhen(true)
-                .setStyle(Notification.MessagingStyle(person))
+                .setStyle(Notification.MessagingStyle(person) .setGroupConversation(false)
+                    .addMessage("버블 알림을 통해서 미션을 확인해보세요", Date().time, person))
                 .setWhen(Date().time).build()
 
             notificationManager?.notify(NotificationConfiguration.NOTIFICATION_ID, notification)
@@ -74,7 +74,7 @@ class NotificationHelper {
     }
 
 
-    fun updateShortcuts(context: Context, stageNumber:Int) {
+    fun updateShortcuts(context: Context, stageNumber: Int) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val shortcutManager: ShortcutManager = context.getSystemService(ShortcutManager::class.java)
             val icon = Icon.createWithResource(context, R.mipmap.ic_launcher_round)
@@ -82,7 +82,13 @@ class NotificationHelper {
                 .setShortLabel("미션${stageNumber}으로 이동하기")
                 .setLongLabel("미션${stageNumber}으로 이동하기")
                 .setIcon(icon)
-                .setIntent(Intent(context, ChattingActivity::class.java).setAction(Intent.ACTION_VIEW).putExtra(ActivityNavigation.STAGE_ROUND, stageNumber))
+                .setIntent(
+                    Intent(context, ChattingActivity::class.java).setAction(Intent.ACTION_VIEW)
+                        .putExtra(
+                            ActivityNavigation.STAGE_ROUND,
+                            stageNumber
+                        )
+                )
                 .build()
 
             shortcutManager.dynamicShortcuts = listOf(shortcut)
