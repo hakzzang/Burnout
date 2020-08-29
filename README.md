@@ -1,14 +1,17 @@
 <img src="https://user-images.githubusercontent.com/22374750/90978874-f01f0100-e58b-11ea-9b35-ec1d4529ee57.png" width="128" height="128">
 
 # Burnout 🧯
+번아웃을 재미있게 해결해보고자, 멘탈을 건강하게 하는 Health를 주제로 프로젝트를 진행합니다.
 
-## Android 11 끝장개발대회 🔋
-주제는 번아웃을 재미있게 해결해보고자, 멘탈을 건강하게 하는 Health를 주제로 프로젝트를 진행합니다.
-
-![Android11](https://img.shields.io/badge/Android11-📱-green.svg)
+[![Android11](https://img.shields.io/badge/Android11-📱-green.svg)](https://developer.android.com/preview)
 [![Wiki](https://img.shields.io/badge/Wiki-📚-pink.svg)](https://github.com/hakzzang/Burnout/wiki)
+![Last Commit](https://img.shields.io/github/last-commit/hakzzang/Burnout)
+<img src="https://img.shields.io/github/languages/top/hakzzang/Burnout"/>
 
-## About
+### with Android 11 끝장개발대회 🔋
+
+
+# About
 
 ### 프로젝트
 
